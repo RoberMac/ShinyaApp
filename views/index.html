@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="zh-CN" ng-app="ShinyaApp" ng-csp>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="深夜，破曉。">
+<!--     <link rel="icon" type="image/x-icon" href="./public/images/favicon_v2.png">
+    <link rel="shortcut icon" href="./public/images/favicon_v2.png"> -->
+    <link rel="apple-touch-icon" sizes="192x192" href="/public/img/favicon.png">
+    <title>深夜，破曉。</title>
+    <link rel="stylesheet" href="/public/css/normalize.css">
+    <link rel="stylesheet" href="/public/css/style.css">
+    <link rel="stylesheet" href="/public/css/angular-csp.css">
+    <script src="/public/js/libs/angular.min.js"></script>
+    <script src="/public/js/libs/angular-route.min.js"></script>
+    <script src="/public/js/libs/angular-touch.min.js"></script>
+    <script src="/public/js/libs/angular-animate.min.js"></script>
+    <script src="/public/js/libs/angular-messages.min.js"></script>
+    <script src="/public/js/libs/angular-jwt.min.js"></script>
+    <script src="/public/js/libs/angular-storage.min.js"></script>
+    <script src="/public/js/libs/socket.io-1.3.2.js"></script>
+    <script src="/public/js/libs/inobounce.min.js"></script>
+</head>
+<body ng-controller="rootController" class="bouncefix">
+    <div>
+        <img class="logo" src="/public/img/logo.svg" alt="logo">
+    </div>
+
+    <div ng-view></div>
+
+    <script src="/public/js/core.js"></script>
+    <script src="/public/js/controllers/chatController.js"></script>
+    <script src="/public/js/controllers/submitController.js"></script>
+    <script src="/public/js/controllers/forgotController.js"></script>
+    <script src="/public/js/directives/sy-msgNotify.js"></script>
+    <script src="/public/js/directives/sy-autofocus.js"></script>
+    <script src="/public/js/directives/sy-hideKeyboard.js"></script>
+</body>
+</html>

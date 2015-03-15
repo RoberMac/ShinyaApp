@@ -1,0 +1,34 @@
+<div class="main_box" ng-class="{'input_shake_animate': input_shake_animate}">
+    <img class="logo" src="/public/img/logo.svg" alt="logo">
+    <div class="form_box">
+        <div ng-switch on="isLogin">
+            <!-- login -->
+            <div ng-switch-when="true">
+                <form novalidate ng-submit="loginSubmit()" name="form">
+                    <div class="form_title">
+                        <span id="login_span">登陸</span>
+                        <span ng-click="toggleSubmit()">註冊</span>
+                    </div>
+                    <input sy-autofocus type="text" ng-model="login.user" name="user" placeholder="用戶名／電郵地址" required>
+                    <input type="password" ng-model="login.password" name="password" placeholder="密碼" required>
+                    <input class="submit_animate" type="submit" value="提交">
+                </form>
+            </div>
+            <!-- register -->
+            <div ng-switch-when="false">
+                <form novalidate ng-submit="registerSubmit()" name="form">
+                    <div class="form_title">
+                        <span ng-click="toggleSubmit()">登陸</span>
+                        <span id="register_span">註冊</span>
+                    </div>
+                    <input sy-autofocus type="text" ng-model="register.username" name="username" placeholder="用戶名" ng-maxlength="16" required>
+                    <input type="email" ng-model="register.email" name="email" placeholder="電郵地址" required>
+                    <input type="password" ng-model="register.password" name="password" placeholder="密碼" required>
+                    <input class="submit_animate general_animate" ng-if="form.$valid" type="submit" value="提交">
+                </form>
+            </div>
+        </div>
+        <sy-notify></sy-notify>
+    </div>
+    <p id="forgotPassword" ng-show="isLogin"><a href="#!forgot">忘記密碼</a></p>
+</div>
