@@ -1,0 +1,51 @@
+- #!index
+    - Animation
+        - BUG: main_box 閃爍 √(?)
+- #!chat
+    - Chat
+        - Animation
+        - input
+            - if no input, don't submit √
+            - if input is all space, trim it, don't submit √
+        - 撤回消息
+        - 當天聊天記錄保存在 localStorage
+        - 限制消息長度 √
+        - 移動端：回彈效果，滾動 √
+        - 收藏消息
+        - Moile Browser:
+            - 取消訪問 autofocus √
+            - 提交消息後隱藏 Keyboard √
+        - Web Notification
+    - Info
+        - 註銷 √
+        - 天氣
+        - 基本用戶信息
+        - 根據用戶註冊時間
+            - 背景顏色
+            - RSS News
+                - 右下角小字註明來源
+                - 更改回 Google News
+                - 用戶註冊時抓取新聞？間隔一段時間抓取？
+                    - 根據註冊地理位置：抓取相應新聞
+                - 根據上次登陸與本次登陸 IP 判斷地理位置信息：距離
+- #!forgot
+    - back 按鈕更換
+- DB
+    - token expires: 14d
+    - 定時備份
+    - api.js 和 index.js 的 DB 用戶分權
+
+- TIME
+    - 夜晚變成全黑白配色
+
+- Perf
+    - 圖片 expires
+
+- 安全
+    - 發布到 GitHub 前將
+        - 郵箱帳號密碼隱藏
+    - 定義服務器 500 錯誤：app.js[60]
+
+低血糖 缺氧
+建议检查空腹血糖
+起床的时候要慢，突然间站起来后，形成站立性低血压，心脏无法快速将血液供应至大脑，导致大脑缺血缺氧
