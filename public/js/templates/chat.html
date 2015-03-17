@@ -6,9 +6,7 @@
                     <div ng-repeat="contentItem in msgInbox">
                         <div class="all" ng-class="{'me': contentItem.isMe, 'others': !contentItem.isMe}">
                             <div ng-if="!contentItem.isMe" class="info_box">
-                                <div class="info_username">
-                                    <span>{{contentItem.username}}</span>
-                                </div>
+                                <span>{{contentItem.username}}</span>
                             </div>
                             <div class="content_box">
                                 <pre>{{contentItem.msg}}</pre>
@@ -48,10 +46,10 @@
                                     <a ng-href="{{item.url}}" target="_blank">{{item.title}}</a>
                                 </div>
                             </div>
-                            <div id="info_news_source">
-                                <span>來源：{{news.source_name}}</span>
-                            </div>                             
                         </div>
+                        <div id="info_news_source">
+                            <span>來源：{{newsSourceName}}</span>
+                        </div> 
                         <div id="info_news_load_more" ng-hide="isNoMoreNews">
                             <span ng-click="getDateNews()">{{newsTips}}</span>
                         </div>
@@ -64,11 +62,12 @@
             <div id="quit" ng-if="isNews">
                 <a ng-click="deleteNews()">刪除新聞</a>
             </div>
-            <button ng-if="isNews" id="returnToPreviousStep" ng-click="toggleNewsBox()">
-                ☜
-            </button>
+            <div ng-show="isNews" id="returnToPreviousStep" ng-click="toggleNewsBox()">
+            </div>
         </div>
     </div>
+</div>
+<div ng-if="!isMobile" class="sunAndMoon" ng-class="{'sun': isSun, 'moon': !isSun}" ng-click="toggleChatBox()"> 
 </div>
 <div id="chat_submit_box" ng-show="isChatBox">
     <form sy-hide-keyboard novalidate ng-submit="emitTextMsg()" name="form">

@@ -145,13 +145,17 @@ function getNews(country, news_box, callback){
         feedparser.on('end', function (){
 
             if (pointer < len - 1){
-                pointer ++
                 news_box.push({
                     'source_name': feed[pointer]['source_name'],
                     'news': news
                 })
+                pointer ++
                 getNextNews()
             } else {
+                news_box.push({
+                    'source_name': feed[pointer]['source_name'],
+                    'news': news
+                })
                 callback(news_box)
             }
         })        

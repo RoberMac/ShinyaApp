@@ -1,4 +1,4 @@
-angular.module('ShinyaApp.chatController', [])
+angular.module('ShinyaApp.chatController', ['ngAnimate'])
 .controller('chatController', ['$rootScope', '$scope', '$http', '$timeout', '$window', '$location', '$route', '$filter', 'jwtHelper','store', 
     function ($rootScope, $scope, $http, $timeout, $window, $location, $route, $filter, jwtHelper, store){
     
@@ -7,8 +7,10 @@ angular.module('ShinyaApp.chatController', [])
     $scope.decodeToken = jwtHelper.decodeToken($scope.token)
     // ngSwitch
     $scope.isChatBox = true
+    $scope.isSun     = false
     $scope.toggleChatBox = function (){
         $scope.isChatBox = !$scope.isChatBox
+        $scope.isSun     = !$scope.isSun
     }
     // ngIf
     $scope.isNews = false
@@ -75,6 +77,9 @@ angular.module('ShinyaApp.chatController', [])
      * 用戶註冊當日新聞
      *     `$scope.newsIndex` 保存當前新聞頁碼
      *     `$scope.newsBox` 新聞列表
+     *     `$scope.newsSourceName` 新聞來源名
+     *     `$scope.newsTips` 「更多」提示按鈕
+     *     `$scope.isNoMoreNews`  是否還有更多新聞
      *     `$scope.getDateNews` 獲取新聞，
      *         成功： `$scope.newsIndex` 加一
      *         失敗：
@@ -83,32 +88,39 @@ angular.module('ShinyaApp.chatController', [])
      */
     $scope.newsIndex = 0
     $scope.newsBox = []
+    $scope.newsSourceName = ''
     $scope.newsTips = '更多'
     $scope.isNoMoreNews = false
     $scope.getDateNews = function (){
 
-        $http.
-        post('/api/getDateNews', {
-            index: $scope.newsIndex
-        }).
-        success(function (data, status, headers, config){
-            $scope.newsBox.push(data.msg)
-            $scope.newsIndex ++
-            if ($scope.isNews === false){
-                $scope.toggleNewsBox()
-            }
-        }).
-        error(function (data, status, headers, config){
-            if (status === 401){
-                $location.path('/')
-            } else if (status === 400){
-                $scope.newsTips = data.msg
-                $timeout(function (){
-                    $scope.isNoMoreNews = true
-                    $scope.newsIndex = 0
-                }, 1717)
-            }
-        })
+        if ($scope.isNews === false){
+            $scope.toggleNewsBox()
+        }
+        if ($scope.newsIndex < 999){
+            $http.
+            post('/api/getDateNews', {
+                index: $scope.newsIndex
+            }).
+            success(function (data, status, headers, config){
+                $scope.newsBox.push(data.msg)
+                $scope.newsSourceName = data.msg.source_name
+                $scope.newsIndex ++
+                if ($scope.isNews === false){
+                    $scope.toggleNewsBox()
+                }
+            }).
+            error(function (data, status, headers, config){
+                if (status === 401){
+                    $location.path('/')
+                } else if (status === 400){
+                    $scope.newsTips = data.msg
+                    $timeout(function (){
+                        $scope.isNoMoreNews = true
+                        $scope.newsIndex = 999
+                    }, 1717)
+                }
+            })
+        }
     }
 
     $scope.deleteNews = function (){
