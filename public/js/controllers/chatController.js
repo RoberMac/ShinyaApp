@@ -1,15 +1,24 @@
-angular.module('ShinyaApp.chatController', [])
-.controller('chatController', ['$rootScope', '$scope', '$http', '$window', '$location', '$route', '$filter', 'jwtHelper','store', 
-    function ($rootScope, $scope, $http, $window, $location, $route, $filter, jwtHelper, store){
+angular.module('ShinyaApp.chatController', ['ngAnimate'])
+.controller('chatController', ['$rootScope', '$scope', '$http', '$timeout', '$window', '$location', '$route', '$filter', 'jwtHelper','store', 
+    function ($rootScope, $scope, $http, $timeout, $window, $location, $route, $filter, jwtHelper, store){
     
     // init
     $scope.token = store.get('id_token')
     $scope.decodeToken = jwtHelper.decodeToken($scope.token)
-    $scope.msgInbox = []
-    $scope.msgOutbox = {
-        'textMsg': ''
+    // ngSwitch
+    $scope.isChatBox = true
+    $scope.isSun     = false
+    $scope.toggleChatBox = function (){
+        $scope.isChatBox = !$scope.isChatBox
+        $scope.isSun     = !$scope.isSun
     }
-    $scope.newsBox = []
+    // ngIf
+    $scope.isNews = false
+    $scope.toggleNewsBox = function (){
+        $scope.isNews = !$scope.isNews
+    }
+
+    // 用戶註冊當日時刻
     function partsOfADay (hour) {
 
         if (0 < hour && hour <= 3){
@@ -30,12 +39,15 @@ angular.module('ShinyaApp.chatController', [])
             return '深夜'
         }
     }
+
+    // 從 JWT 解碼獲取用戶信息
     $scope.infoBox = {
         username: $scope.decodeToken.username,
         numero: $scope.decodeToken.numero,
         date: $filter('date')($scope.decodeToken.date, 'yyyy 年 M 月 d 日'),
         partsOfADay: partsOfADay($window.parseInt($filter('date')($scope.decodeToken.date, 'H')))
     }
+    // 用戶註冊次序號
     $scope.getNumero = function (){
 
         var numero = $scope.infoBox.numero
@@ -47,6 +59,11 @@ angular.module('ShinyaApp.chatController', [])
             return 'steel'
         }
     }
+    /*
+     * 用戶註冊時刻：「白天」／「夜晚」
+     *     「白天」：CSS Class -> daytime -> 黑邊黑字
+     *     「夜晚」：CSS Class -> night -> 黑底白字
+     */
     $scope.getPartsOfADay = function (){
 
         var day = $window.parseInt($filter('date')($scope.decodeToken.date, 'H'))
@@ -56,35 +73,75 @@ angular.module('ShinyaApp.chatController', [])
             return 'night'
         }
     }
+    /*
+     * 用戶註冊當日新聞
+     *     `$scope.newsIndex` 保存當前新聞頁碼
+     *     `$scope.newsBox` 新聞列表
+     *     `$scope.newsSourceName` 新聞來源名
+     *     `$scope.newsTips` 「更多」提示按鈕
+     *     `$scope.isNoMoreNews`  是否還有更多新聞
+     *     `$scope.getDateNews` 獲取新聞，
+     *         成功： `$scope.newsIndex` 加一
+     *         失敗：
+     *             狀態碼 401：JWT 過期，跳轉到首頁
+     *             狀態碼 400：已無更多新聞
+     */
+    $scope.newsIndex = 0
+    $scope.newsBox = []
+    $scope.newsSourceName = ''
+    $scope.newsTips = '更多'
+    $scope.isNoMoreNews = false
     $scope.getDateNews = function (){
 
-        $http.
-        get('/api/getDateNews').
-        success(function (data, status, headers, config){
-            $scope.newsBox = data.msg
+        if ($scope.isNews === false){
             $scope.toggleNewsBox()
-        }).
-        error(function (data, status, headers, config){
-            if (status === 401){
-                $location.path('/')
-            }
-        })
+        }
+        if ($scope.newsIndex < 999){
+            $http.
+            post('/api/getDateNews', {
+                index: $scope.newsIndex
+            }).
+            success(function (data, status, headers, config){
+                $scope.newsBox.push(data.msg)
+                $scope.newsSourceName = data.msg.source_name
+                $scope.newsIndex ++
+                if ($scope.isNews === false){
+                    $scope.toggleNewsBox()
+                }
+            }).
+            error(function (data, status, headers, config){
+                if (status === 401){
+                    $location.path('/')
+                } else if (status === 400){
+                    $scope.newsTips = data.msg
+                    $timeout(function (){
+                        $scope.isNoMoreNews = true
+                        $scope.newsIndex = 999
+                    }, 1717)
+                }
+            })
+        }
     }
+
+    $scope.deleteNews = function (){
+   
+    }
+    // 註銷
     $scope.quit = function (){
         store.remove('id_token')
         $location.path('/')
     }
-    // ngSwitch
-    $scope.isChatBox = true
-    $scope.toggleChatBox = function (){
-        $scope.isChatBox = !$scope.isChatBox
+
+    /*
+     * Socket.IO
+     */
+    // I/O Text Message
+    $scope.msgInbox = []
+    $scope.msgOutbox = {
+        'textMsg': ''
     }
-    // ngIf
-    $scope.isNews = false
-    $scope.toggleNewsBox = function (){
-        $scope.isNews = !$scope.isNews
-    }
-    function newMsg(data) {
+    function onTextMsg(data) {
+
         var mainBox = document.querySelector('.main_box'),
             before  = mainBox.scrollHeight - mainBox.clientHeight - mainBox.scrollTop,
             isMe    = $rootScope.socket.id === data.id;
@@ -108,11 +165,16 @@ angular.module('ShinyaApp.chatController', [])
         }
     }
     $scope.emitTextMsg = function (){
+
+        if(jwtHelper.isTokenExpired($scope.token)){
+
+            console.log($scope.msgInbox)
+            $window.location.reload()
+        }
         // 屏蔽純空白輸入，由於 ngInput 默認 trim，故只需判斷是否為空，無需判斷空白字符
         if ($scope.msgOutbox.textMsg !== ''){
-            $rootScope.socket.emit('chat message', {
+            $rootScope.socket.emit('textMsg', {
                 'id': $rootScope.socket.id,
-                'type': 'text',
                 'msg': $scope.msgOutbox.textMsg,
                 'username': $scope.infoBox.username
             })
@@ -120,39 +182,54 @@ angular.module('ShinyaApp.chatController', [])
         }
     }
 
-    // Socket.IO
-    if (!$rootScope.socket){
+    // User Join or Quit
+    $scope.userCount = 0
+    function onUserIO(count){
+        $scope.userCount = count
+    }
+    function connectSIO(){
         $rootScope.socket = io(':8080', {
             'query': 'token=' + $scope.token
             // 'secure': true
         })
-        // $rootScope.socket.on('connect', function (){
-        //   $rootScope.socket.send()
-        //   $rootScope.socket.on('message', function (msg){
-        //     newMsg(msg)
-        //   })
-        // })
-        $rootScope.socket.on('chat message', function (msg){
-            newMsg(msg)
+        $rootScope.socket.on('connect', function (){
+
+            $rootScope.socket.emit('latestMsg', $scope.msgInbox.length >= 0)
+            $rootScope.socket.on('latestMsg', function (msg){
+                for (var i = 0; i < msg.length; i++){
+                    $scope.msgInbox.push(msg[i])
+                }
+            })
         })
-        // $rootScope.socket.on('add username', function (msg){
-        //     newMsg(msg)
-        // })
-        // $rootScope.socket.on('disconnect', function (msg){
-        //     newMsg(msg)
-        // })
+        $rootScope.socket.on('textMsg', function (msg){
+            onTextMsg(msg)
+        })
+        // User Join or Quit
+        $rootScope.socket.on('userJoin', function (count){
+            onUserIO(count)
+        })
+        $rootScope.socket.on('disconnect', function (count){
+            onUserIO(count)
+        })
+    }
+    function reconnectSIO(){
+        console.log('reconnect')
+        $rootScope.socket.disconnect()
+        $rootScope.socket.connect(':8080')
+        $rootScope.socket.on('textMsg', function (msg){
+            console.log('textMsg')
+            onTextMsg(msg)
+        })
+    }
+    if (!$rootScope.socket){
+        connectSIO()
     } else {
         /*
          * 當從 '/chat' 按瀏覽器 back 後
          * 會從 '/' 跳轉回 '/chat'，重新加載 template，斷開 ws 重新鏈接
          *
          */
-        $rootScope.socket.disconnect()
-        $rootScope.socket.connect()
-        $rootScope.socket.on('chat message', function (msg){
-            console.log('chat message')
-            newMsg(msg)
-        })
+         reconnectSIO()
     }
 
 }])

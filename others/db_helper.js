@@ -2,31 +2,23 @@ var nodemailer    = require('nodemailer'),
     getGeo        = require('./geo_helper'),
     getNews       = require('./rss_helper');
 
-// 每隔 30 分鐘抓取一次新聞
-var latest_news = []
-getNews(function (news){
-    latest_news = news
-    console.log(Date() + ' :')
-    console.log(latest_news)
-})
-setInterval(function (){
-    getNews(function (news){
-        latest_news = news
-        console.log(Date() + ' :')
-        console.log(latest_news)
-    })
-}, 300000)
-
 var db_helper = {
     register: function (register_form, validator, User, res, next){
 
+        var username = register_form.username,
+            password = register_form.password,
+            email    = register_form.email,
+            info     = register_form.register_info,
+            geo      = getGeo(register_form.register_info.ip),
+            news     = []
+
         // 檢查郵箱
-        if (validator.isEmail(register_form.email)){
+        if (validator.isEmail(email)){
             //檢查用戶名
-            if (register_form.username.search(/\s/) < 0){
-                if (validator.isLength(register_form.username, 1, 16)){
+            if (username.search(/\s/) < 0){
+                if (validator.isLength(username, 1, 16)){
                     // 檢查用戶名是否存在
-                    User.findOne({username: register_form.username}, function (err, found){
+                    User.findOne({username: username}, function (err, found){
 
                         if (err){
                             next({'code': 500, 'status': 'error', 'msg': 'Server Error'})
@@ -36,7 +28,7 @@ var db_helper = {
                             next({'code': 400, 'status': 'error', 'msg': '用戶名已存在'})
                         } else {
                             // 檢查電郵地址是否存在
-                            User.findOne({email: register_form.email}, function (err, found){
+                            User.findOne({email: email}, function (err, found){
 
                                 if (err){
                                     next({'code': 500, 'status': 'error', 'msg': 'Server Error'})
@@ -51,16 +43,16 @@ var db_helper = {
                                             next({'code': 500, 'status': 'error', 'msg': 'Server Error'})
                                             return err
                                         }
+                                        console.log('count: ' + count)
                                         // 保存到數據庫
                                         var user = new User({
-                                            'username': register_form.username,
-                                            'email': register_form.email,
-                                            'password': register_form.password,
-                                            'register_info': register_form.register_info,
+                                            'username': username,
+                                            'email': email,
+                                            'password': password,
+                                            'register_info': info,
                                             'other_info': {
                                                 'numero': count,
-                                                'news'  : latest_news,
-                                                'geo'   : getGeo(register_form.register_info.ip)
+                                                'geo'   : geo
                                             }
                                         })
                                         user.save(function (err){
@@ -69,6 +61,18 @@ var db_helper = {
                                                 return err
                                             }
                                             res.json({'status': 'ok', 'msg': '註冊成功'})
+                                            // 獲取新聞並保存
+                                            getNews('CN', news, function (latest_news){
+                                                User.findOneAndUpdate({username: username}, {
+                                                    news: latest_news
+                                                }, function (err){
+                                                    if (err){
+                                                        console.log('保存新聞失敗')
+                                                        return err
+                                                    }
+                                                    console.log('新聞已保存')
+                                                })
+                                            })
                                         })
                                     })
                                 }
@@ -93,22 +97,25 @@ var db_helper = {
                 if (err) return err
                 // 檢查用戶是否存在
                 if (!found){
-                    console.log('Not Found')
                     res.status(400).json({'status': 'error', 'msg': '用戶不存在'})
                 } else {
-                    // 檢查密碼是否正確
-                    var compare_password = found.password
-                    if (bcrypt.compareSync(login_form.password, compare_password)){
-                        var token = jwt.sign({
-                            username: found.username,
-                            numero: found.other_info.numero,
-                            date: found.register_info.date
-                        }, key, {
-                            expiresInMinutes: 1
-                        })
-                        res.json({'token': token})
+                    if (!login_form.password){
+                            next({'code': 400, 'status': 'error', 'msg': '請輸入密碼'})
                     } else {
-                        next({'code': 400, 'status': 'error', 'msg': '密碼有誤'})
+                        // 檢查密碼是否正確
+                        var compare_password = found.password
+                        if (bcrypt.compareSync(login_form.password, compare_password)){
+                            var token = jwt.sign({
+                                username: found.username,
+                                numero: found.other_info.numero,
+                                date: found.register_info.date
+                            }, key, {
+                                expiresInMinutes: 10
+                            })
+                            res.json({'token': token})
+                        } else {
+                            next({'code': 400, 'status': 'error', 'msg': '密碼有誤'})
+                        }
                     }
                 }
             }) 
@@ -120,24 +127,28 @@ var db_helper = {
                     console.log('Not Found')
                     res.status(400).json({'status': 'error', 'msg': '用戶不存在'})
                 } else {
-                    // 檢查密碼是否正確
-                    var compare_password = found.password
-                    if (bcrypt.compareSync(login_form.password, compare_password)){
-                        var token = jwt.sign({
-                            username: found.username,
-                            numero: found.other_info.numero,
-                            date: found.register_info.date
-                        }, key, {
-                            expiresInMinutes: 1
-                        })
-                        res.json({'token': token})
+
+                    if (!login_form.password){
+                            next({'code': 400, 'status': 'error', 'msg': '請輸入密碼'})
                     } else {
-                        next({'code': 400, 'status': 'error', 'msg': '密碼有誤'})
+                        // 檢查密碼是否正確
+                        var compare_password = found.password
+                        if (bcrypt.compareSync(login_form.password, compare_password)){
+                            var token = jwt.sign({
+                                username: found.username,
+                                numero: found.other_info.numero,
+                                date: found.register_info.date
+                            }, key, {
+                                expiresInMinutes: 10
+                            })
+                            res.json({'token': token})
+                        } else {
+                            next({'code': 400, 'status': 'error', 'msg': '密碼有誤'})
+                        }
                     }
                 }
-            })            
+            })
         }
-
     },
     forgot_email: function (forgot_email_form, User, jwt, key, res, next){
 
@@ -148,7 +159,7 @@ var db_helper = {
             expiresInMinutes: 60
         })
         console.log(code)
-        User.findOneAndUpdate({email: forgot_email_form.email}, {other_info: {code: code}}, function (err, found){
+        User.findOneAndUpdate({email: forgot_email_form.email}, {forgot_code: code}, function (err, found){
             if (err) return err
             // 檢查電郵地址是否存在
             if (!found){
@@ -190,13 +201,16 @@ var db_helper = {
         // 檢查驗證碼是否最新鮮，因為有可能同時存在多個新鮮的驗證碼
         User.findOne({email: update_form.email}, function (err, found){
             if (err) return err
-            console.log('update_form.email'+update_form.email)
+            console.log('update_form.email' + update_form.email)
             if (!found) {
                 next({'code': 400, 'status': 'error', 'msg': '電郵地址不存在'})
             } else {
                 // 驗證碼最新鮮
-                if (found.other_info.code === update_form.code){
-                    User.findOneAndUpdate({email: update_form.email}, {password: update_form.password}, function (err, found){
+                if (found.forgot_code === update_form.code){
+                    User.findOneAndUpdate({email: update_form.email}, {
+                        password: update_form.password,
+                        forgot_code: '',
+                    }, function (err, found){
                         if (err) return err
                         if (!found) {
                             next({'code': 400, 'status': 'error', 'msg': '電郵地址不存在'})

@@ -2,22 +2,17 @@
     <div ng-switch on="isChatBox">
         <div ng-switch-when="true">
             <div id="chat_box">
-                <div id="chatlist">
-                    <div ng-repeat="contentItem in msgInbox">
-                        <div class="all" ng-class="{'me': contentItem.isMe, 'others': !contentItem.isMe}">
-                            <div ng-if="!contentItem.isMe" class="info_box">
-                                <div class="info_username">
-                                    <span>{{contentItem.username}}</span>
-                                </div>
-                            </div>
-                            <div class="content_box">
-                                <pre>{{contentItem.msg}}</pre>
-                            </div>
-
+                <div ng-repeat="contentItem in msgInbox">
+                    <div class="all" ng-class="{'me': contentItem.isMe, 'others': !contentItem.isMe}">
+                        <div ng-if="!contentItem.isMe" class="info_box">
+                            <span>{{contentItem.username}}</span>
+                        </div>
+                        <div class="content_box">
+                            <pre>{{contentItem.msg}}</pre>
                         </div>
                     </div>
                 </div>
-            </div>            
+            </div>
         </div>
         <div ng-switch-when="false">
             <div id="info_box">
@@ -39,12 +34,21 @@
                     </div>
                 </div>
                 <div ng-if="isNews">
+                    <h3>當日新聞</h3>
                     <div id="info_news_box">
-                        <div ng-repeat="item in newsBox">
-                            <div id="info_news_content_box">
-                                <span>{{item.date | date: 'HH:mm'}}</span>
-                                <a ng-href="{{item.url}}" target="_blank">{{item.title}}</a>
+                        <div ng-repeat="news in newsBox">
+                            <div ng-repeat="item in news.news">
+                                <div id="info_news_content_box">
+                                    <span>{{item.date | date: 'HH:mm'}}</span>
+                                    <a ng-href="{{item.url}}" target="_blank">{{item.title}}</a>
+                                </div>
                             </div>
+                        </div>
+                        <div id="info_news_source">
+                            <span>來源：{{newsSourceName}}</span>
+                        </div> 
+                        <div id="info_news_load_more" ng-hide="isNoMoreNews">
+                            <span ng-click="getDateNews()">{{newsTips}}</span>
                         </div>
                     </div>
                 </div>
@@ -52,11 +56,18 @@
             <div id="quit" ng-if="!isNews">
                 <a ng-click="quit()">註銷用戶</a>
             </div>
-            <button ng-if="isNews" id="returnToPreviousStep" ng-click="toggleNewsBox()">
-                ☜
-            </button>
+            <div id="quit" ng-if="isNews">
+                <a ng-click="deleteNews()">刪除新聞</a>
+            </div>
+            <div ng-show="isNews" id="returnToPreviousStep" ng-click="toggleNewsBox()">
+            </div>
         </div>
     </div>
+</div>
+<div ng-if="!isMobile" class="sunAndMoon" ng-class="{'sun': isSun, 'moon': !isSun}" ng-click="toggleChatBox()"> 
+</div>
+<div id="userCount">
+    在線人數：{{userCount}}
 </div>
 <div id="chat_submit_box" ng-show="isChatBox">
     <form sy-hide-keyboard novalidate ng-submit="emitTextMsg()" name="form">

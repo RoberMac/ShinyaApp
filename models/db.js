@@ -32,11 +32,11 @@ var userSchema = new Schema({
         platform : String
     },
     other_info   : {
-        code     : String,
         numero   : Number,
-        news     : Array,
         geo      : Schema.Types.Mixed
-    }
+    },
+    forgot_code  : String,
+    news         : Array
 })
 
 var User = mongoose.model('User', userSchema)
