@@ -1,23 +1,72 @@
-angular.module('ShinyaApp.chatController', ['ngAnimate'])
-.controller('chatController', ['$rootScope', '$scope', '$http', '$timeout', '$window', '$location', '$route', '$filter', 'jwtHelper','store', 
-    function ($rootScope, $scope, $http, $timeout, $window, $location, $route, $filter, jwtHelper, store){
+angular.module('ShinyaApp.chatController', ['duScroll'])
+.controller('chatController', ['$rootScope', '$scope', '$http', '$timeout', '$window', '$document', '$location', '$route', '$filter', 'jwtHelper','store', 
+    function ($rootScope, $scope, $http, $timeout, $window, $document, $location, $route, $filter, jwtHelper, store){
     
-    // init
-    $scope.token = store.get('id_token')
-    $scope.decodeToken = jwtHelper.decodeToken($scope.token)
-    // ngSwitch
+    /*
+     * `$scope.nowPos`: 當前 `.main_box` 位置
+     * `$scope.getBottomPos`: 獲取 `.main_box` 底部位置
+     * `$scope.storeNowPos`: 保存 `.main_box` 當前位置
+     * `$scope.setNowPos`: 設置 `.main_box` 當前位置
+     * `$scope.getBottomPos`: 獲取 `.main_box` 底部位置
+     * `$scope.isBottom`: 判斷是否在 `.main_box` 底部
+     * `$scope.scrollToBottom`: 滾動到 `.main_box` 底部
+     *
+     */
+    $scope.nowPos = 0
+    $scope.storeNowPos = function (){
+        var mainBoxElem = document.querySelector('.main_box')
+        $scope.nowPos = mainBoxElem.scrollTop
+    }
+    $scope.setNowPos = function (nowPos){
+        var mainBoxElem = document.querySelector('.main_box')
+        mainBoxElem.scrollTop = nowPos
+    }
+    $scope.getBottomPos = function (){
+        var mainBoxElem = document.querySelector('.main_box')
+        return mainBoxElem.scrollHeight - mainBoxElem.clientHeight
+    }
+    $scope.isBottom = function (){
+        var mainBoxElem = document.querySelector('.main_box')
+        return !(mainBoxElem.scrollHeight - mainBoxElem.clientHeight - mainBoxElem.scrollTop)
+    }
+    $scope.scrollToBottom = function (){
+        if (!$rootScope.isMobile){
+            angular.element(document.querySelector('.main_box'))
+            .scrollTo(0, $scope.getBottomPos(), 717)
+            .then(function(){
+                console.log('scroll to bottom')
+            })
+        } else {
+            $scope.setNowPos($scope.getBottomPos())
+        }
+
+    }
+    // `#chat_box` 和 `#info_box` 切換
     $scope.isChatBox = true
     $scope.isSun     = false
     $scope.toggleChatBox = function (){
+        // 切換到 #info_box 前保存當前位置
+        if ($scope.isChatBox){
+            $scope.storeNowPos()
+        }
         $scope.isChatBox = !$scope.isChatBox
         $scope.isSun     = !$scope.isSun
+        // 切換回 #chat_box 後會滾到之前位置
+        $timeout(function (){
+            if ($scope.isChatBox){
+                $scope.setNowPos($scope.nowPos)
+            }            
+        }, 0)
+
     }
-    // ngIf
+    // `#info_news_box` 切換
     $scope.isNews = false
     $scope.toggleNewsBox = function (){
         $scope.isNews = !$scope.isNews
     }
 
+    var token = store.get('id_token'),
+        decodeToken = jwtHelper.decodeToken(token);
     // 用戶註冊當日時刻
     function partsOfADay (hour) {
 
@@ -39,13 +88,12 @@ angular.module('ShinyaApp.chatController', ['ngAnimate'])
             return '深夜'
         }
     }
-
     // 從 JWT 解碼獲取用戶信息
     $scope.infoBox = {
-        username: $scope.decodeToken.username,
-        numero: $scope.decodeToken.numero,
-        date: $filter('date')($scope.decodeToken.date, 'yyyy 年 M 月 d 日'),
-        partsOfADay: partsOfADay($window.parseInt($filter('date')($scope.decodeToken.date, 'H')))
+        username: decodeToken.username,
+        numero: decodeToken.numero,
+        date: $filter('date')(decodeToken.date, 'yyyy 年 M 月 d 日'),
+        partsOfADay: partsOfADay($window.parseInt($filter('date')(decodeToken.date, 'H')))
     }
     // 用戶註冊次序號
     $scope.getNumero = function (){
@@ -64,9 +112,9 @@ angular.module('ShinyaApp.chatController', ['ngAnimate'])
      *     「白天」：CSS Class -> daytime -> 黑邊黑字
      *     「夜晚」：CSS Class -> night -> 黑底白字
      */
-    $scope.getPartsOfADay = function (){
+    $scope.getDaytimeOrNight = function (){
 
-        var day = $window.parseInt($filter('date')($scope.decodeToken.date, 'H'))
+        var day = $window.parseInt($filter('date')(decodeToken.date, 'H'))
         if (9 < day && day < 18){
             return 'daytime'
         } else {
@@ -132,15 +180,21 @@ angular.module('ShinyaApp.chatController', ['ngAnimate'])
         $location.path('/')
     }
 
-    // Socket.IO
+    /*
+     *************
+     * Socket.IO *
+     *************
+     *  
+     * 文本消息抵達與發送
+     *
+     */    
     $scope.msgInbox = []
     $scope.msgOutbox = {
         'textMsg': ''
     }
-    function newMsg(data) {
-        var mainBox = document.querySelector('.main_box'),
-            before  = mainBox.scrollHeight - mainBox.clientHeight - mainBox.scrollTop,
-            isMe    = $rootScope.socket.id === data.id;
+    function onTextMsg(data) {
+        var isMe = $rootScope.socket.id === data.id,
+            beforePush = $scope.isBottom();
         $scope.$apply(function (){
             $scope.msgInbox.push({
                 'isMe': isMe,
@@ -154,57 +208,88 @@ angular.module('ShinyaApp.chatController', ['ngAnimate'])
          * 另外，當用戶發送新消息時，滾動到底部
          *
          */
-        if (before <= 0 || isMe){
-            mainBox.scrollTop = mainBox.scrollHeight - mainBox.clientHeight
+        if (beforePush || isMe){
+            $scope.scrollToBottom()
         } else {
-            // 提醒用戶新消息到來
+            if (!isMe){
+                $scope.msgNotify('newMsg', '新消息')
+            }
         }
     }
     $scope.emitTextMsg = function (){
-        // 屏蔽純空白輸入，由於 ngInput 默認 trim，故只需判斷是否為空，無需判斷空白字符
-        if ($scope.msgOutbox.textMsg !== ''){
-            $rootScope.socket.emit('chat message', {
-                'id': $rootScope.socket.id,
-                'type': 'text',
-                'msg': $scope.msgOutbox.textMsg,
-                'username': $scope.infoBox.username
-            })
-            $scope.msgOutbox.textMsg = ''
+
+        if(jwtHelper.isTokenExpired(token)){
+            $window.location.reload()
+        } else {
+            // 屏蔽純空白輸入，由於 ngInput 默認 trim，故只需判斷是否為空，無需判斷空白字符
+            if ($scope.msgOutbox.textMsg !== ''){
+                $rootScope.socket.emit('textMsg', {
+                    'id': $rootScope.socket.id,
+                    'msg': $scope.msgOutbox.textMsg,
+                    'username': $scope.infoBox.username
+                })
+                $scope.msgOutbox.textMsg = ''
+            }
         }
     }
-
-    if (!$rootScope.socket){
+    /*
+     * Socket.IO 連接與重連
+     *
+     */
+    function connectSIO(){
         $rootScope.socket = io(':8080', {
-            'query': 'token=' + $scope.token
+            'query': 'token=' + token
             // 'secure': true
         })
-        // $rootScope.socket.on('connect', function (){
-        //   $rootScope.socket.send()
-        //   $rootScope.socket.on('message', function (msg){
-        //     newMsg(msg)
-        //   })
-        // })
-        $rootScope.socket.on('chat message', function (msg){
-            newMsg(msg)
+        $rootScope.socket.on('connect', function (){
+
+            $rootScope.socket.emit('latestMsg', $scope.msgInbox.length >= 0)
+            $rootScope.socket.on('latestMsg', function (msg){
+                $scope.$apply(function (){
+                    for (var i = 0; i < msg.length; i++){
+                        $scope.msgInbox.push({
+                            'isMe'    : decodeToken.username === msg[i].username,
+                            'msg'     : msg[i].msg,
+                            'username': msg[i].username
+                        })
+                    }
+                })
+            })
         })
-        // $rootScope.socket.on('add username', function (msg){
-        //     newMsg(msg)
-        // })
-        // $rootScope.socket.on('disconnect', function (msg){
-        //     newMsg(msg)
-        // })
+        $rootScope.socket.on('textMsg', function (msg){
+            onTextMsg(msg)
+        })
+        /*
+         * `userJoin`: 有用戶加入
+         * `disconnect`: 有用戶退出
+         *
+         */
+        $rootScope.socket.on('userJoin', function (count){
+            $scope.onUserIO(count)
+        })
+        $rootScope.socket.on('disconnect', function (count){
+            $scope.onUserIO(count)
+        })
+    }
+    function reconnectSIO(){
+        console.log('reconnect')
+        $rootScope.socket.disconnect()
+        $rootScope.socket.connect(':8080')
+        $rootScope.socket.on('textMsg', function (msg){
+            console.log('textMsg')
+            onTextMsg(msg)
+        })
+    }
+    if (!$rootScope.socket){
+        connectSIO()
     } else {
         /*
          * 當從 '/chat' 按瀏覽器 back 後
-         * 會從 '/' 跳轉回 '/chat'，重新加載 template，斷開 ws 重新鏈接
+         * 會從 '/' 跳轉回 '/chat'，重新加載 template，斷開重新鏈接
          *
          */
-        $rootScope.socket.disconnect()
-        $rootScope.socket.connect()
-        $rootScope.socket.on('chat message', function (msg){
-            console.log('chat message')
-            newMsg(msg)
-        })
+         $window.location.reload()
+         reconnectSIO()
     }
 
 }])

@@ -2,7 +2,7 @@ angular.module('ShinyaApp.notifyDirective', [])
 .directive('syNotify', function (){
     return {
         restrict: 'E',
-        replace: true,
+        replace : true,
         template: '<div ng-messages="formMessage.$msg" >'
                 +     '<div id="error_msg" class="notification general_animate" ng-message="error_msg">'
                 +         '{{errMsg}}'

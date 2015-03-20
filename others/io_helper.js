@@ -1,22 +1,32 @@
 var fs   = require('fs'),
     sjwt = require('socketio-jwt');
 
-var key = fs.readFileSync('public/others/public_key.pem');
+var key       = fs.readFileSync('public/others/public_key.pem')
 // io.use(function (a, b){
 //     a.my_token = key;
 //     b();
 // })
+
 io.use(sjwt.authorize({
     secret: key,
     handshake: true
 }))
 
+var msgCache  = [],
+    userCount = 0;
 io.on('connection', function (socket) {
 
-    // socket.on('message', function (mes){
-    //     console.log(mes + 'is in.');
-    //     io.emit('message', socket.id)
-    // })
+    userCount ++
+    io.emit('userJoin', userCount)
+
+    socket.on('latestMsg', function (msg){
+        if (msg === true){
+            io.sockets.connected[socket.id].emit('latestMsg', msgCache)            
+        } else {
+            console.log('nothing need to do')
+        }
+    })
+
     console.log('socket.decoded_token: ', socket.decoded_token);
     console.log('socket.id: ' + socket.id)
 
@@ -28,14 +38,30 @@ io.on('connection', function (socket) {
     //     io.emit('add username', msg)
     //     console.log('add username: ' + msg)
     // })
-    socket.on('chat message', function (msg) {
-        io.emit('chat message', msg)
-        console.log('chat message: ' + msg.msg + ', id: ' + msg.id)
+    socket.on('textMsg', function (msg) {
+        // 緩存十條消息
+        if (msgCache.length < 10){
+            msgCache.push({
+                'id'      : socket.id,
+                'msg'     : msg.msg,
+                'username': socket.decoded_token.username
+            })
+        } else {
+            msgCache.shift()
+            msgCache.push({
+                'id'      : socket.id,
+                'msg'     : msg.msg,
+                'username': socket.decoded_token.username
+            })
+        }
+        io.emit('textMsg', msg)
+        console.log('textMsg: ' + msg.msg + ', id: ' + msg.id)
     })
-    // socket.on('disconnect', function (msg) {
-    //     io.emit('disconnect', msg)
-    //     console.log('disconnect: ' + msg)
-    // })
+    socket.on('disconnect', function (msg) {
+        userCount --
+        io.emit('disconnect', userCount)
+        console.log(socket.decoded_token.username + 'quit')
+    })
 })
 
 module.exports = io

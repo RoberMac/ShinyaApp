@@ -1,21 +1,18 @@
-<div class="main_box" ng-class="{'input_shake_animate': input_shake_animate, 'chat_box': isChatBox}" ng-swipe-left="toggleChatBox()" ng-swipe-right="toggleChatBox()">
+<div class="main_box" ng-class="{'input_shake_animate': input_shake_animate, 'chat_box': isChatBox}" ng-swipe-left="toggleChatBox()" ng-swipe-right="toggleChatBox()" sy-autoscroll>
     <div ng-switch on="isChatBox">
         <div ng-switch-when="true">
             <div id="chat_box">
-                <div id="chatlist">
-                    <div ng-repeat="contentItem in msgInbox">
-                        <div class="all" ng-class="{'me': contentItem.isMe, 'others': !contentItem.isMe}">
-                            <div ng-if="!contentItem.isMe" class="info_box">
-                                <span>{{contentItem.username}}</span>
-                            </div>
-                            <div class="content_box">
-                                <pre>{{contentItem.msg}}</pre>
-                            </div>
-
+                <div ng-repeat="contentItem in msgInbox">
+                    <div class="all" ng-class="{'me': contentItem.isMe, 'others': !contentItem.isMe}">
+                        <div ng-if="!contentItem.isMe" class="info_box">
+                            <span>{{contentItem.username}}</span>
+                        </div>
+                        <div class="content_box">
+                            <pre>{{contentItem.msg}}</pre>
                         </div>
                     </div>
                 </div>
-            </div>            
+            </div>
         </div>
         <div ng-switch-when="false">
             <div id="info_box">
@@ -31,7 +28,7 @@
                         <div class="date">
                             <span><a ng-click="getDateNews()">{{infoBox.date}}</a></span>
                         </div>
-                        <div ng-class="getPartsOfADay()">
+                        <div ng-class="getDaytimeOrNight()">
                             <span>{{infoBox.partsOfADay}}</span>
                         </div>
                     </div>
@@ -69,6 +66,8 @@
 </div>
 <div ng-if="!isMobile" class="sunAndMoon" ng-class="{'sun': isSun, 'moon': !isSun}" ng-click="toggleChatBox()"> 
 </div>
+<sy-usercount></sy-usercount>
+<sy-beep></sy-beep>
 <div id="chat_submit_box" ng-show="isChatBox">
     <form sy-hide-keyboard novalidate ng-submit="emitTextMsg()" name="form">
         <input type="text" ng-model="msgOutbox.textMsg" sy-autofocus ng-maxlength="1024">

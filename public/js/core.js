@@ -8,9 +8,13 @@ angular.module('ShinyaApp', [
     'ShinyaApp.notifyDirective',
     'ShinyaApp.autofocusDirective',
     'ShinyaApp.hideKeyboardDirective',
+    'ShinyaApp.autoscrollDirective',
+    'ShinyaApp.beepDirective',
+    'ShinyaApp.usercountDirective',
     'ShinyaApp.submitController',
     'ShinyaApp.chatController',
-    'ShinyaApp.forgotController'
+    'ShinyaApp.forgotController',
+    'duScroll'
     ])
 .config(['$routeProvider', '$locationProvider', '$httpProvider', 'jwtInterceptorProvider', 
     function ($routeProvider, $locationProvider, $httpProvider, jwtInterceptorProvider) {
@@ -89,4 +93,5 @@ angular.module('ShinyaApp', [
             }
         }
     })
+    
 }])
