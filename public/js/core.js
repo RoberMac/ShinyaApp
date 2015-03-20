@@ -5,6 +5,8 @@ angular.module('ShinyaApp', [
     'ngMessages',
     'angular-jwt',
     'angular-storage',
+    'ShinyaApp.posHelperServices',
+    'ShinyaApp.timeHelperServices',
     'ShinyaApp.notifyDirective',
     'ShinyaApp.autofocusDirective',
     'ShinyaApp.hideKeyboardDirective',

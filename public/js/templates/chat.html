@@ -21,14 +21,14 @@
                         <h2>{{infoBox.username}}</h2>
                     </div>
                     <div id="info_numero_box">
-                        <p>第 <span ng-class="getNumero()">{{infoBox.numero}}</span> 號用戶</p>
+                        <p>第 <span ng-class="numero">{{infoBox.numero}}</span> 號用戶</p>
                     </div>
                     <div id="info_date_box">
                         <h3>加入於</h3>
                         <div class="date">
                             <span><a ng-click="getDateNews()">{{infoBox.date}}</a></span>
                         </div>
-                        <div ng-class="getDaytimeOrNight()">
+                        <div ng-class="daytimeOrNight">
                             <span>{{infoBox.partsOfADay}}</span>
                         </div>
                     </div>

@@ -1,5 +1,5 @@
 angular.module('ShinyaApp.beepDirective', [])
-.directive('syBeep', function (){
+.directive('syBeep', ['syPosHelper', function (syPosHelper){
     return {
         restrict: 'E',
         replace : true,
@@ -19,7 +19,7 @@ angular.module('ShinyaApp.beepDirective', [])
             $scope.msgNotifyBox = {}
             $scope.viewedMsg = function (){
                 $scope.isViewMsg = true
-                $scope.scrollToBottom()
+                syPosHelper.scrollToBottom()
             }
             $scope.msgNotify = function(type, msg){
                 $scope.$apply(function (){
@@ -34,4 +34,4 @@ angular.module('ShinyaApp.beepDirective', [])
             }
         }]
     }
-})
+}])
