@@ -36,7 +36,7 @@ angular.module('ShinyaApp', [
             controller: 'forgotController'
         }).
         otherwise({
-            templateUrl: '/public/js/templates/404.html'
+            redirectTo: '/'
         })
     jwtInterceptorProvider.tokenGetter = ['store', function(store) {
         return store.get('id_token')

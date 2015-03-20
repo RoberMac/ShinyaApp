@@ -33,10 +33,10 @@ angular.module('ShinyaApp.chatController', ['duScroll'])
         username: decodeToken.username,
         numero: decodeToken.numero,
         date: $filter('date')(decodeToken.date, 'yyyy 年 M 月 d 日'),
-        partsOfADay: syTimeHelper.partsOfADay($window.parseInt($filter('date')(decodeToken.date, 'H')))
+        partsOfADay: syTimeHelper.partsOfADay(~~($filter('date')(decodeToken.date, 'H')))
     }
     $scope.numero = syTimeHelper.getNumero($scope.infoBox.numero)
-    $scope.daytimeOrNight = syTimeHelper.getDaytimeOrNight($window.parseInt($filter('date')(decodeToken.date, 'H')))
+    $scope.daytimeOrNight = syTimeHelper.getDaytimeOrNight(~~($filter('date')(decodeToken.date, 'H')))
 
     /*
      * 用戶註冊當日新聞
