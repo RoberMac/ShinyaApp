@@ -16,7 +16,7 @@ angular.module('ShinyaApp.chatController', ['duScroll'])
         $timeout(function (){
             if ($scope.isChatBox){
                 syPosHelper.setNowPos(syPosHelper.nowPos)
-            }            
+            }
         }, 0)
 
     }
@@ -108,14 +108,25 @@ angular.module('ShinyaApp.chatController', ['duScroll'])
     $scope.msgOutbox = {
         'textMsg': ''
     }
+    var now = Date.now()
+    function isShowDate(date){
+        if (date - now > 1000 * 60){
+            now = Date.now()
+            return true
+        } else {
+            return false
+        }
+    }
     function onTextMsg(data) {
-        var isMe = $rootScope.socket.id === data.id,
+        var isMe       = $rootScope.socket.id === data.id,
             beforePush = syPosHelper.isBottom();
         $scope.$apply(function (){
             $scope.msgInbox.push({
-                'isMe': isMe,
-                'msg' : data.msg,
-                'username': data.username
+                'isMe'      : isMe,
+                'isShowDate': isShowDate(data.date),
+                'date'      : data.date,
+                'msg'       : data.msg,
+                'username'  : data.username
             })
         })
         /* 
@@ -140,8 +151,8 @@ angular.module('ShinyaApp.chatController', ['duScroll'])
             // 屏蔽純空白輸入，由於 ngInput 默認 trim，故只需判斷是否為空，無需判斷空白字符
             if ($scope.msgOutbox.textMsg !== ''){
                 $rootScope.socket.emit('textMsg', {
-                    'id': $rootScope.socket.id,
-                    'msg': $scope.msgOutbox.textMsg,
+                    'id'      : $rootScope.socket.id,
+                    'msg'     : $scope.msgOutbox.textMsg,
                     'username': $scope.infoBox.username
                 })
                 $scope.msgOutbox.textMsg = ''
@@ -164,9 +175,11 @@ angular.module('ShinyaApp.chatController', ['duScroll'])
                 $scope.$apply(function (){
                     for (var i = 0; i < msg.length; i++){
                         $scope.msgInbox.push({
-                            'isMe'    : decodeToken.username === msg[i].username,
-                            'msg'     : msg[i].msg,
-                            'username': msg[i].username
+                            'isMe'      : decodeToken.username === msg[i].username,
+                            'isShowDate': (i === 0) ? true : false,
+                            'date'      : msg[i].date,
+                            'msg'       : msg[i].msg,
+                            'username'  : msg[i].username
                         })
                     }
                 })

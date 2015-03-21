@@ -170,20 +170,29 @@ ul {
 }
     #chat_box .all {
         width: 100%;
-        margin: 5px;
+        margin: 5px auto;
     }
     #chat_box .all .content_box {
         padding: 4px 10px;
         max-width: 66.7%;
         border-radius: 7px;   
     }
-    #chat_box .all .content_box pre {
-        -webkit-user-select: text;
-        text-align: left;
-        word-wrap: break-word;
-        white-space: pre-wrap;
-        font: inherit;
-    }
+        #chat_box .all .content_box pre {
+            -webkit-user-select: text;
+            text-align: left;
+            word-wrap: break-word;
+            white-space: pre-wrap;
+            font: inherit;
+            cursor: text;
+        }
+        #chat_box .all .content_box pre::selection {
+            background-color: #000;
+            color: #FFF;
+        }
+        #chat_box .all .content_box pre::-moz-selection {
+            background-color: #000;
+            color: #FFF;
+        }
     #chat_box .me {
         float: right;
     }
@@ -193,6 +202,14 @@ ul {
             background-color: #4EBD4A;
         }
     #chat_box .info_box {
+        font-size: 10px;
+        color: #666;
+        margin-bottom: 5px;
+    }
+        #chat_box .info_box span {
+            border-bottom: 1px solid #666;
+        }
+    #chat_box .username_box {
         /* gold / aluminum / steel */
         text-align: left;
         font-size: 11px;
@@ -200,7 +217,7 @@ ul {
         margin-bottom: 1px;
         color: #000;
     }
-        #chat_box .info_box span {
+        #chat_box .username_box span {
             border-radius: 4px;
             padding: 0px 2px;
         }
@@ -224,22 +241,22 @@ ul {
     cursor: pointer;
 }
 /* info_box */
-#info_box {
+#user_info_box {
     position: absolute;
     top: 15%;
     left: 20%;
     width: 60%;
     height: 70%;
 }
-    #info_box #info_username_box {
+    #user_info_box #info_username_box {
            
     }
-    #info_box #info_numero_box {
+    #user_info_box #info_numero_box {
         margin-bottom: 10%;
         font-size: 12px;
         color: #555;
     }
-        #info_box #info_numero_box span {
+        #user_info_box #info_numero_box span {
             padding: 1px 5px;
             border-radius: 5px;
             border-left-style: solid;
@@ -247,23 +264,23 @@ ul {
             border-right-style: solid;
             border-right-width: 2px;
         }
-        #info_box #info_numero_box span.gold {
+        #user_info_box #info_numero_box span.gold {
             border-color: #D4AF37;
         }
-        #info_box #info_numero_box span.aluminum {
+        #user_info_box #info_numero_box span.aluminum {
             border-color: #999;
         }
-        #info_box #info_numero_box span.steel {
+        #user_info_box #info_numero_box span.steel {
             border-color: #666;
         }
-    #info_box #info_date_box > div {
+    #user_info_box #info_date_box > div {
         margin: 3% auto;
     }
-    #info_box #info_date_box .date span {
+    #user_info_box #info_date_box .date span {
         cursor: pointer;
         border-bottom: 1px solid #000;
     }
-    #info_box #info_date_box .daytime {
+    #user_info_box #info_date_box .daytime {
         font-size: 12px;
         width: 34px;
         height: 34px;
@@ -272,7 +289,7 @@ ul {
         -webkit-border-radius: 17px;
         border: 1px solid #000;
     }
-    #info_box #info_date_box .night {
+    #user_info_box #info_date_box .night {
         color: #fff;
         font-size: 12px;
         width: 34px;
@@ -544,16 +561,16 @@ input,
         border-radius: 4px;
         color: #fff;
     }
-    #info_box {
+    #user_info_box {
         top: 15%;
         left: 10%;
         width: 80%;
         height: 70%;
     }
-        #info_box #info_numero_box {
+        #user_info_box #info_numero_box {
             margin-bottom: 40%;
         }
-        #info_box #info_date_box > div {
+        #user_info_box #info_date_box > div {
             margin: 7% auto;
         }
     #chat_submit_box {
@@ -596,10 +613,10 @@ input,
             padding: 1.3%;
             line-height: 20px;
         }
-    #info_box #info_numero_box {
+    #user_info_box #info_numero_box {
         margin-bottom: 7%;
     }
-    #info_box #info_date_box > div {
+    #user_info_box #info_date_box > div {
         margin: 4% auto;
     }
     #notify_box {
@@ -668,10 +685,10 @@ input,
         border-radius: 4px;
         color: #fff;
     }
-    #info_box #info_numero_box {
+    #user_info_box #info_numero_box {
         margin-bottom: 40%;
     }
-    #info_box #info_date_box > div {
+    #user_info_box #info_date_box > div {
         margin: 7% auto;
     }
     #chat_submit_box {
@@ -693,10 +710,10 @@ input,
     .main_box .logo {
         max-width: 15%;
     }
-    #info_box #info_numero_box {
+    #user_info_box #info_numero_box {
         margin-bottom: 22%;
     }
-    #info_box #info_date_box > div {
+    #user_info_box #info_date_box > div {
         margin: 5% auto;
     }
     #notify_box {

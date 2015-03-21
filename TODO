@@ -12,11 +12,13 @@
         - 限制消息長度 √
         - 移動端：回彈效果，滾動 √
         - 收藏消息
+        - @user
+            - 滾動到消息位置
         - Moile Browser:
             - 取消訪問 autofocus √
             - 提交消息後隱藏 Keyboard √
-        - Web Notification
-        - 消息中的用戶名，當夜晚，用 金／鋁／鐵標示
+        - Web Notification X
+        - 消息中的用戶名，當夜晚，用 金／鋁／鐵標示 X
     - Info
         - 註銷 √
         - 天氣

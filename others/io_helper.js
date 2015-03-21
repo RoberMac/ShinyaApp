@@ -39,10 +39,12 @@ io.on('connection', function (socket) {
     //     console.log('add username: ' + msg)
     // })
     socket.on('textMsg', function (msg) {
+        
         // 緩存十條消息
         if (msgCache.length < 10){
             msgCache.push({
                 'id'      : socket.id,
+                'date'    : Date.now(),
                 'msg'     : msg.msg,
                 'username': socket.decoded_token.username
             })
@@ -50,11 +52,17 @@ io.on('connection', function (socket) {
             msgCache.shift()
             msgCache.push({
                 'id'      : socket.id,
+                'date'    : Date.now(),
                 'msg'     : msg.msg,
                 'username': socket.decoded_token.username
             })
         }
-        io.emit('textMsg', msg)
+        io.emit('textMsg', {
+            'id'      : socket.id,
+            'date'    : Date.now(),
+            'msg'     : msg.msg,
+            'username': socket.decoded_token.username
+        })
         console.log('textMsg: ' + msg.msg + ', id: ' + msg.id)
     })
     socket.on('disconnect', function (msg) {
