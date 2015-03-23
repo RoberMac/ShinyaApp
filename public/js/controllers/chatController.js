@@ -1,4 +1,4 @@
-angular.module('ShinyaApp.chatController', ['duScroll'])
+angular.module('ShinyaApp.chatController', [])
 .controller('chatController', ['$rootScope', '$scope', '$http', '$timeout', '$window', '$location', '$filter', 'jwtHelper','store', 'syPosHelper', 'syTimeHelper', 
     function ($rootScope, $scope, $http, $timeout, $window, $location, $filter, jwtHelper, store, syPosHelper, syTimeHelper){
 
@@ -28,6 +28,7 @@ angular.module('ShinyaApp.chatController', ['duScroll'])
     // `#info_news_box` 用戶信息
     var token = store.get('id_token'),
         decodeToken = jwtHelper.decodeToken(token);
+    console.log(decodeToken)
     // 從 JWT 解碼獲取用戶信息
     $scope.infoBox = {
         username: decodeToken.username,
@@ -39,7 +40,9 @@ angular.module('ShinyaApp.chatController', ['duScroll'])
     $scope.daytimeOrNight = syTimeHelper.getDaytimeOrNight(~~($filter('date')(decodeToken.date, 'H')))
 
     /*
+     *****************
      * 用戶註冊當日新聞
+     *****************
      *     `$scope.newsIndex` 保存當前新聞頁碼
      *     `$scope.newsBox` 新聞列表
      *     `$scope.newsSourceName` 新聞來源名
@@ -87,27 +90,77 @@ angular.module('ShinyaApp.chatController', ['duScroll'])
             })
         }
     }
-    $scope.deleteNews = function (){
-   
-    }
     // 註銷
     $scope.quit = function (){
         store.remove('id_token')
         $location.path('/')
     }
-
     /*
-     *************
-     * Socket.IO *
-     *************
+     **************
+     * 地理位置相關
+     **************
+     *
+     * 若已開啟，自動獲取
+     */
+    $scope.geoBox = {}
+    $scope.isGeoOn = false
+    if (decodeToken.isGeoServices){
+        $scope.isGeoOn = true
+        $window.navigator.geolocation.getCurrentPosition(function (pos){
+            console.log(pos.coords.latitude, pos.coords.longitude)
+            $http.
+            post('/api/getGeoServices', {
+                coords: {
+                    lat: pos.coords.latitude,
+                    lon: pos.coords.longitude
+                }
+            }).
+            success(function (data, status, headers, config){
+                $scope.geoBox = data.msg
+            }).
+            error(function (data, status, headers, config){
+
+            })
+        })
+    } else {
+        console.log('geo services off')
+    }
+    $scope.toggleGeoServices = function (){
+        if (!$scope.isGeoOn){
+            $http.
+            get('/api/turnOnGeoServices').
+            success(function (data, status, headers, config){
+                $scope.$emit('preTurnOnGeoServices', '驗證身份以開啟服務')
+                $scope.quit()
+            }).
+            error(function (data, status, headers, config){
+                
+            })
+        } else {
+            $http.
+            get('/api/turnOffGeoServices').
+            success(function (data, status, headers, config){
+                $scope.$emit('preTurnOffGeoServices', '驗證身份以取消服務')
+                $scope.quit()
+            }).
+            error(function (data, status, headers, config){
+                
+            })
+        }
+    }
+    /*
+     ************
+     * Socket.IO
+     ************
      *  
      * 文本消息抵達與發送
      *
-     */    
+     */
     $scope.msgInbox = []
     $scope.msgOutbox = {
         'textMsg': ''
     }
+    // 間隔 60 秒顯示時間
     var now = Date.now()
     function isShowDate(date){
         if (date - now > 1000 * 60){
@@ -205,7 +258,6 @@ angular.module('ShinyaApp.chatController', ['duScroll'])
         $rootScope.socket.disconnect()
         $rootScope.socket.connect(':8080')
         $rootScope.socket.on('textMsg', function (msg){
-            console.log('textMsg')
             onTextMsg(msg)
         })
     }
@@ -217,7 +269,7 @@ angular.module('ShinyaApp.chatController', ['duScroll'])
          * 會從 '/' 跳轉回 '/chat'，重新加載 template，斷開重新鏈接
          *
          */
-         $window.location.reload()
+         // $window.location.reload()
          reconnectSIO()
     }
 

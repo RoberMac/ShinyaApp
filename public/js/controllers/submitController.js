@@ -15,6 +15,17 @@ angular.module('ShinyaApp.submitController', [])
             }, 0)
         }
     }
+    // 監聽開啟／關閉「位置服務」
+    $scope.$on('turnOnGeoServices', function (msg){
+        $timeout(function (){
+            $scope.msgNotify('ok', {'msg': '驗證身份以開啟服務'})
+        }, 0)
+    })
+    $scope.$on('turnOffGeoServices', function (msg){
+        $timeout(function (){
+            $scope.msgNotify('ok', {'msg': '驗證身份以取消服務'})
+        }, 0)
+    })
 
     // ngSwitch
     $scope.isLogin = true;

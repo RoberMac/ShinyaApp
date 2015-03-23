@@ -29,14 +29,14 @@ var userSchema = new Schema({
     register_info: {
         ip       : String,
         date     : Date,
-        platform : String
-    },
-    other_info   : {
+        platform : String,
         numero   : Number,
-        geo      : Schema.Types.Mixed
+        country  : Schema.Types.Mixed
     },
     forgot_code  : String,
-    news         : Array
+    news         : Array,
+    isGeoServices: Boolean,
+    last_geo     : Schema.Types.Mixed
 })
 
 var User = mongoose.model('User', userSchema)

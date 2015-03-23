@@ -43,8 +43,8 @@ angular.module('ShinyaApp', [
     }]
     $httpProvider.interceptors.push('jwtInterceptor')
 }])
-.controller('rootController', ['$rootScope', '$scope','$location','$route','$window', 'jwtHelper', 'store', 
-    function($rootScope, $scope, $location, $route, $window, jwtHelper, store){
+.controller('rootController', ['$rootScope', '$scope', '$timeout', '$location', '$route', '$window', 'jwtHelper', 'store', 
+    function($rootScope, $scope, $timeout, $location, $route, $window, jwtHelper, store){
 
     // 檢測是否為手機瀏覽器
     // https://stackoverflow.com/questions/11381673/detecting-a-mobile-browser
@@ -95,5 +95,15 @@ angular.module('ShinyaApp', [
             }
         }
     })
-    
+    // 監聽開啟／關閉「位置服務」
+    $scope.$on('preTurnOnGeoServices', function (msg){
+        $timeout(function (){
+            $scope.$broadcast('turnOnGeoServices', msg)
+        }, 0)
+    })
+    $scope.$on('preTurnOffGeoServices', function (msg){
+        $timeout(function (){
+            $scope.$broadcast('turnOffGeoServices', msg)
+        }, 0)
+    })
 }])

@@ -56,12 +56,25 @@
                     </div>
                 </div>
             </div>
-            <div id="quit" ng-if="!isNews">
-                <a ng-click="quit()">註銷用戶</a>
+            <div ng-if="!isNews">
+                <div class="bottom_left_corner">
+                    <div class="geoStatus">
+                        <div ng-class="{'geoOn': isGeoOn}" class="geoOnAndOff" ng-click="toggleGeoServices()">
+                        </div>
+                    </div>
+                </div>
+                <div class="bottom_center_corner">
+                    <span><a ng-href="http://maps.google.com/maps?z=12&t=h&q=loc:{{geoBox.last_geo.lat}}+{{geoBox.last_geo.lon}}" target="_blank">{{geoBox.last_geo.location}}</a></span>
+                    <span id="distance">{{geoBox.distance}}</span>
+                    <span>
+                        <a ng-href="http://maps.google.com/maps?z=12&t=h&q=loc:{{geoBox.now_geo.lat}}+{{geoBox.now_geo.lon}}" target="_blank">{{geoBox.now_geo.location}}</a>
+                    </span>
+                </div>
+                <div class="bottom_right_corner">
+                    <a ng-click="quit()">註銷用戶</a>
+                </div>
             </div>
-            <div id="quit" ng-if="isNews">
-                <a ng-click="deleteNews()">刪除新聞</a>
-            </div>
+
             <div ng-show="isNews" id="returnToPreviousStep" ng-click="toggleNewsBox()">
             </div>
         </div>

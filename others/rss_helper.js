@@ -6,15 +6,13 @@ var feed_list = {
         {'source_name': 'Yahoo Mundo', 'url': 'https://br.noticias.yahoo.com/mundo/?format=rss'}, // Yahoo Mundo
         {'source_name': 'G1 - Brasil', 'url': 'http://g1.globo.com/dynamo/brasil/rss2.xml'} // G1 - Brasil
     ],
-    // 'CA': [
-    // ],
     'CN': [
+        // {'source_name': 'Google 新聞', 'url': 'https://news.google.com/news?cf=all&ned=cn&hl=zh-CN&output=rss'}, // Google 新聞
+        {'source_name': '網易新闻', 'url': 'http://news.163.com/special/00011K6L/rss_sh.xml'}, // 網易新聞
+        // {'source_name': '搜狐新闻', 'url': 'http://rss.news.sohu.com/rss/guonei.xml'} // 搜狐新聞
         // {'source_name': '紐約時報中文網', 'url': 'http://cn.nytimes.com/rss.html'}, // 紐約時報中文網
         // {'source_name': 'BBC 中文網', 'url': 'http://www.bbc.co.uk/zhongwen/trad/index.xml'}, // BBC 中文網
-        // {'source_name': 'Engadget 中文版', 'url': 'http://cn.engadget.com/rss.xml'}, // Engadget 中文版
-        {'source_name': '知乎每日精选', 'url': 'http://www.zhihu.com/rss'}, // 知乎每日精选
-        {'source_name': '极客公园', 'url': 'http://www.geekpark.net/rss'}, // 极客公园
-        {'source_name': '36 氪', 'url': 'http://www.36kr.com/feed'} // 36氪
+        // {'source_name': 'Engadget 中文版', 'url': 'http://cn.engadget.com/rss.xml'} // Engadget 中文版
     ],
     'DE': [
         {'source_name': 'SPIEGEL ONLINE', 'url': 'http://www.spiegel.de/schlagzeilen/tops/index.rss'}, // SPIEGEL ONLINE - Schlagzeilen
@@ -65,7 +63,7 @@ var feed_list = {
     'TW': [
         {'source_name': 'Yahoo 奇摩新聞', 'url': 'https://tw.news.yahoo.com/rss'}, // Yahoo 奇摩新聞
         {'source_name': '蘋果日報', 'url': 'http://www.appledaily.com.tw/rss/newcreate/kind/rnews/type/new'}, // 蘋果日報 - 即時新聞
-        {'source_name': 'Google 新聞', 'url': 'https://news.google.com/news?pz=1&cf=all&ned=tw&hl=zh-TW&output=rss'}, // Google 新聞
+        {'source_name': 'Google 新聞', 'url': 'https://news.google.com/news?cf=all&ned=tw&hl=zh-TW&output=rss'}, // Google 新聞
         {'source_name': '聯合新聞網', 'url': 'http://udn.com/rssfeed/news/1/1?ch=news'}, // 聯合新聞網 - 即時 / 要聞
         {'source_name': '中時電子報', 'url': 'http://feeds.feedburner.com/chinatimes/realtimenews-focus'}, // 中時電子報 - 焦點
         {'source_name': 'Inside', 'url': 'http://feeds.feedburner.com/inside-blog-taiwan'}, // Inside 硬塞的網路趨勢觀察

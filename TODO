@@ -7,11 +7,11 @@
         - input
             - if no input, don't submit √
             - if input is all space, trim it, don't submit √
-        - 撤回消息
-        - 當天聊天記錄保存在 localStorage
+        - 撤回消息 ?
+        - 當天聊天記錄保存在 localStorage X
         - 限制消息長度 √
         - 移動端：回彈效果，滾動 √
-        - 收藏消息
+        - 收藏消息 X
         - @user
             - 滾動到消息位置
         - Moile Browser:
@@ -22,7 +22,8 @@
     - Info
         - 註銷 √
         - 天氣
-        - 基本用戶信息
+            - PM 2.5
+        - 基本用戶信息 √
         - 根據用戶註冊時間
             - 背景顏色
             - RSS News
@@ -30,9 +31,10 @@
                 - 用戶註冊時抓取新聞？間隔一段時間抓取？√ (用戶註冊時抓取)
                     - 根據註冊地理位置：抓取相應新聞 √
                     - 優化新聞源
-                - 根據上次登陸與本次登陸 IP 判斷地理位置信息：距離
+        - 根據上次登陸與本次登陸 IP 判斷地理位置信息：距離
+            - 根據當前地理位置選擇顯示語言
 - #!forgot
-    - back 按鈕更換
+    - back 按鈕更換 √
 - DB
     - token expires: 14d
     - 定時備份
@@ -44,8 +46,9 @@
 - Perf
     - 圖片 expires
 
-- 安全
+- 備忘
     - 發布到 GitHub 前將
         - 郵箱帳號密碼隱藏
+    - db_helper.js[65:53]
     - 定義服務器 500 錯誤：app.js[60]
 

@@ -2,7 +2,7 @@ angular.module('ShinyaApp.usercountDirective', [])
 .directive('syUsercount', function (){
     return {
         restrict: 'E',
-        template: '<div id="userCount">'
+        template: '<div ng-if="!isMobile" id="userCount">'
                 +   '在線人數：{{userCount}}'
                 + '</div>',
         controller: ['$scope', function ($scope){

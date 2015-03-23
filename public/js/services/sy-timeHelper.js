@@ -25,9 +25,9 @@ angular.module('ShinyaApp.timeHelperServices', [])
     // 用戶註冊次序號
     this.getNumero = function (numero){
 
-        if (numero < 10){
+        if (numero < 77){
             return 'gold'
-        } else if(numero < 100){
+        } else if(numero < 177){
             return 'aluminum'
         } else {
             return 'steel'

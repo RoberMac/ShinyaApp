@@ -1,5 +1,5 @@
 var nodemailer    = require('nodemailer'),
-    getGeo        = require('./geo_helper'),
+    getCountry    = require('./geo_helper').getCountry,
     getNews       = require('./rss_helper');
 
 var db_helper = {
@@ -8,8 +8,6 @@ var db_helper = {
         var username = register_form.username,
             password = register_form.password,
             email    = register_form.email,
-            info     = register_form.register_info,
-            geo      = getGeo(register_form.register_info.ip),
             news     = []
 
         // 檢查郵箱
@@ -21,7 +19,7 @@ var db_helper = {
                     User.findOne({username: username}, function (err, found){
 
                         if (err){
-                            next({'code': 500, 'status': 'error', 'msg': 'Server Error'})
+                            next({'code': 500, 'status': 'error', 'msg': '服務器出錯'})
                             return err
                         }
                         if (found){
@@ -31,7 +29,7 @@ var db_helper = {
                             User.findOne({email: email}, function (err, found){
 
                                 if (err){
-                                    next({'code': 500, 'status': 'error', 'msg': 'Server Error'})
+                                    next({'code': 500, 'status': 'error', 'msg': '服務器出錯'})
                                     return err
                                 }
                                 if (found){
@@ -40,7 +38,7 @@ var db_helper = {
                                     // 獲取當前註冊用戶數
                                     User.count({}, function (err, count){
                                         if (err){
-                                            next({'code': 500, 'status': 'error', 'msg': 'Server Error'})
+                                            next({'code': 500, 'status': 'error', 'msg': '服務器出錯'})
                                             return err
                                         }
                                         console.log('count: ' + count)
@@ -49,12 +47,20 @@ var db_helper = {
                                             'username': username,
                                             'email': email,
                                             'password': password,
-                                            'register_info': info,
-                                            'other_info': {
-                                                'numero': count,
-                                                'geo'   : geo
+                                            'register_info': {
+                                                'ip'      : register_form.register_info.ip,
+                                                'date'    : register_form.register_info.date,
+                                                'platform': register_form.register_info.platform,
+                                                'country' : getCountry(register_form.register_info.ip),
+                                                'numero'  : count
+                                            },
+                                            'last_geo': {
+                                                lat: 56.185096,
+                                                lon: -4.050264,
+                                                location: '臨冬城'
                                             }
                                         })
+                                        console.log(user)
                                         user.save(function (err){
                                             if (err){
                                                 next({'code': 400, 'status': 'error', 'msg': '用戶名或電郵地址已存在'})
@@ -93,7 +99,7 @@ var db_helper = {
 
         if (validator.isEmail(login_form.user)){
             console.log(validator.normalizeEmail(login_form.user))
-            User.findOne({email: validator.normalizeEmail(login_form.user)}, 'username password email register_info other_info', function (err, found){
+            User.findOne({email: validator.normalizeEmail(login_form.user)}, 'username password email register_info isGeoServices', function (err, found){
                 if (err) return err
                 // 檢查用戶是否存在
                 if (!found){
@@ -107,8 +113,9 @@ var db_helper = {
                         if (bcrypt.compareSync(login_form.password, compare_password)){
                             var token = jwt.sign({
                                 username: found.username,
-                                numero: found.other_info.numero,
-                                date: found.register_info.date
+                                numero: found.register_info.numero,
+                                date: found.register_info.date,
+                                isGeoServices: found.isGeoServices
                             }, key, {
                                 expiresInMinutes: 10
                             })
@@ -120,7 +127,7 @@ var db_helper = {
                 }
             }) 
         } else {
-            User.findOne({username: login_form.user}, 'username password email register_info other_info', function (err, found){
+            User.findOne({username: login_form.user}, 'username password email register_info isGeoServices', function (err, found){
                 if (err) return err
                 // 檢查用戶是否存在
                 if (!found){
@@ -136,8 +143,9 @@ var db_helper = {
                         if (bcrypt.compareSync(login_form.password, compare_password)){
                             var token = jwt.sign({
                                 username: found.username,
-                                numero: found.other_info.numero,
-                                date: found.register_info.date
+                                numero: found.register_info.numero,
+                                date: found.register_info.date,
+                                isGeoServices: found.isGeoServices
                             }, key, {
                                 expiresInMinutes: 10
                             })
