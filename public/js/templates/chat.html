@@ -1,6 +1,6 @@
 <div class="main_box" ng-class="{'input_shake_animate': input_shake_animate, 'chat_box': isChatBox}" ng-swipe-left="toggleChatBox()" ng-swipe-right="toggleChatBox()" ng-swipe-disable-mouse sy-autoscroll>
     <div ng-switch on="isChatBox">
-        <div ng-switch-when="true">
+        <div class="general_animate" ng-switch-when="true">
             <div id="chat_box">
                 <div ng-repeat="contentItem in msgInbox">
                     <div class="all" ng-class="{'me': contentItem.isMe, 'others': !contentItem.isMe}">
@@ -17,7 +17,7 @@
                 </div>
             </div>
         </div>
-        <div ng-switch-when="false">
+        <div class="general_animate" ng-switch-when="false">
             <div id="user_info_box">
                 <div ng-if="!isNews">
                     <div id="info_username_box">
@@ -31,8 +31,8 @@
                         <div class="date">
                             <span><a ng-click="getDateNews()">{{infoBox.date}}</a></span>
                         </div>
-                        <div ng-class="daytimeOrNight">
-                            <span>{{infoBox.partsOfADay}}</span>
+                        <div class="all" ng-class="[getDaytimeOrNight, partWeather]" ng-click="getPartWeather()">
+                            <span class="general_animate" ng-show="!partWeather">{{infoBox.partsOfADay}}</span>
                         </div>
                     </div>
                 </div>
@@ -84,7 +84,7 @@
 </div>
 <sy-usercount></sy-usercount>
 <sy-beep></sy-beep>
-<div id="chat_submit_box" ng-show="isChatBox">
+<div id="chat_submit_box" class="general_animate" ng-show="isChatBox">
     <form sy-hide-keyboard novalidate ng-submit="emitTextMsg()" name="form">
         <input type="text" ng-model="msgOutbox.textMsg" sy-autofocus ng-maxlength="1024">
     </form>

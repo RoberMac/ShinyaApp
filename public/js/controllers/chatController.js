@@ -37,8 +37,15 @@ angular.module('ShinyaApp.chatController', [])
         partsOfADay: syTimeHelper.partsOfADay(~~($filter('date')(decodeToken.date, 'H')))
     }
     $scope.numero = syTimeHelper.getNumero($scope.infoBox.numero)
-    $scope.daytimeOrNight = syTimeHelper.getDaytimeOrNight(~~($filter('date')(decodeToken.date, 'H')))
-
+    $scope.getDaytimeOrNight = syTimeHelper.getDaytimeOrNight(~~($filter('date')(decodeToken.date, 'H')))
+    $scope.partWeather = ''
+    $scope.getPartWeather = function (){
+        if ($scope.partWeather == 'rain'){
+            $scope.partWeather = ''
+        } else {
+            $scope.partWeather = 'rain'
+        }
+    }
     /*
      *****************
      * 用戶註冊當日新聞

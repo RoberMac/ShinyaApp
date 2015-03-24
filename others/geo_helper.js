@@ -38,6 +38,22 @@ var geo_helper = {
             callback(data[0].streetName)
         });
     },
+    getDistance: function (origin, destination, callback){
+        distance.get({
+            origin: origin.lat + ', ' + origin.lon,
+            destination: destination.lat + ', ' + destination.lon
+        }, function (err, data){
+            if (err) {
+                callback({
+                    distance: null,
+                    location: null,
+                    destination: '加利福尼亞'
+                })
+                return err
+            }
+            callback(data)
+        })
+    },
     // initCoords: function (country){
     //     var coords = {
     //         'CN': '30.254258, 120.163803',
@@ -54,21 +70,12 @@ var geo_helper = {
     getWeather: function (lat, lon, callback){
         // Yahoo
     },
-    getDistance: function (origin, destination, callback){
-        distance.get({
-            origin: origin.lat + ', ' + origin.lon,
-            destination: destination.lat + ', ' + destination.lon
-        }, function (err, data){
-            if (err) {
-                callback({
-                    distance: null,
-                    location: null,
-                    destination: '加利福尼亞'
-                })
-                return err
-            }
-            callback(data)
-        })
+    isSamePlace: function (last, now){
+
+        return Math.abs(last.lat - now.lat) > 0.001
+        || Math.abs(last.lon - now.lon) > 0.001
+        ? false
+        : true
     }
 }
 

@@ -78,8 +78,8 @@ ul {
     }
     .main_box .bottom_right_corner {
         position: absolute;
-        bottom: 20px;
-        right: 30px;
+        bottom: 10px;
+        right: 17px;
         z-index: 999;
     }
         .main_box .bottom_right_corner a {
@@ -89,31 +89,32 @@ ul {
     .main_box .bottom_center_corner {
         position: absolute;
         width: 100%;
-        bottom: 20px;
+        bottom: 10px;
         left: 0px;
         font-size: 10px;
-        color: #777;
+        color: #CECECF;
     }
         .main_box .bottom_center_corner #distance {
             position: relative;
             top: 4px;
-            border-top: 1px solid #777;
-            font-size: 8px;
+            padding: 0 10px;
+            border-top: 1px solid #CECECF;
+            font-size: 7px;
         }
         .main_box .bottom_center_corner a {
-            color: #777;
+            color: #CECECF;
         }
     .main_box .bottom_left_corner {
         position: absolute;
-        bottom: 20px;
-        left: 30px;
+        bottom: 10px;
+        left: 17px;
         font-size: 12px;
         color: #CECECF;
         z-index: 999;
     }
         .main_box .bottom_left_corner .geoStatus {
             position: relative;
-            top: 5px;
+            top: 2px;
             display: inline-block;
             width: 14px;
             height: 14px;
@@ -314,15 +315,15 @@ ul {
             border-right-style: solid;
             border-right-width: 2px;
         }
-        #user_info_box #info_numero_box span.gold {
-            border-color: #D4AF37;
-        }
-        #user_info_box #info_numero_box span.aluminum {
-            border-color: #999;
-        }
-        #user_info_box #info_numero_box span.steel {
-            border-color: #666;
-        }
+            #user_info_box #info_numero_box span.gold {
+                border-color: #D4AF37;
+            }
+            #user_info_box #info_numero_box span.aluminum {
+                border-color: #999;
+            }
+            #user_info_box #info_numero_box span.steel {
+                border-color: #666;
+            }
     #user_info_box #info_date_box > div {
         margin: 3% auto;
     }
@@ -330,26 +331,51 @@ ul {
         cursor: pointer;
         border-bottom: 1px solid #000;
     }
-    #user_info_box #info_date_box .daytime {
-        font-size: 12px;
+    #user_info_box #info_date_box .all {
         width: 34px;
         height: 34px;
-        line-height: 34px;
-        border-radius: 17px;
-        -webkit-border-radius: 17px;
-        border: 1px solid #000;
-    }
-    #user_info_box #info_date_box .night {
-        color: #fff;
         font-size: 12px;
-        width: 34px;
-        height: 34px;
         line-height: 34px;
-        background-color: #000;
+        border: 1px solid #FFF;
         border-radius: 17px;
-        -webkit-border-radius: 17px;
-        border: 1px solid #fff;
+        -webkit-border-radius: 17px;    
+        cursor: pointer;
     }
+        #user_info_box #info_date_box span {
+            cursor: pointer;
+        }
+        #user_info_box #info_date_box .daytime {
+            border: 1px solid #000;
+        }
+        #user_info_box #info_date_box .night {
+            color: #fff;
+            background-color: #000;
+            border: 1px solid #FFF;
+        }
+        #user_info_box #info_date_box .rain {
+            width: 30px;
+            height: 30px;
+            border-top-left-radius: 0px;
+            margin-top: 20%;
+            -webkit-transform: rotate(45deg);
+            transform: rotate(45deg);
+        }
+        #user_info_box #info_date_box .wind {
+            width: 50px;
+            height: 25px;
+            margin-top: 8%;
+            border-radius: 0 25px 0 25px;
+            -webkit-transform: rotate(1440deg);
+            transform: rotate(1440deg);
+        }
+        #user_info_box #info_date_box .sun {
+            margin-top: 5%;
+            border: 1px solid #000;
+            border-top: 17px solid #000;
+            border-bottom: 17px solid #000;
+            -moz-box-shadow: 0px 0px 17px 7px rgba(0, 0, 0, .50);
+            box-shadow: 0px 0px 17px 7px rgba(0, 0, 0, .50);
+        }
 /* info_news_box */
 #info_news_box {
     position: absolute;
@@ -439,14 +465,10 @@ ul {
     right: 20px;
     bottom: 20px;
     font-size: 12px;
-    color: #CECECF
+    color: #CECECF;
 }
 /* Animate */
-.sunAndMoon {
-    -webkit-transition: all .7s ease-in-out;
-    transition: all .7s ease-in-out;    
-}
-#info_news_box #info_news_load_more span{
+#info_news_box #info_news_load_more span {
     -webkit-transition: all .3s ease-in-out;
     transition: all .3s ease-in-out;
 }
@@ -455,12 +477,29 @@ ul {
         color: #fff;
     }
 input,
-#returnToPreviousStep,
-.general_animate.ng-enter,
-.general_animate.ng-leave {
-    -webkit-transition: all .5s ease-in-out;
-    transition: all .5s ease-in-out;
+.sunAndMoon,
+#info_date_box .all,
+.general_animate.ng-animate {
+    -webkit-transition: all .7s ease-in-out;
+    transition: all .7s ease-in-out;
 }
+#returnToPreviousStep {
+    -webkit-transition: all .7s cubic-bezier(0.6, -0.28, 0.735, 0.045);
+    transition:         all .7s cubic-bezier(0.6, -0.28, 0.735, 0.045);
+}
+#info_date_box .all.rain {
+    -webkit-transition: all .7s cubic-bezier(0.55, 0.055, 0.675, 0.19) .7s;
+    transition:         all .7s cubic-bezier(0.55, 0.055, 0.675, 0.19) .7s;
+}
+#info_date_box .all.wind {
+    -webkit-transition: all 2.8s ease-in-out .7s;
+    transition:         all 2.8s ease-in-out .7s;
+}
+#info_date_box .all.sun {
+    -webkit-transition: all .7s ease-in-out .7s;
+    transition:         all .7s ease-in-out .7s;
+}
+
     input.submit_animate:hover {
         border-color: #000;
         color: #000;
@@ -479,7 +518,8 @@ input,
             border: 1px solid #FCD20A;
         }
     .general_animate.ng-enter,
-    .general_animate.ng-leave.ng-leave-active {
+    .general_animate.ng-leave.ng-leave-active,
+    .general_animate.ng-hide {
       opacity:0;
     }
     .general_animate.ng-leave,
@@ -569,6 +609,7 @@ input,
     position: relative;
     height: 77%;
     top: 11.5%;
+    -webkit-touch-callout: default;
 }
 /* Mobile Phone in portrait and landscape */
 @media (max-device-width : 767px), (max-width: 767px) {

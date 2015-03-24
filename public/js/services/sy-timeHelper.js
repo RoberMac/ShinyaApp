@@ -40,10 +40,8 @@ angular.module('ShinyaApp.timeHelperServices', [])
      */
     this.getDaytimeOrNight = function (day){
 
-        if (9 < day && day < 18){
-            return 'daytime'
-        } else {
-            return 'night'
-        }
+        return 6 < day && day < 18
+        ? 'daytime'
+        : 'night'
     }
 })
