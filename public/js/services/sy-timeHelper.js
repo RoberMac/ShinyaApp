@@ -4,19 +4,19 @@ angular.module('ShinyaApp.timeHelperServices', [])
     // 用戶註冊當日時刻
     this.partsOfADay = function (hour) {
 
-        if (0 < hour && hour <= 3){
+        if (hour <= 3){
             return '深夜'
-        } else if (3 < hour && hour <= 6){
+        } else if (hour <= 6){
             return '破曉'
-        } else if (6 < hour && hour <= 9){
+        } else if (hour <= 9){
             return '早晨'
-        } else if (9 < hour && hour <= 12){
+        } else if (hour <= 12){
             return '午前'
-        } else if (12 < hour && hour <= 15){
+        } else if (hour <= 15){
             return '午後'
-        } else if (15 < hour && hour <= 18){
+        } else if (hour <= 18){
             return '傍晚'
-        } else if (18 < hour && hour <= 21){
+        } else if (hour <= 21){
             return '薄暮'
         } else {
             return '深夜'

@@ -1,36 +1,38 @@
-var maxmind   = require('maxmind'),
-    validator = require('validator'),
+var request   = require('request'),
     distance  = require('google-distance'),
     API_KEY   = 'AIzaSyA894nYOdT_qk9_gEXZtNUeHpyJLn-MFs0',
-    geocoder  = require('node-geocoder')('google', 'https', {
+    geocoder  = require('node-geocoder');
+    
+
+var google_geocoder  = geocoder('google', 'https', {
         apiKey: API_KEY,
         language: 'zh-HK'
-    });
-
-// init
-maxmind.init('./others/GeoIP.dat')
-maxmind.init('./others/GeoIPv6.dat')
+    }),
+    freegeoip = geocoder('freegeoip', 'https');
 
 
 var geo_helper = {
+    // 地理位置
+    getCountryAndCity: function (ip, callback){
 
-    getCountry: function (ip){
-        if (validator.isIP(ip, 4)){
-            return maxmind.getCountry(ip)
-        } else if (validator.isIP(ip, 6)){
-            return maxmind.getCountryV6(ip)
-        } else {
-            return null
-        }
+        freegeoip.geocode(ip, function (err, data){
+            if (err){
+                callback('', '')
+                return err
+            }
+            console.log(data[0])
+            callback(data[0].countryCode, data[0].city)
+        })
     },
     getStreetName: function (origin, callback){
-        geocoder.reverse({
+
+        google_geocoder.reverse({
             lat: origin.lat, 
             lon: origin.lon
         }, function (err, data){
             if (err){
                 callback({
-                    streetName: '...'
+                    streetName: ''
                 })
                 return err
             }
@@ -38,7 +40,9 @@ var geo_helper = {
             callback(data[0].streetName)
         });
     },
+    // 距離
     getDistance: function (origin, destination, callback){
+
         distance.get({
             origin: origin.lat + ', ' + origin.lon,
             destination: destination.lat + ', ' + destination.lon
@@ -67,17 +71,51 @@ var geo_helper = {
     //         'RU': ''
     //     }
     // },
-    getWeather: function (lat, lon, callback){
-        // Yahoo
-    },
     isSamePlace: function (last, now){
 
         return Math.abs(last.lat - now.lat) > 0.001
         || Math.abs(last.lon - now.lon) > 0.001
         ? false
         : true
+    },
+    // 天氣
+    getCityWeather: function (city, callback){
+
+        var url = 'http://api.openweathermap.org/data/2.5/weather?q='
+                    + city
+                    +'&lang=zh_tw&units=metric';
+        request({
+            url: url,
+            json: true
+        }, function (err, res, body){
+            if (!err && res.statusCode == 200) {
+                callback({
+                    description: body.weather[0].description,
+                    code: body.weather[0].id
+                })
+            } else {
+                callback({
+                    description: '多雲',
+                    code: '802'
+                })
+            }
+        })
+    },
+    getGeoWeather: function (lat, lon, callback){
+
+        var url = 'http://api.openweathermap.org/data/2.5/weather?lat='
+                    + lat
+                    + '&lon='
+                    + lon
+                    + '&lang=zh_tw&units=metric';
+        request(url, function (err, res, body){
+            if (!error && response.statusCode == 200) {
+                callback(body)
+            } else {
+                callback()
+            }
+        })
     }
 }
-
 
 module.exports = geo_helper

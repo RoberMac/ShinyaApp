@@ -1,6 +1,6 @@
 angular.module('ShinyaApp.chatController', [])
-.controller('chatController', ['$rootScope', '$scope', '$http', '$timeout', '$window', '$location', '$filter', 'jwtHelper','store', 'syPosHelper', 'syTimeHelper', 
-    function ($rootScope, $scope, $http, $timeout, $window, $location, $filter, jwtHelper, store, syPosHelper, syTimeHelper){
+.controller('chatController', ['$rootScope', '$scope', '$http', '$timeout', '$window', '$location', '$filter', 'jwtHelper','store', 'syPosHelper', 'syTimeHelper', 'syWeatherHelper', 
+    function ($rootScope, $scope, $http, $timeout, $window, $location, $filter, jwtHelper, store, syPosHelper, syTimeHelper, syWeatherHelper){
 
     // `#chat_box` 和 `#info_box` 切換
     $scope.isChatBox = true
@@ -40,10 +40,10 @@ angular.module('ShinyaApp.chatController', [])
     $scope.getDaytimeOrNight = syTimeHelper.getDaytimeOrNight(~~($filter('date')(decodeToken.date, 'H')))
     $scope.partWeather = ''
     $scope.getPartWeather = function (){
-        if ($scope.partWeather == 'rain'){
+        if ($scope.partWeather == syWeatherHelper.getCityWeatherType(decodeToken.weather.code)){
             $scope.partWeather = ''
         } else {
-            $scope.partWeather = 'rain'
+            $scope.partWeather = syWeatherHelper.getCityWeatherType(decodeToken.weather.code)
         }
     }
     /*
@@ -100,6 +100,7 @@ angular.module('ShinyaApp.chatController', [])
     // 註銷
     $scope.quit = function (){
         store.remove('id_token')
+        $rootScope.socket.disconnect()
         $location.path('/')
     }
     /*

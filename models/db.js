@@ -30,8 +30,12 @@ var userSchema = new Schema({
         ip       : String,
         date     : Date,
         platform : String,
-        numero   : Number,
-        country  : Schema.Types.Mixed
+        numero   : Number
+    },
+    geo_info     : {
+        country  : String,
+        city     : String,
+        weather  : Schema.Types.Mixed
     },
     forgot_code  : String,
     news         : Array,

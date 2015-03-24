@@ -82,7 +82,7 @@ var feed_list = {
     ]
 }
 
-function getNews(country, news_box, callback){
+function getNews(country, callback){
 
     /**
      *
@@ -99,11 +99,12 @@ function getNews(country, news_box, callback){
     } else if (!(country in feed_list)){
         country = 'US'
     }
-    var feed    = feed_list[country],
-        len     = feed.length,
-        pointer = 0,
-        now    = new Date(),
-        today   = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    var feed     = feed_list[country],
+        len      = feed.length,
+        pointer  = 0,
+        news_box = []
+        now      = new Date(),
+        today    = new Date(now.getFullYear(), now.getMonth(), now.getDate());
 
     function getNextNews(){
 

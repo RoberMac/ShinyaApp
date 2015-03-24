@@ -347,35 +347,77 @@ ul {
         #user_info_box #info_date_box .daytime {
             border: 1px solid #000;
         }
+            #user_info_box #info_date_box .daytime.rain {
+                width: 30px;
+                height: 30px;
+                border-top-left-radius: 0px;
+                margin-top: 20%;
+                -webkit-transform: rotate(45deg);
+                transform: rotate(45deg);
+            }
+            #user_info_box #info_date_box .daytime.wind {
+                width: 50px;
+                height: 25px;
+                margin-top: 8%;
+                border-radius: 0 25px 0 25px;
+                -webkit-transform: rotate(1440deg);
+                transform: rotate(1440deg);
+            }
+            #user_info_box #info_date_box .daytime.sun {
+                margin-top: 5%;
+                border: 1px solid #000;
+                border-top: 17px solid #000;
+                border-bottom: 17px solid #000;
+                -moz-box-shadow: 0px 0px 17px 7px rgba(0, 0, 0, .50);
+                box-shadow: 0px 0px 17px 7px rgba(0, 0, 0, .50);
+            }
+            #user_info_box #info_date_box .daytime.fog {
+                margin-top: 7%;
+                border: 1px solid rgba(206, 206, 207, 0.7);
+                border-right: 1px solid rgba(206, 206, 207, 0);
+                background-color: rgba(206, 206, 207, 0.7);
+                -moz-box-shadow: 17px 17px 37px 37px rgba(206,206,207,0.7);
+                box-shadow: 17px 17px 37px 37px rgba(206,206,207,0.7);
+            }
         #user_info_box #info_date_box .night {
             color: #fff;
             background-color: #000;
-            border: 1px solid #FFF;
-        }
-        #user_info_box #info_date_box .rain {
-            width: 30px;
-            height: 30px;
-            border-top-left-radius: 0px;
-            margin-top: 20%;
-            -webkit-transform: rotate(45deg);
-            transform: rotate(45deg);
-        }
-        #user_info_box #info_date_box .wind {
-            width: 50px;
-            height: 25px;
-            margin-top: 8%;
-            border-radius: 0 25px 0 25px;
-            -webkit-transform: rotate(1440deg);
-            transform: rotate(1440deg);
-        }
-        #user_info_box #info_date_box .sun {
-            margin-top: 5%;
             border: 1px solid #000;
-            border-top: 17px solid #000;
-            border-bottom: 17px solid #000;
-            -moz-box-shadow: 0px 0px 17px 7px rgba(0, 0, 0, .50);
-            box-shadow: 0px 0px 17px 7px rgba(0, 0, 0, .50);
         }
+            #user_info_box #info_date_box .night.rain {
+                width: 30px;
+                height: 30px;
+                background-color: #fff;
+                border-top-left-radius: 0px;
+                margin-top: 20%;
+                -webkit-transform: rotate(45deg);
+                transform: rotate(45deg);
+            }
+            #user_info_box #info_date_box .night.wind {
+                width: 50px;
+                height: 25px;
+                margin-top: 8%;
+                border-radius: 0 25px 0 25px;
+                -webkit-transform: rotate(1440deg);
+                transform: rotate(1440deg);
+            }
+            #user_info_box #info_date_box .night.sun {
+                margin-top: 5%;
+                border: 1px solid #000;
+                border-top: 17px solid #000;
+                border-bottom: 17px solid #000;
+                -moz-box-shadow: 0px 0px 17px 7px rgba(0, 0, 0, .50);
+                box-shadow: 0px 0px 17px 7px rgba(0, 0, 0, .50);
+            }
+            #user_info_box #info_date_box .night.fog {
+                margin-top: 7%;
+                border: 1px solid rgba(0, 0, 0, 0.7);
+                border-right: 1px solid rgba(0, 0, 0, 0.3);
+                background-color: rgba(0, 0, 0, 0.8);
+                -moz-box-shadow: 17px 17px 37px 37px rgba(0, 0, 0,0.7);
+                box-shadow: 17px 17px 37px 37px rgba(0, 0, 0,0.7);
+            }
+
 /* info_news_box */
 #info_news_box {
     position: absolute;
@@ -493,13 +535,13 @@ input,
 }
 #info_date_box .all.wind {
     -webkit-transition: all 2.8s ease-in-out .7s;
-    transition:         all 2.8s ease-in-out .7s;
+    transition:         all 2.8s ease-in-out .7s;    
 }
-#info_date_box .all.sun {
+#info_date_box .all.sun,
+#info_date_box .all.frog {
     -webkit-transition: all .7s ease-in-out .7s;
     transition:         all .7s ease-in-out .7s;
 }
-
     input.submit_animate:hover {
         border-color: #000;
         color: #000;
