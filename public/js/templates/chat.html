@@ -29,7 +29,7 @@
                     <div id="info_date_box">
                         <h3>加入於</h3>
                         <div class="date">
-                            <span><a ng-click="getDateNews()">{{infoBox.date}}</a></span>
+                            <span><a ng-click="getSelectedDateNews()">{{infoBox.date}}</a></span>
                         </div>
                         <div class="all" ng-class="[getDaytimeOrNight, partWeather]" ng-click="getPartWeather()">
                             <span class="general_animate" ng-show="!partWeather">{{infoBox.partsOfADay}}</span>
@@ -37,24 +37,33 @@
                     </div>
                 </div>
                 <div ng-if="isNews">
-                    <h3>當日新聞</h3>
-                    <div id="info_news_box">
-                        <div ng-repeat="news in newsBox">
+                    <div id="info_news_inner_box">
+                        <div ng-repeat="news in selectDateNewsBox">
                             <div ng-repeat="item in news.news">
                                 <div id="info_news_content_box">
                                     <span>{{item.date | date: 'HH:mm'}}</span>
                                     <a ng-href="{{item.url}}" target="_blank">{{item.title}}</a>
                                 </div>
                             </div>
-                        </div>
-                        <div id="info_news_source">
-                            <span>來源：{{newsSourceName}}</span>
-                        </div> 
-                        <div id="info_news_load_more" ng-hide="isNoMoreNews">
-                            <span ng-click="getDateNews()">{{newsTips}}</span>
+                            <div id="info_news_source">
+                                <span>來源：{{news.source_name}}</span>
+                            </div>
                         </div>
                     </div>
                 </div>
+            </div>
+            <div ng-if="isNews" id="info_news_outer_box">
+                <div id="info_news_title">
+                    <h3>當日新聞</h3>
+                </div>
+                <div id="info_news_select_date">
+                    <span ng-click="previousHour()">&lt;</span>
+                    <div id="info_news_now">
+                        <span>{{selectDate}}:00</span>
+                    </div>
+                    <span ng-click="nextHour()">&gt;</span>                    
+                </div>
+
             </div>
             <div ng-if="!isNews">
                 <div class="bottom_left_corner">
@@ -74,7 +83,6 @@
                     <a ng-click="quit()">註銷用戶</a>
                 </div>
             </div>
-
             <div ng-show="isNews" id="returnToPreviousStep" ng-click="toggleNewsBox()">
             </div>
         </div>

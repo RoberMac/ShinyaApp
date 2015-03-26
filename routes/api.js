@@ -6,9 +6,9 @@ var router = require('express').Router(),
 // Middleware
 router.use(ejwt({secret: key}))
 
-router.post('/getDateNews', function (req, res, next){
+router.post('/getSelectedDateNews', function (req, res, next){
 
-    api_db_helper.getDateNews(req.user, req.body.index, User, res, next)
+    api_db_helper.getSelectedDateNews(req.user, req.body, User, res, next)
 })
 
 router.get('/turnOnGeoServices', function (req, res, next){

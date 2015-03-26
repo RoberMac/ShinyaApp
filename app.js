@@ -12,6 +12,7 @@ var express    = require('express'),
 // global variables
 global.io    = require('socket.io')(http),
 global.User  = require('./models/db').User,
+global.News  = require('./models/db').News
 global.key   = require('fs').readFileSync(__dirname + '/public/others/public_key.pem')
 
 // init
@@ -25,6 +26,7 @@ mongoose.connect('mongodb://localhost/test', {
     user: app.get('DB').username,
     pass: app.get('DB').password
 });
+
 var db = mongoose.connection
 .on('err', function (err){
     console.log(err)
@@ -75,12 +77,14 @@ app.use('/api', api)
 
 // Handing 404   
 app.use(function (req, res){
+    console.log('[404 Error]')
     res.status('404').sendFile(__dirname + '/views/404.html')
 })
 
 // Handing 400
 app.use(function (err, req, res, next){
     if (err.code === 400){
+        console.log('[400 Error]:' + err)
         res.status(400).json({'status': 'error', 'msg': err.msg})
     } else {
         next(err)        
@@ -90,6 +94,7 @@ app.use(function (err, req, res, next){
 // Handing 500
 app.use(function (err, req, res, next){
     if (err.code === 500){
+        console.log('[500 Error]:' + err)
         res.status(500).json({'status': 'error', 'msg': err.msg})
     } else {
         next(err)
@@ -98,13 +103,19 @@ app.use(function (err, req, res, next){
 
 // Handing 401
 app.use(function (err, req, res, next){
-    console.log('[88]:' + err)
+    for (var i in err){
+        console.log('[401 Error]:' + err)        
+    }
     if (err.status === 401){
         res.status(401).json({'status': 'error','msg': err.message})  
     } else {
         next(err)
     }
 })
+
+// 定時抓取新聞
+var getNews = require('./others/rss_helper');
+getNews(1000 * 60 * 60 * 1)
 
 
 http.listen('3000', function (){

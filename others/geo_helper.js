@@ -31,8 +31,9 @@ var geo_helper = {
             lon: origin.lon
         }, function (err, data){
             if (err){
+                console.log(err)
                 callback({
-                    streetName: ''
+                    streetName: '洛陽城四零四號山洞'
                 })
                 return err
             }
@@ -51,7 +52,7 @@ var geo_helper = {
                 callback({
                     distance: null,
                     location: null,
-                    destination: '加利福尼亞'
+                    destination: '逍遙谷'
                 })
                 return err
             }

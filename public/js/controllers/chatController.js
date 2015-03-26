@@ -50,52 +50,88 @@ angular.module('ShinyaApp.chatController', [])
      *****************
      * 用戶註冊當日新聞
      *****************
-     *     `$scope.newsIndex` 保存當前新聞頁碼
-     *     `$scope.newsBox` 新聞列表
-     *     `$scope.newsSourceName` 新聞來源名
-     *     `$scope.newsTips` 「更多」提示按鈕
-     *     `$scope.isNoMoreNews`  是否還有更多新聞
-     *     `$scope.getDateNews` 獲取新聞，
-     *         成功： `$scope.newsIndex` 加一
+     *     `$scope.newsBox` 緩存獲取到的新聞
+     *     `$scope.selectDateNewsBox` 當前展示的新聞，從 `$scope.newsBox` 獲取
+     *     `$scope.selectDate` 本地時間
+     *     `$scope.previousHour` 獲取上一個時間段新聞
+     *          更新：`$scope.selectDate`、`$scope.selectDateNewsBox`
+     *     `$scope.nextHour` 獲取下一個時間段新聞
+     *          更新：`$scope.selectDate`、`$scope.selectDateNewsBox`
+     *     `$scope.getSelectedDateNews` 獲取新聞，
+     *         成功：保存到 `$scope.newsBox`，更新 `$scope.selectDateNewsBox`
      *         失敗：
      *             狀態碼 401：JWT 過期，跳轉到首頁
-     *             狀態碼 400：已無更多新聞
+     *             狀態碼 400：此時段新聞未獲取
      */
-    $scope.newsIndex = 0
     $scope.newsBox = []
-    $scope.newsSourceName = ''
-    $scope.newsTips = '更多'
-    $scope.isNoMoreNews = false
-    $scope.getDateNews = function (){
-
+    $scope.selectDateNewsBox = []
+    $scope.timezoneOffset = new Date().getTimezoneOffset() / 60
+    $scope.selectDate = new Date().getHours()
+    $scope.previousHour = function (){
+        if ($scope.selectDate > 1){
+            $scope.selectDate --
+            $scope.getSelectedDateNews(function (){
+                $scope.selectDateNewsBox = $scope.newsBox[$scope.selectDate]
+            })
+        } else {
+            $scope.selectDate = 24
+            $scope.getSelectedDateNews(function (){
+                $scope.selectDateNewsBox = $scope.newsBox[$scope.selectDate]
+            })
+        }
+    }
+    $scope.nextHour = function (){
+        if ($scope.selectDate < 24){
+            $scope.selectDate ++
+            $scope.getSelectedDateNews(function (){
+                $scope.selectDateNewsBox = $scope.newsBox[$scope.selectDate]
+            })
+        } else {
+            $scope.selectDate = 1
+            $scope.getSelectedDateNews(function (){
+                $scope.selectDateNewsBox = $scope.newsBox[$scope.selectDate]
+            })
+        }
+    }
+    $scope.getSelectedDateNews = function (callback){
+        console.log($scope.selectDate)
         if ($scope.isNews === false){
             $scope.toggleNewsBox()
         }
-        if ($scope.newsIndex < 999){
-            $http.
-            post('/api/getDateNews', {
-                index: $scope.newsIndex
-            }).
-            success(function (data, status, headers, config){
-                $scope.newsBox.push(data.msg)
-                $scope.newsSourceName = data.msg.source_name
-                $scope.newsIndex ++
-                if ($scope.isNews === false){
-                    $scope.toggleNewsBox()
+        $http.
+        post('/api/getSelectedDateNews', {
+            selectDate: $scope.selectDate,
+            timezoneOffset: $scope.timezoneOffset
+        }).
+        success(function (data, status, headers, config){
+            $scope.newsBox[$scope.selectDate] = data.msg
+            console.log($scope.newsBox)
+            if (callback){
+                // 從 previousHour 或 nextHour 執行
+                callback()
+            } else {
+                // 從 !isNews 頁面執行
+                $scope.selectDateNewsBox = $scope.newsBox[$scope.selectDate]
+            }
+            // $scope.newsSourceName = data.msg.source_name
+            if ($scope.isNews === false){
+                $scope.toggleNewsBox()
+            }
+        }).
+        error(function (data, status, headers, config){
+            if (status === 401){
+                $location.path('/')
+            } else if (status === 400){
+                // 不再發出請求
+                if (callback){
+                    // 從 previousHour 或 nextHour 執行
+                    callback()
+                } else {
+                    // 從 !isNews 頁面執行
+                    $scope.selectDateNewsBox = $scope.newsBox[$scope.selectDate]
                 }
-            }).
-            error(function (data, status, headers, config){
-                if (status === 401){
-                    $location.path('/')
-                } else if (status === 400){
-                    $scope.newsTips = data.msg
-                    $timeout(function (){
-                        $scope.isNoMoreNews = true
-                        $scope.newsIndex = 999
-                    }, 1717)
-                }
-            })
-        }
+            }
+        })
     }
     // 註銷
     $scope.quit = function (){

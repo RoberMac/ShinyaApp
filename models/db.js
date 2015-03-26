@@ -41,12 +41,35 @@ var userSchema = new Schema({
     news         : Array,
     isGeoServices: Boolean,
     last_geo     : Schema.Types.Mixed
-})
+}),
+    newsSchema = new Schema({
 
-var User = mongoose.model('User', userSchema)
-// User.schema.path('password', Number)
-// User.schema.path('username').validate(function (value){
-//     return value == 'RoberMac' ? true : false
-// })
+        // 'BR': Schema.Types.Mixed,
+        // 'CN': Schema.Types.Mixed,
+        // 'DE': Schema.Types.Mixed,
+        // 'FR': Schema.Types.Mixed,
+        // 'HK': Schema.Types.Mixed,
+        // 'IN': Schema.Types.Mixed,
+        // 'JP': Schema.Types.Mixed,
+        // 'KR': Schema.Types.Mixed,
+        // 'RU': Schema.Types.Mixed,
+        // 'TW': Schema.Types.Mixed,
+        // 'US': Schema.Types.Mixed
+        date: Number,
+        'BR': Schema.Types.Mixed,
+        'CN': Schema.Types.Mixed,
+        'DE': Schema.Types.Mixed,
+        'FR': Schema.Types.Mixed,
+        'HK': Schema.Types.Mixed,
+        'IN': Schema.Types.Mixed,
+        'JP': Schema.Types.Mixed,
+        'KR': Schema.Types.Mixed,
+        'RU': Schema.Types.Mixed,
+        'TW': Schema.Types.Mixed,
+        'US': Schema.Types.Mixed
+    });
 
-module.exports.User = User
+module.exports = {
+    User: mongoose.model('User', userSchema),
+    News: mongoose.model('News', newsSchema)
+}

@@ -1,15 +1,16 @@
 var nodemailer        = require('nodemailer'),
     geo_helper        = require('./geo_helper'),
+    getBeginPlace     = require('./begin_place_helper'),
     getCountryAndCity = geo_helper.getCountryAndCity,
-    getCityWeather    = geo_helper.getCityWeather,
-    getNews           = require('./rss_helper');
+    getCityWeather    = geo_helper.getCityWeather;
 
 var db_helper = {
     register: function (register_form, validator, User, res, next){
 
         var username = register_form.username,
             password = register_form.password,
-            email    = register_form.email;
+            email    = register_form.email,
+            place    = getBeginPlace();
 
         // 檢查郵箱
         if (validator.isEmail(email)){
@@ -53,9 +54,9 @@ var db_helper = {
                                                 'numero'  : count,
                                             },
                                             'last_geo': {
-                                                lat: 56.185096,
-                                                lon: -4.050264,
-                                                location: '臨冬城'
+                                                lat: place.lat,
+                                                lon: place.lon,
+                                                location: place.name
                                             }
                                         })
                                         console.log(user)
@@ -82,18 +83,6 @@ var db_helper = {
                                                         }
                                                         console.log('地理位置信息已保存')
                                                     })
-                                                })
-                                            })
-                                            // 獲取新聞並保存
-                                            getNews('CN', function (latest_news){
-                                                User.findOneAndUpdate({username: username}, {
-                                                    news: latest_news
-                                                }, function (err){
-                                                    if (err){
-                                                        console.log('保存新聞失敗')
-                                                        return err
-                                                    }
-                                                    console.log('新聞已保存')
                                                 })
                                             })
                                         })
@@ -135,7 +124,7 @@ var db_helper = {
                                 weather: found.geo_info.weather,
                                 isGeoServices: found.isGeoServices
                             }, key, {
-                                expiresInMinutes: 10
+                                expiresInMinutes: 30
                             })
                             res.json({'token': token})
                         } else {
@@ -166,7 +155,7 @@ var db_helper = {
                                 weather: found.geo_info.weather,
                                 isGeoServices: found.isGeoServices
                             }, key, {
-                                expiresInMinutes: 10
+                                expiresInMinutes: 30
                             })
                             res.json({'token': token})
                         } else {
