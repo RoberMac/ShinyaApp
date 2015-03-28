@@ -27,18 +27,21 @@
                         <p>第 <span ng-class="numero">{{infoBox.numero}}</span> 號用戶</p>
                     </div>
                     <div id="info_date_box">
-                        <h3>加入於</h3>
-                        <div class="date">
-                            <span><a ng-click="getSelectedDateNews()">{{infoBox.date}}</a></span>
+                        <h3>{{infoBox.title}}</h3>
+                        <div class="register_date">
+                            <span ng-show="infoBox.title == '加入於'">
+                                <a ng-click="getSelectedDateNews()">{{infoBox.date}}</a>
+                            </span>
+                            <span ng-show="infoBox.title != '加入於'">{{infoBox.weather}}</span>
                         </div>
-                        <div class="all" ng-class="[getDaytimeOrNight, partWeather]" ng-click="getPartWeather()">
+                        <div class="all" ng-class="[getDaytimeOrNight, partWeather]" ng-click="togglePartWeather()">
                             <span class="general_animate" ng-show="!partWeather">{{infoBox.partsOfADay}}</span>
                         </div>
                     </div>
                 </div>
                 <div ng-if="isNews">
                     <div id="info_news_inner_box">
-                        <div ng-repeat="news in selectDateNewsBox">
+                        <div ng-if="isNewsExist" ng-repeat="news in selectDateNewsBox" id="info_news_source_box">
                             <div ng-repeat="item in news.news">
                                 <div id="info_news_content_box">
                                     <span>{{item.date | date: 'HH:mm'}}</span>
@@ -48,6 +51,9 @@
                             <div id="info_news_source">
                                 <span>來源：{{news.source_name}}</span>
                             </div>
+                        </div>
+                        <div ng-if="!isNewsExist" id="info_news_dont_exist">
+                            <h3>此時段新聞不存在</h3>
                         </div>
                     </div>
                 </div>
@@ -73,11 +79,13 @@
                     </div>
                 </div>
                 <div class="bottom_center_corner">
-                    <span><a ng-href="http://maps.google.com/maps?z=12&t=h&q=loc:{{geoBox.last_geo.lat}}+{{geoBox.last_geo.lon}}" target="_blank">{{geoBox.last_geo.location}}</a></span>
-                    <span id="distance">{{geoBox.distance}}</span>
-                    <span>
-                        <a ng-href="http://maps.google.com/maps?z=12&t=h&q=loc:{{geoBox.now_geo.lat}}+{{geoBox.now_geo.lon}}" target="_blank">{{geoBox.now_geo.location}}</a>
-                    </span>
+                    <div>
+                        <span><a ng-href="http://maps.google.com/maps?z=12&t=h&q=loc:{{geoBox.last_geo.lat}}+{{geoBox.last_geo.lon}}" target="_blank">{{geoBox.last_geo.location}}</a></span>
+                        <span id="distance">{{geoBox.distance}}</span>
+                        <span>
+                            <a ng-href="http://maps.google.com/maps?z=12&t=h&q=loc:{{geoBox.now_geo.lat}}+{{geoBox.now_geo.lon}}" target="_blank">{{geoBox.now_geo.location}}</a>
+                        </span>
+                    </div>
                 </div>
                 <div class="bottom_right_corner">
                     <a ng-click="quit()">註銷用戶</a>

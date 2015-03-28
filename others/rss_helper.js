@@ -8,10 +8,12 @@ var feed_list = {
     // ],
     'CN': [
         // {'source_name': 'Google 新聞', 'url': 'https://news.google.com/news?cf=all&ned=cn&hl=zh-CN&output=rss'}, // Google 新聞
-        {'source_name': '網易新闻', 'url': 'http://news.163.com/special/00011K6L/rss_sh.xml'} // 網易新聞
-        // {'source_name': '搜狐新闻', 'url': 'http://rss.news.sohu.com/rss/guonei.xml'} // 搜狐新聞
+        // {'source_name': '網易新闻', 'url': 'http://news.163.com/special/00011K6L/rss_sh.xml'}, // 網易新聞
+        {'source_name': '新浪新闻', 'url': 'http://rss.sina.com.cn/news/china/focus15.xml'}, // 新浪新聞
+        // {'source_name': '華爾街見闻', 'url': 'http://wallstreetcn.com/rss.xml'}, // 華爾街見闻
         // {'source_name': '紐約時報中文網', 'url': 'http://cn.nytimes.com/rss.html'}, // 紐約時報中文網
         // {'source_name': 'BBC 中文網', 'url': 'http://www.bbc.co.uk/zhongwen/trad/index.xml'}, // BBC 中文網
+        {'source_name': 'cnBeta', 'url': 'http://rss.cnbeta.com/rss'}// cnBeta
         // {'source_name': 'Engadget 中文版', 'url': 'http://cn.engadget.com/rss.xml'} // Engadget 中文版
     ],
     // 'DE': [
@@ -70,9 +72,6 @@ var feed_list = {
         // {'source_name': '紐約時報中文網', 'url': 'http://cn.nytimes.com/rss/zh-hant'}, // 紐約時報中文網
         // {'source_name': 'BBC 中文網', 'url': 'http://www.bbc.co.uk/zhongwen/trad/index.xml'}, // BBC 中文網
         // {'source_name': 'Engadget 中文版', 'url': 'http://chinese.engadget.com/rss.xml'} // Engadget 中文版
-    // ],
-    // 'UK': [
-    //     {'source_name': '', 'url': 'http://feeds.bbci.co.uk/news/uk/rss.xml'}, // BBC UK
     // ],
     'US': [
     //     {'source_name': 'BBC World', 'url': 'http://feeds.bbci.co.uk/news/world/rss.xml'}, // BBC World
@@ -190,8 +189,9 @@ function getNews(frequency){
                 now.getUTCDate(),
                 now.getUTCHours()
             )
-        );
-    console.log(new Date(), new Date(now))
+        ),
+        restrict        = now - frequency;
+    console.log(new Date(), now, frequency)
     News.findOne({date: now}, function (err, found){
         if (!found){
             var news = new News({
@@ -204,8 +204,8 @@ function getNews(frequency){
                 }
                 var country_list    = Object.keys(feed_list),
                     country_len     = country_list.length,
-                    country_pointer = 0,
-                    restrict        = now - frequency;
+                    country_pointer = 0;
+
                 (function getCountryNews(country){
 
                     var feed_item    = feed_list[country],
@@ -237,7 +237,7 @@ function getNews(frequency){
                                 meta = this.meta,
                                 item;
                             while (item = stream.read()){
-                                if (item.date > restrict){
+                                if (item.date < now && item.date > restrict){
                                     cache.push({
                                         'title': item.title,
                                         'url'  : item.link,
@@ -290,7 +290,8 @@ function getNews(frequency){
 module.exports = function (frequency){
     // 每隔一小時抓取一次，每隔一分鐘檢測是否需要抓取
     getNews(frequency)
-    setInterval(function (frequency){
+    setInterval(function (){
+        console.log(frequency)
         getNews(frequency)
     }, 1000 * 60 * 1)
 }

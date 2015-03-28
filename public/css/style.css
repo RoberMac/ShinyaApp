@@ -94,6 +94,13 @@ ul {
         font-size: 10px;
         color: #CECECF;
     }
+        .main_box .bottom_center_corner > div:first-child {
+            word-wrap: break-word;
+            white-space: nowrap;
+            width: 77%;
+            text-overflow: initial;
+            overflow: hidden;
+        }
         .main_box .bottom_center_corner #distance {
             position: relative;
             top: 4px;
@@ -261,7 +268,6 @@ ul {
             border-bottom: 1px solid #666;
         }
     #chat_box .username_box {
-        /* gold / aluminum / steel */
         text-align: left;
         font-size: 11px;
         margin-top: 10px;
@@ -327,7 +333,7 @@ ul {
     #user_info_box #info_date_box > div {
         margin: 3% auto;
     }
-    #user_info_box #info_date_box .date span {
+    #user_info_box #info_date_box .register_date span:first-child {
         cursor: pointer;
         border-bottom: 1px solid #000;
     }
@@ -341,8 +347,12 @@ ul {
         -webkit-border-radius: 17px;    
         cursor: pointer;
     }
-        #user_info_box #info_date_box span {
-            cursor: pointer;
+        #user_info_box #info_date_box .all.clouds {
+            width: 77px;
+            height: 77px;
+            border-radius: 38.5px;
+            background-color: #CECECF;
+            border: 1px solid #CECECF;
         }
         #user_info_box #info_date_box .daytime {
             border: 1px solid #000;
@@ -417,7 +427,6 @@ ul {
                 -moz-box-shadow: 17px 17px 37px 37px rgba(0, 0, 0,0.7);
                 box-shadow: 17px 17px 37px 37px rgba(0, 0, 0,0.7);
             }
-
 /* info_news_inner_box */
 #info_news_inner_box {
     position: absolute;
@@ -425,6 +434,14 @@ ul {
     height: 100%;
     overflow: auto;
 }
+    #info_news_inner_box #info_news_dont_exist {
+        position: relative;
+        top: 47%;
+        color: #cececf;
+    }
+    #info_news_inner_box #info_news_source_box {
+        margin-bottom: 10%;
+    }
     #info_news_inner_box #info_news_content_box {
         overflow: hidden;
         white-space:nowrap;
@@ -527,6 +544,7 @@ ul {
 /* Animate */
 input,
 .sunAndMoon,
+#info_date_box .register_date,
 #info_date_box .all,
 .general_animate.ng-animate {
     -webkit-transition: all .7s ease-in-out;
@@ -545,7 +563,8 @@ input,
     transition:         all 2.8s ease-in-out .7s;    
 }
 #info_date_box .all.sun,
-#info_date_box .all.frog {
+#info_date_box .all.frog,
+#info_date_box .all.clouds {
     -webkit-transition: all .7s ease-in-out .7s;
     transition:         all .7s ease-in-out .7s;
 }
@@ -720,6 +739,9 @@ input,
         #user_info_box #info_date_box > div {
             margin: 7% auto;
         }
+    #info_news_inner_box #info_news_source_box {
+        margin-bottom: 17%;
+    }
     #chat_submit_box {
         top: 92.5%;
         left: 3%;

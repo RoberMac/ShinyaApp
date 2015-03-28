@@ -1,6 +1,6 @@
 var request   = require('request'),
     distance  = require('google-distance'),
-    API_KEY   = 'AIzaSyA894nYOdT_qk9_gEXZtNUeHpyJLn-MFs0',
+    API_KEY   = 'AIzaSyAbDnuQxB6VIAjG7O6Te4p_a1NvQws6Hy0',
     geocoder  = require('node-geocoder');
     
 
@@ -17,6 +17,7 @@ var geo_helper = {
 
         freegeoip.geocode(ip, function (err, data){
             if (err){
+                console.log(err)
                 callback('', '')
                 return err
             }
@@ -32,9 +33,7 @@ var geo_helper = {
         }, function (err, data){
             if (err){
                 console.log(err)
-                callback({
-                    streetName: '洛陽城四零四號山洞'
-                })
+                callback('洛陽城四零四號山洞')
                 return err
             }
             console.log(data[0])
@@ -79,6 +78,16 @@ var geo_helper = {
         ? false
         : true
     },
+    getTodayMs: function (){
+        var date = new Date()
+        return Date.parse(
+                new Date(
+                    date.getUTCFullYear(),
+                    date.getUTCMonth(),
+                    date.getUTCDate()
+                    )
+                )
+    },
     // 天氣
     getCityWeather: function (city, callback){
 
@@ -90,6 +99,7 @@ var geo_helper = {
             json: true
         }, function (err, res, body){
             if (!err && res.statusCode == 200) {
+                console.log(body)
                 callback({
                     description: body.weather[0].description,
                     code: body.weather[0].id

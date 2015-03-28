@@ -20,30 +20,33 @@ angular.module('ShinyaApp.chatController', [])
         }, 0)
 
     }
-    // `#info_news_box` 切換
-    $scope.isNews = false
-    $scope.toggleNewsBox = function (){
-        $scope.isNews = !$scope.isNews
-    }
     // `#info_news_box` 用戶信息
     var token = store.get('id_token'),
         decodeToken = jwtHelper.decodeToken(token);
     console.log(decodeToken)
     // 從 JWT 解碼獲取用戶信息
     $scope.infoBox = {
-        username: decodeToken.username,
-        numero: decodeToken.numero,
-        date: $filter('date')(decodeToken.date, 'yyyy 年 M 月 d 日'),
-        partsOfADay: syTimeHelper.partsOfADay(~~($filter('date')(decodeToken.date, 'H')))
+        title      : '加入於',
+        username   : decodeToken.username,
+        numero     : decodeToken.numero,
+        date       : $filter('date')(decodeToken.date, 'yyyy 年 M 月 d 日'),
+        partsOfADay: syTimeHelper.partsOfADay(~~($filter('date')(decodeToken.date, 'H'))),
+        weather    : decodeToken.weather.description
     }
     $scope.numero = syTimeHelper.getNumero($scope.infoBox.numero)
     $scope.getDaytimeOrNight = syTimeHelper.getDaytimeOrNight(~~($filter('date')(decodeToken.date, 'H')))
     $scope.partWeather = ''
-    $scope.getPartWeather = function (){
+    $scope.togglePartWeather = function (){
         if ($scope.partWeather == syWeatherHelper.getCityWeatherType(decodeToken.weather.code)){
             $scope.partWeather = ''
+            $timeout(function (){
+                $scope.infoBox.title = '加入於'
+            }, 777)
         } else {
             $scope.partWeather = syWeatherHelper.getCityWeatherType(decodeToken.weather.code)
+            $timeout(function (){
+                $scope.infoBox.title = '當日天氣'
+            }, 777)
         }
     }
     /*
@@ -57,82 +60,95 @@ angular.module('ShinyaApp.chatController', [])
      *          更新：`$scope.selectDate`、`$scope.selectDateNewsBox`
      *     `$scope.nextHour` 獲取下一個時間段新聞
      *          更新：`$scope.selectDate`、`$scope.selectDateNewsBox`
-     *     `$scope.getSelectedDateNews` 獲取新聞，
+     *     `getSelectedDateNews` 獲取新聞，
      *         成功：保存到 `$scope.newsBox`，更新 `$scope.selectDateNewsBox`
      *         失敗：
      *             狀態碼 401：JWT 過期，跳轉到首頁
      *             狀態碼 400：此時段新聞未獲取
      */
-    $scope.newsBox = []
+    $scope.isNews = false
+    $scope.isNewsExist = false
+    $scope.toggleNewsBox = function (){
+        $scope.isNews = !$scope.isNews
+    }
+    $scope.toggleNewsExist = function (){
+        $scope.isNewsExist = !$scope.isNewsExist
+    }
+    $scope.newsBox = {}
     $scope.selectDateNewsBox = []
     $scope.timezoneOffset = new Date().getTimezoneOffset() / 60
     $scope.selectDate = new Date().getHours()
-    $scope.previousHour = function (){
-        if ($scope.selectDate > 1){
-            $scope.selectDate --
-            $scope.getSelectedDateNews(function (){
-                $scope.selectDateNewsBox = $scope.newsBox[$scope.selectDate]
-            })
-        } else {
-            $scope.selectDate = 24
-            $scope.getSelectedDateNews(function (){
-                $scope.selectDateNewsBox = $scope.newsBox[$scope.selectDate]
-            })
-        }
-    }
-    $scope.nextHour = function (){
-        if ($scope.selectDate < 24){
-            $scope.selectDate ++
-            $scope.getSelectedDateNews(function (){
-                $scope.selectDateNewsBox = $scope.newsBox[$scope.selectDate]
-            })
-        } else {
-            $scope.selectDate = 1
-            $scope.getSelectedDateNews(function (){
-                $scope.selectDateNewsBox = $scope.newsBox[$scope.selectDate]
-            })
-        }
-    }
-    $scope.getSelectedDateNews = function (callback){
-        console.log($scope.selectDate)
-        if ($scope.isNews === false){
-            $scope.toggleNewsBox()
-        }
+    function getSelectedDateNews(callback){
         $http.
         post('/api/getSelectedDateNews', {
             selectDate: $scope.selectDate,
             timezoneOffset: $scope.timezoneOffset
         }).
         success(function (data, status, headers, config){
-            $scope.newsBox[$scope.selectDate] = data.msg
-            console.log($scope.newsBox)
             if (callback){
-                // 從 previousHour 或 nextHour 執行
-                callback()
-            } else {
-                // 從 !isNews 頁面執行
-                $scope.selectDateNewsBox = $scope.newsBox[$scope.selectDate]
-            }
-            // $scope.newsSourceName = data.msg.source_name
-            if ($scope.isNews === false){
-                $scope.toggleNewsBox()
+                callback('ok', data.msg)
             }
         }).
         error(function (data, status, headers, config){
             if (status === 401){
                 $location.path('/')
             } else if (status === 400){
-                // 不再發出請求
                 if (callback){
-                    // 從 previousHour 或 nextHour 執行
-                    callback()
-                } else {
-                    // 從 !isNews 頁面執行
-                    $scope.selectDateNewsBox = $scope.newsBox[$scope.selectDate]
+                    callback('error', data.msg)
                 }
             }
         })
     }
+    $scope.getSelectedDateNews = function(){
+        if ($scope.selectDate in $scope.newsBox){
+            // 從 `$scope.newsBox` 獲取，不執行 `getSelectedDateNews`
+            $scope.selectDateNewsBox = $scope.newsBox[$scope.selectDate]
+            if ($scope.isNews === false){
+                $scope.toggleNewsBox()
+            }
+            if (!$scope.isNewsExist){
+                $scope.toggleNewsExist()
+            }
+            console.log($scope.selectDateNewsBox)
+        } else {
+            getSelectedDateNews(function (status, news){
+                if (status === 'ok'){
+                    $scope.newsBox[$scope.selectDate] = news
+                    $scope.selectDateNewsBox = $scope.newsBox[$scope.selectDate]
+                    if ($scope.isNews === false){
+                        $scope.toggleNewsBox()
+                    }
+                    if (!$scope.isNewsExist){
+                        $scope.toggleNewsExist()
+                    }
+                } else {
+                    if ($scope.isNewsExist){
+                        $scope.toggleNewsExist()
+                    }
+                    console.log('no message')
+                }
+            })
+        }
+    }
+    $scope.previousHour = function (){
+        if ($scope.selectDate > 1){
+            $scope.selectDate --
+            $scope.getSelectedDateNews()
+        } else {
+            $scope.selectDate = 24
+            $scope.getSelectedDateNews()
+        }
+    }
+    $scope.nextHour = function (){
+        if ($scope.selectDate < 24){
+            $scope.selectDate ++
+            $scope.getSelectedDateNews()
+        } else {
+            $scope.selectDate = 1
+            $scope.getSelectedDateNews()
+        }
+    }
+
     // 註銷
     $scope.quit = function (){
         store.remove('id_token')

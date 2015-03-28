@@ -2,7 +2,8 @@ var nodemailer        = require('nodemailer'),
     geo_helper        = require('./geo_helper'),
     getBeginPlace     = require('./begin_place_helper'),
     getCountryAndCity = geo_helper.getCountryAndCity,
-    getCityWeather    = geo_helper.getCityWeather;
+    getCityWeather    = geo_helper.getCityWeather,
+    getTodayMs        = geo_helper.getTodayMs;
 
 var db_helper = {
     register: function (register_form, validator, User, res, next){
@@ -10,7 +11,8 @@ var db_helper = {
         var username = register_form.username,
             password = register_form.password,
             email    = register_form.email,
-            place    = getBeginPlace();
+            place    = getBeginPlace(),
+            date     = new Date();
 
         // 檢查郵箱
         if (validator.isEmail(email)){
@@ -56,7 +58,8 @@ var db_helper = {
                                             'last_geo': {
                                                 lat: place.lat,
                                                 lon: place.lon,
-                                                location: place.name
+                                                location: place.name,
+                                                date: getTodayMs()
                                             }
                                         })
                                         console.log(user)

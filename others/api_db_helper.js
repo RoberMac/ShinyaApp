@@ -2,6 +2,8 @@ var geo_helper = require('./geo_helper')
 
 var api_db_helper = {
 
+    getTodayMs: geo_helper.getTodayMs,
+    // 獲取選定時段新聞
     getSelectedDateNews: function (user, body, User, res, next){
 
         User.findOne({username: user.username}, 'register_info geo_info', function (err, userInfo){
@@ -25,22 +27,24 @@ var api_db_helper = {
                         )
                     );
                 console.log(body.selectDate, body.timezoneOffset, body.selectDate + body.timezoneOffset)
+                console.log(selectDate, country, userDate)
                 /**
                  *
                  * 新聞來源指向：
                  * 新加坡、馬來西亞 -> 台灣
                  * 澳門 -> 香港
-                 * 加拿大、英國、其他 -> 美國
+                 * 其他(加拿大、英國、...) -> 美國
                  *
                 **/
-                // if (country === 'MO'){
-                //     country = 'HK'
-                // } else if (country === 'SG' || country === 'MY'){
-                //     country = 'TW'
-                // } else if (!(country in )){
-                //     country = 'US'
-                // }
-                News.findOne({date: selectDate}, 'HK', function (err, found){
+                var country_list = ['BR', 'CN', 'DE', 'FR', 'HK', 'IN', 'JP', 'KR', 'RU', 'TW', 'US']
+                if (country === 'MO'){
+                    country = 'HK'
+                } else if (country === 'SG' || country === 'MY'){
+                    country = 'TW'
+                } else if (country_list.indexOf(country) < 0){
+                    country = 'US'
+                }
+                News.findOne({date: selectDate}, country, function (err, found){
 
                     if (err){
                         console.log(err)
@@ -50,12 +54,13 @@ var api_db_helper = {
                     if (!found){
                         res.status(400).json({'status': 'error', 'msg': '此時段新聞不存在'})
                     } else {
-                        res.send({'status': 'ok', 'msg': found['HK']})
+                        res.send({'status': 'ok', 'msg': found[country]})
                     }
                 })
             }
         })
     },
+    // 開啟「位置服務」
     turnOnGeoServices: function (user, User, res, next){
 
         User.findOneAndUpdate({username: user.username}, {isGeoServices: true}, function (err){
@@ -67,6 +72,7 @@ var api_db_helper = {
             res.send({'status': 'ok', 'msg': '已開啟位置服務，請重新登錄'})
         })
     },
+    // 關閉「位置服務」
     turnOffGeoServices: function (user, User, res, next){
 
         User.findOneAndUpdate({username: user.username}, {isGeoServices: false}, function (err){
@@ -78,6 +84,7 @@ var api_db_helper = {
             res.send({'status': 'ok', 'msg': '已關閉位置服務，請重新登錄'})
         })
     },
+    // 獲取「位置服務」
     getGeoServices: function (user, coords, User, res, next){
 
         User.findOne({username: user.username}, 'last_geo', function (err, found){
@@ -89,9 +96,8 @@ var api_db_helper = {
             if (!found){
                 res.status(400).json({'status': 'error', 'msg': '用戶不存在'})
             } else {
-                // 同一位置多次請求
-                if (geo_helper.isSamePlace(found.last_geo, coords)){
-                    console.log('same place')
+                if (geo_helper.isSamePlace(found.last_geo, coords) && (Date.now() - found.last_geo.date) < 86400000){
+                    // 同一天同一位置多次請求
                     var msg = {
                         distance: '0 km',
                         last_geo: found.last_geo,
@@ -114,9 +120,11 @@ var api_db_helper = {
                                 now_geo : {
                                     lat: coords.lat,
                                     lon: coords.lon,
-                                    location: streetName
+                                    location: streetName,
+                                    date: geo_helper.getTodayMs()
                                 }
                             }
+                            console.log(msg)
                             // 更新座標
                             User.findOneAndUpdate({username: user.username}, {
                                 last_geo: msg.now_geo
