@@ -18,8 +18,20 @@ angular.module('ShinyaApp.chatController', [])
                 syPosHelper.setNowPos(syPosHelper.nowPos)
             }
         }, 0)
-
     }
+    /*
+     **************
+     * 用戶基本信息
+     **************
+     *      `$scope.infoBox`
+     *          title: 加入於／當日天氣
+     *          username: 用戶名
+     *          numero: 註冊序號
+     *          date: 註冊日期
+     *          partsOfADay: 註冊當天時分
+     *          weather: 當天天氣
+     *
+     */
     // `#info_news_box` 用戶信息
     var token = store.get('id_token'),
         decodeToken = jwtHelper.decodeToken(token);
@@ -64,7 +76,7 @@ angular.module('ShinyaApp.chatController', [])
      *         成功：保存到 `$scope.newsBox`，更新 `$scope.selectDateNewsBox`
      *         失敗：
      *             狀態碼 401：JWT 過期，跳轉到首頁
-     *             狀態碼 400：此時段新聞未獲取
+     *             狀態碼 400：此時段新聞未獲取，`$scope.isNewsExist` -> false
      */
     $scope.isNews = false
     $scope.isNewsExist = false
@@ -85,17 +97,13 @@ angular.module('ShinyaApp.chatController', [])
             timezoneOffset: $scope.timezoneOffset
         }).
         success(function (data, status, headers, config){
-            if (callback){
-                callback('ok', data.msg)
-            }
+            callback('ok', data.msg)
         }).
         error(function (data, status, headers, config){
             if (status === 401){
                 $location.path('/')
-            } else if (status === 400){
-                if (callback){
-                    callback('error', data.msg)
-                }
+            } else {
+                callback('error', data.msg)
             }
         })
     }
@@ -125,7 +133,6 @@ angular.module('ShinyaApp.chatController', [])
                     if ($scope.isNewsExist){
                         $scope.toggleNewsExist()
                     }
-                    console.log('no message')
                 }
             })
         }
@@ -232,7 +239,7 @@ angular.module('ShinyaApp.chatController', [])
     }
     function onTextMsg(data) {
         var isMe       = $rootScope.socket.id === data.id,
-            beforePush = syPosHelper.isBottom();
+            isBottom   = syPosHelper.isBottom();
         $scope.$apply(function (){
             $scope.msgInbox.push({
                 'isMe'      : isMe,
@@ -243,12 +250,12 @@ angular.module('ShinyaApp.chatController', [])
             })
         })
         /* 
-         * 當用戶處於 main_box 底部，新消息到來時自動滾動到底部
-         * 此外，當用戶回滾查看歷史消息時，新消息到來時不會自動滾動到底部
-         * 另外，當用戶發送新消息時，滾動到底部
+         * 當用戶處於 chat_box 底部，新消息到來時自動滾動到底部
+         * 當用戶回滾查看歷史消息時，新消息到來時不會自動滾動到底部
+         * 當用戶發送新消息時，滾動到底部
          *
          */
-        if (beforePush || isMe){
+        if (isBottom || isMe){
             syPosHelper.scrollToBottom()
         } else {
             if (!isMe){

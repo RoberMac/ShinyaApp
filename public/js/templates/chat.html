@@ -1,18 +1,16 @@
 <div class="main_box" ng-class="{'input_shake_animate': input_shake_animate, 'chat_box': isChatBox}" ng-swipe-left="toggleChatBox()" ng-swipe-right="toggleChatBox()" ng-swipe-disable-mouse sy-autoscroll>
     <div ng-switch on="isChatBox">
-        <div class="general_animate" ng-switch-when="true">
-            <div id="chat_box">
-                <div ng-repeat="contentItem in msgInbox">
-                    <div class="all" ng-class="{'me': contentItem.isMe, 'others': !contentItem.isMe}">
-                        <div ng-if="contentItem.isShowDate" class="info_box">
-                            <span>{{contentItem.date | date: 'H:mm:ss'}}</span>
-                        </div>
-                        <div ng-if="!contentItem.isMe" class="username_box">
-                            <span>{{contentItem.username}}</span>
-                        </div>
-                        <div class="content_box">
-                            <pre>{{contentItem.msg}}</pre>
-                        </div>
+        <div id="chat_box" class="general_animate" ng-switch-when="true">
+            <div ng-repeat="contentItem in msgInbox">
+                <div class="all" ng-class="{'me': contentItem.isMe, 'others': !contentItem.isMe}">
+                    <div ng-if="contentItem.isShowDate" class="info_box">
+                        <span>{{contentItem.date | date: 'H:mm:ss'}}</span>
+                    </div>
+                    <div ng-if="!contentItem.isMe" class="username_box">
+                        <span>{{contentItem.username}}</span>
+                    </div>
+                    <div class="content_box">
+                        <pre>{{contentItem.msg}}</pre>
                     </div>
                 </div>
             </div>
@@ -69,7 +67,6 @@
                     </div>
                     <span ng-click="nextHour()">&gt;</span>                    
                 </div>
-
             </div>
             <div ng-if="!isNews">
                 <div class="bottom_left_corner">

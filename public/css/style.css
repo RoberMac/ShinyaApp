@@ -69,9 +69,6 @@ ul {
     -moz-box-shadow: 0px 3px 15px 0px rgba(0,0,0,0.50);
     box-shadow:      0px 3px 15px 0px rgba(0,0,0,0.50);
     border-radius: 10px;
-    overflow-x: hidden;
-    overflow-y: auto;
-    -webkit-overflow-scrolling: touch;
 }
     .main_box .logo {
         display: none;
@@ -223,8 +220,13 @@ ul {
     }
 /* chat_box */
 #chat_box {
+    position: absolute;
+    width: 100%;
+    height: 100%;
     padding: 5px;
-
+    overflow-x: hidden;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
 }
     #chat_box .all {
         width: 100%;
