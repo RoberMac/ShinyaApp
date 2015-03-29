@@ -1,6 +1,9 @@
-var nodemailer    = require('nodemailer'),
-    getGeo        = require('./geo_helper'),
-    getNews       = require('./rss_helper');
+var nodemailer        = require('nodemailer'),
+    geo_helper        = require('./geo_helper'),
+    getBeginPlace     = require('./begin_place_helper'),
+    getCountryAndCity = geo_helper.getCountryAndCity,
+    getCityWeather    = geo_helper.getCityWeather,
+    getTodayMs        = geo_helper.getTodayMs;
 
 var db_helper = {
     register: function (register_form, validator, User, res, next){
@@ -8,9 +11,8 @@ var db_helper = {
         var username = register_form.username,
             password = register_form.password,
             email    = register_form.email,
-            info     = register_form.register_info,
-            geo      = getGeo(register_form.register_info.ip),
-            news     = []
+            place    = getBeginPlace(),
+            date     = new Date();
 
         // 檢查郵箱
         if (validator.isEmail(email)){
@@ -19,9 +21,8 @@ var db_helper = {
                 if (validator.isLength(username, 1, 16)){
                     // 檢查用戶名是否存在
                     User.findOne({username: username}, function (err, found){
-
                         if (err){
-                            next({'code': 500, 'status': 'error', 'msg': 'Server Error'})
+                            next({'code': 500, 'status': 'error', 'msg': '服務器出錯'})
                             return err
                         }
                         if (found){
@@ -29,9 +30,8 @@ var db_helper = {
                         } else {
                             // 檢查電郵地址是否存在
                             User.findOne({email: email}, function (err, found){
-
                                 if (err){
-                                    next({'code': 500, 'status': 'error', 'msg': 'Server Error'})
+                                    next({'code': 500, 'status': 'error', 'msg': '服務器出錯'})
                                     return err
                                 }
                                 if (found){
@@ -40,37 +40,44 @@ var db_helper = {
                                     // 獲取當前註冊用戶數
                                     User.count({}, function (err, count){
                                         if (err){
-                                            next({'code': 500, 'status': 'error', 'msg': 'Server Error'})
+                                            next({'code': 500, 'status': 'error', 'msg': '服務器出錯'})
                                             return err
                                         }
-                                        console.log('count: ' + count)
-                                        // 保存到數據庫
-                                        var user = new User({
-                                            'username': username,
-                                            'email': email,
-                                            'password': password,
-                                            'register_info': info,
-                                            'other_info': {
-                                                'numero': count,
-                                                'geo'   : geo
-                                            }
-                                        })
-                                        user.save(function (err){
-                                            if (err){
-                                                next({'code': 400, 'status': 'error', 'msg': '用戶名或電郵地址已存在'})
-                                                return err
-                                            }
-                                            res.json({'status': 'ok', 'msg': '註冊成功'})
-                                            // 獲取新聞並保存
-                                            getNews('CN', news, function (latest_news){
-                                                User.findOneAndUpdate({username: username}, {
-                                                    news: latest_news
-                                                }, function (err){
+                                        // 獲取 國家代碼 和 城市名
+                                        getCountryAndCity('14.18.190.188', function (country, city){
+                                            // 獲取城市天氣
+                                            getCityWeather(city, function (weather){
+                                                // 保存到數據庫
+                                                var user = new User({
+                                                    'username': username,
+                                                    'email': email,
+                                                    'password': password,
+                                                    'register_info': {
+                                                        'ip'      : register_form.register_info.ip,
+                                                        'date'    : register_form.register_info.date,
+                                                        'platform': register_form.register_info.platform,
+                                                        'numero'  : count,
+                                                    },
+                                                    'last_geo': {
+                                                        lat: place.lat,
+                                                        lon: place.lon,
+                                                        location: place.name,
+                                                        date: getTodayMs()
+                                                    },
+                                                    geo_info: {
+                                                        'country': country,
+                                                        'city'   : city,
+                                                        'weather': weather
+                                                    }
+                                                })
+                                                console.log(user)
+                                                user.save(function (err){
                                                     if (err){
-                                                        console.log('保存新聞失敗')
+                                                        next({'code': 400, 'status': 'error', 'msg': '用戶名或電郵地址已存在'})
                                                         return err
                                                     }
-                                                    console.log('新聞已保存')
+                                                    res.json({'status': 'ok', 'msg': '註冊成功'})
+                                                    console.log('地理位置信息已保存')
                                                 })
                                             })
                                         })
@@ -93,7 +100,7 @@ var db_helper = {
 
         if (validator.isEmail(login_form.user)){
             console.log(validator.normalizeEmail(login_form.user))
-            User.findOne({email: validator.normalizeEmail(login_form.user)}, 'username password email register_info other_info', function (err, found){
+            User.findOne({email: validator.normalizeEmail(login_form.user)}, 'username password email register_info geo_info isGeoServices', function (err, found){
                 if (err) return err
                 // 檢查用戶是否存在
                 if (!found){
@@ -107,10 +114,12 @@ var db_helper = {
                         if (bcrypt.compareSync(login_form.password, compare_password)){
                             var token = jwt.sign({
                                 username: found.username,
-                                numero: found.other_info.numero,
-                                date: found.register_info.date
+                                numero: found.register_info.numero,
+                                date: found.register_info.date,
+                                weather: found.geo_info.weather,
+                                isGeoServices: found.isGeoServices
                             }, key, {
-                                expiresInMinutes: 10
+                                expiresInMinutes: 30
                             })
                             res.json({'token': token})
                         } else {
@@ -120,7 +129,7 @@ var db_helper = {
                 }
             }) 
         } else {
-            User.findOne({username: login_form.user}, 'username password email register_info other_info', function (err, found){
+            User.findOne({username: login_form.user}, 'username password email register_info geo_info isGeoServices', function (err, found){
                 if (err) return err
                 // 檢查用戶是否存在
                 if (!found){
@@ -136,10 +145,12 @@ var db_helper = {
                         if (bcrypt.compareSync(login_form.password, compare_password)){
                             var token = jwt.sign({
                                 username: found.username,
-                                numero: found.other_info.numero,
-                                date: found.register_info.date
+                                numero: found.register_info.numero,
+                                date: found.register_info.date,
+                                weather: found.geo_info.weather,
+                                isGeoServices: found.isGeoServices
                             }, key, {
-                                expiresInMinutes: 10
+                                expiresInMinutes: 30
                             })
                             res.json({'token': token})
                         } else {
@@ -223,7 +234,6 @@ var db_helper = {
                 }
             }
         })
-
     }
 }
 

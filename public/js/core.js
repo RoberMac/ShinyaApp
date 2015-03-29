@@ -5,12 +5,19 @@ angular.module('ShinyaApp', [
     'ngMessages',
     'angular-jwt',
     'angular-storage',
+    'ShinyaApp.posHelperServices',
+    'ShinyaApp.timeHelperServices',
+    'ShinyaApp.weatherHelperServices',
     'ShinyaApp.notifyDirective',
     'ShinyaApp.autofocusDirective',
     'ShinyaApp.hideKeyboardDirective',
+    'ShinyaApp.autoscrollDirective',
+    'ShinyaApp.beepDirective',
+    'ShinyaApp.usercountDirective',
     'ShinyaApp.submitController',
     'ShinyaApp.chatController',
-    'ShinyaApp.forgotController'
+    'ShinyaApp.forgotController',
+    'duScroll'
     ])
 .config(['$routeProvider', '$locationProvider', '$httpProvider', 'jwtInterceptorProvider', 
     function ($routeProvider, $locationProvider, $httpProvider, jwtInterceptorProvider) {
@@ -30,15 +37,15 @@ angular.module('ShinyaApp', [
             controller: 'forgotController'
         }).
         otherwise({
-            templateUrl: '/public/js/templates/404.html'
+            redirectTo: '/'
         })
     jwtInterceptorProvider.tokenGetter = ['store', function(store) {
         return store.get('id_token')
     }]
     $httpProvider.interceptors.push('jwtInterceptor')
 }])
-.controller('rootController', ['$rootScope', '$scope','$location','$route','$window', 'jwtHelper', 'store', 
-    function($rootScope, $scope, $location, $route, $window, jwtHelper, store){
+.controller('rootController', ['$rootScope', '$scope', '$timeout', '$location', '$route', '$window', 'jwtHelper', 'store', 
+    function($rootScope, $scope, $timeout, $location, $route, $window, jwtHelper, store){
 
     // 檢測是否為手機瀏覽器
     // https://stackoverflow.com/questions/11381673/detecting-a-mobile-browser
@@ -88,5 +95,16 @@ angular.module('ShinyaApp', [
                 }
             }
         }
+    })
+    // 監聽開啟／關閉「位置服務」
+    $scope.$on('preTurnOnGeoServices', function (msg){
+        $timeout(function (){
+            $scope.$broadcast('turnOnGeoServices', msg)
+        }, 0)
+    })
+    $scope.$on('preTurnOffGeoServices', function (msg){
+        $timeout(function (){
+            $scope.$broadcast('turnOffGeoServices', msg)
+        }, 0)
     })
 }])
