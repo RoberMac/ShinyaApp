@@ -6,7 +6,7 @@ angular.module('ShinyaApp.autoscrollDirective' ,[])
             elem.bind('scroll', function (){
                 if (syPosHelper.isBottom()){
                     scope.$apply(function (){
-                        scope.isViewMsg = true
+                        scope.viewedMsg('dontScroll')
                     })
                 }
             })

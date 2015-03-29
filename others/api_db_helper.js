@@ -104,40 +104,46 @@ var api_db_helper = {
                         now_geo : {
                             lat: coords.lat,
                             lon: coords.lon,
-                            location: found.last_geo.location
+                            location: found.last_geo.location,
+                            date: geo_helper.getTodayMs(),
+                            weather: found.last_geo.weather
                         }
                     }
                     res.send({'status': 'ok', 'msg': msg})
                 } else {
-                    geo_helper.getStreetName(coords, function (streetName){
-                        console.log(streetName)
-                        geo_helper.getDistance(found.last_geo, coords, function (data){
-                            console.log(data)
-                            // 距離服務
-                            var msg = {
-                                distance: !!data.distance ? data.distance : '+∞ km',
-                                last_geo: found.last_geo,
-                                now_geo : {
-                                    lat: coords.lat,
-                                    lon: coords.lon,
-                                    location: streetName,
-                                    date: geo_helper.getTodayMs()
+                    geo_helper.getGeoWeather(coords.lat, coords.lon, function (weather){
+                        geo_helper.getStreetName(coords, function (streetName){
+                            console.log(streetName)
+                            geo_helper.getDistance(found.last_geo, coords, function (data){
+                                console.log(data)
+                                // 距離服務
+                                var msg = {
+                                    distance: !!data.distance ? data.distance : '+∞ km',
+                                    last_geo: found.last_geo,
+                                    now_geo : {
+                                        lat: coords.lat,
+                                        lon: coords.lon,
+                                        location: streetName,
+                                        date: geo_helper.getTodayMs(),
+                                        weather: weather
+                                    }
                                 }
-                            }
-                            console.log(msg)
-                            // 更新座標
-                            User.findOneAndUpdate({username: user.username}, {
-                                last_geo: msg.now_geo
-                            }, function (err, found){
-                                if (err){
-                                    next({'code': 500, 'status': 'error', 'msg': '服務器出錯'})
-                                    return err
-                                }
-                                res.send({'status': 'ok', 'msg': msg})
+                                console.log(msg)
+                                // 更新座標
+                                User.findOneAndUpdate({username: user.username}, {
+                                    last_geo: msg.now_geo
+                                }, function (err, found){
+                                    if (err){
+                                        next({'code': 500, 'status': 'error', 'msg': '服務器出錯'})
+                                        return err
+                                    }
+                                    res.send({'status': 'ok', 'msg': msg})
+                                })
+                                // 天氣服務
                             })
-                            // 天氣服務
                         })
                     })
+
                 }
             }
         })

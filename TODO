@@ -38,6 +38,7 @@
                     - 優化新聞源
         - 根據上次登陸與本次登陸 IP 判斷地理位置信息：距離
             - 根據當前地理位置選擇顯示語言
+        - 開啟／關閉「位置服務」提醒 BUG
 - #!forgot
     - back 按鈕更換 √
 - DB
@@ -58,4 +59,6 @@
         - getCityWeather 的 「IP 地址」
         - getNews 的 「國家代碼」
     - 定義服務器 500 錯誤：app.js[60]
+    - 屏蔽非瀏覽器發出的請求
 
+http POST http://localhost:8080/api/getSelectedDateNews Authorization:Bearer\ eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6IlJvYmVyTWFjIiwibnVtZXJvIjowLCJkYXRlIjoiMjAxNS0wMy0yOVQxMjo1ODo0OC4yNTdaIiwid2VhdGhlciI6eyJpc05pZ2h0Ijp0cnVlLCJjb2RlIjo1MDEsImRlc2NyaXB0aW9uIjoi5Lit6ZuoIn0sImlzR2VvU2VydmljZXMiOnRydWUsImlhdCI6MTQyNzYzNjExNiwiZXhwIjoxNDI3NjM3OTE2fQ.ojEv8dziqIjr-lbtk2OyEM6u5DxerfF4tq5hr7BuXM0 selectDate='18' timezoneOffset='-8'

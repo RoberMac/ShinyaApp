@@ -2,21 +2,57 @@ angular.module('ShinyaApp.chatController', [])
 .controller('chatController', ['$rootScope', '$scope', '$http', '$timeout', '$window', '$location', '$filter', 'jwtHelper','store', 'syPosHelper', 'syTimeHelper', 'syWeatherHelper', 
     function ($rootScope, $scope, $http, $timeout, $window, $location, $filter, jwtHelper, store, syPosHelper, syTimeHelper, syWeatherHelper){
 
-    // `#chat_box` 和 `#info_box` 切換
+    /*
+     **********
+     * 頁面切換
+     **********
+     *  `$scope.isChatBox`：是否處於 `chat_box` 頁面
+     *  `$scope.isSun`：提示標誌
+     *  `$scope.toggleChatBox`：切換頁面
+     *      移動端：根據滑動切換
+     *          左滑：若處於 `chat_box`，切換到 `info_box`
+     *          右滑：若處於 `info_box`，切換到 `chat_box`
+     *      桌面段：根據點擊 `.sunAndMoon` 切換
+     *
+     */
     $scope.isChatBox = true
     $scope.isSun     = false
-    $scope.toggleChatBox = function (){
-        // 切換到 #info_box 前保存當前位置
-        if ($scope.isChatBox){
-            syPosHelper.storeNowPos()
-        }
-        $scope.isChatBox = !$scope.isChatBox
-        $scope.isSun     = !$scope.isSun
-        // 切換回 #chat_box 後會滾到之前位置
-        $timeout(function (){
-            if ($scope.isChatBox){
-                syPosHelper.setNowPos(syPosHelper.nowPos)
+    $scope.toggleChatBox = function (action){
+
+        if (!!action){
+            // 移動端
+            if (action === 'infoBox' && $scope.isChatBox){
+                // 切換到 #info_box 前保存當前位置
+                if ($scope.isChatBox){
+                    syPosHelper.storeNowPos()
+                }
+                $scope.isChatBox = !$scope.isChatBox
+            } else if (action === 'chatBox' && !$scope.isChatBox){
+                $scope.isChatBox = !$scope.isChatBox
+                // 切換回 #chat_box 後會滾到之前位置
+                $timeout(function (){
+                    syPosHelper.setNowPos(syPosHelper.nowPos)
+                }, 0)
             }
+        } else {
+            // 桌面端
+            if ($scope.isChatBox){
+                syPosHelper.storeNowPos()
+            }
+            $scope.isChatBox = !$scope.isChatBox
+            $scope.isSun     = !$scope.isSun
+            // 切換回 #chat_box 後會滾到之前位置
+            $timeout(function (){
+                if ($scope.isChatBox){
+                    syPosHelper.setNowPos(syPosHelper.nowPos)
+                }
+            }, 0)
+        }
+    }
+    $scope.currentPage = 'infoBox'
+    $scope.toggleCurrentPage = function (name){
+        $timeout(function (){
+            $scope.currentPage = name
         }, 0)
     }
     /*
@@ -28,11 +64,10 @@ angular.module('ShinyaApp.chatController', [])
      *          username: 用戶名
      *          numero: 註冊序號
      *          date: 註冊日期
-     *          partsOfADay: 註冊當天時分
-     *          weather: 當天天氣
+     *          partsOfADay: 註冊當日時分
+     *          weather: 當日天氣
      *
      */
-    // `#info_news_box` 用戶信息
     var token = store.get('id_token'),
         decodeToken = jwtHelper.decodeToken(token);
     console.log(decodeToken)
@@ -78,11 +113,7 @@ angular.module('ShinyaApp.chatController', [])
      *             狀態碼 401：JWT 過期，跳轉到首頁
      *             狀態碼 400：此時段新聞未獲取，`$scope.isNewsExist` -> false
      */
-    $scope.isNews = false
     $scope.isNewsExist = false
-    $scope.toggleNewsBox = function (){
-        $scope.isNews = !$scope.isNews
-    }
     $scope.toggleNewsExist = function (){
         $scope.isNewsExist = !$scope.isNewsExist
     }
@@ -111,8 +142,8 @@ angular.module('ShinyaApp.chatController', [])
         if ($scope.selectDate in $scope.newsBox){
             // 從 `$scope.newsBox` 獲取，不執行 `getSelectedDateNews`
             $scope.selectDateNewsBox = $scope.newsBox[$scope.selectDate]
-            if ($scope.isNews === false){
-                $scope.toggleNewsBox()
+            if ($scope.currentPage === 'infoBox'){
+                $scope.toggleCurrentPage('newsBox')
             }
             if (!$scope.isNewsExist){
                 $scope.toggleNewsExist()
@@ -123,8 +154,8 @@ angular.module('ShinyaApp.chatController', [])
                 if (status === 'ok'){
                     $scope.newsBox[$scope.selectDate] = news
                     $scope.selectDateNewsBox = $scope.newsBox[$scope.selectDate]
-                    if ($scope.isNews === false){
-                        $scope.toggleNewsBox()
+                    if ($scope.currentPage === 'infoBox'){
+                        $scope.toggleCurrentPage('newsBox')
                     }
                     if (!$scope.isNewsExist){
                         $scope.toggleNewsExist()
@@ -170,6 +201,7 @@ angular.module('ShinyaApp.chatController', [])
      * 若已開啟，自動獲取
      */
     $scope.geoBox = {}
+    $scope.weatherBox = {}
     $scope.isGeoOn = false
     if (decodeToken.isGeoServices){
         $scope.isGeoOn = true
@@ -183,7 +215,17 @@ angular.module('ShinyaApp.chatController', [])
                 }
             }).
             success(function (data, status, headers, config){
+                var last_code = data.msg.last_geo.weather.code,
+                    now_code  = data.msg.now_geo.weather.code,
+                    last_isNight= data.msg.last_geo.weather.isNight,
+                    now_isNight = data.msg.now_geo.weather.isNight
+                    last_weather = syWeatherHelper.getGeoWeatherType(last_code, last_isNight),
+                    now_weather = syWeatherHelper.getGeoWeatherType(now_code, now_isNight);
                 $scope.geoBox = data.msg
+                $scope.weatherBox = {
+                    'last_weather': last_weather,
+                    'now_weather': now_weather
+                }
             }).
             error(function (data, status, headers, config){
 

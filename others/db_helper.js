@@ -43,49 +43,41 @@ var db_helper = {
                                             next({'code': 500, 'status': 'error', 'msg': '服務器出錯'})
                                             return err
                                         }
-                                        console.log('count: ' + count)
-                                        // 保存到數據庫
-                                        var user = new User({
-                                            'username': username,
-                                            'email': email,
-                                            'password': password,
-                                            'register_info': {
-                                                'ip'      : register_form.register_info.ip,
-                                                'date'    : register_form.register_info.date,
-                                                'platform': register_form.register_info.platform,
-                                                'numero'  : count,
-                                            },
-                                            'last_geo': {
-                                                lat: place.lat,
-                                                lon: place.lon,
-                                                location: place.name,
-                                                date: getTodayMs()
-                                            }
-                                        })
-                                        console.log(user)
-                                        user.save(function (err){
-                                            if (err){
-                                                next({'code': 400, 'status': 'error', 'msg': '用戶名或電郵地址已存在'})
-                                                return err
-                                            }
-                                            res.json({'status': 'ok', 'msg': '註冊成功'})
-                                            // 獲取 國家代碼 和 城市名
-                                            getCountryAndCity('14.18.190.188', function (country, city){
-                                                // 獲取城市天氣
-                                                getCityWeather(city, function (weather){
-                                                    User.findOneAndUpdate({username: username}, {
-                                                        geo_info: {
-                                                            'country': country,
-                                                            'city'   : city,
-                                                            'weather': weather
-                                                        }
-                                                    }, function (err){
-                                                        if (err){
-                                                            console.log('地理位置信息保存失敗')
-                                                            return err
-                                                        }
-                                                        console.log('地理位置信息已保存')
-                                                    })
+                                        // 獲取 國家代碼 和 城市名
+                                        getCountryAndCity('14.18.190.188', function (country, city){
+                                            // 獲取城市天氣
+                                            getCityWeather(city, function (weather){
+                                                // 保存到數據庫
+                                                var user = new User({
+                                                    'username': username,
+                                                    'email': email,
+                                                    'password': password,
+                                                    'register_info': {
+                                                        'ip'      : register_form.register_info.ip,
+                                                        'date'    : register_form.register_info.date,
+                                                        'platform': register_form.register_info.platform,
+                                                        'numero'  : count,
+                                                    },
+                                                    'last_geo': {
+                                                        lat: place.lat,
+                                                        lon: place.lon,
+                                                        location: place.name,
+                                                        date: getTodayMs()
+                                                    },
+                                                    geo_info: {
+                                                        'country': country,
+                                                        'city'   : city,
+                                                        'weather': weather
+                                                    }
+                                                })
+                                                console.log(user)
+                                                user.save(function (err){
+                                                    if (err){
+                                                        next({'code': 400, 'status': 'error', 'msg': '用戶名或電郵地址已存在'})
+                                                        return err
+                                                    }
+                                                    res.json({'status': 'ok', 'msg': '註冊成功'})
+                                                    console.log('地理位置信息已保存')
                                                 })
                                             })
                                         })
@@ -242,7 +234,6 @@ var db_helper = {
                 }
             }
         })
-
     }
 }
 

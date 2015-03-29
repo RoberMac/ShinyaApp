@@ -3,7 +3,7 @@ angular.module('ShinyaApp.beepDirective', [])
     return {
         restrict: 'E',
         replace : true,
-        template: '<div ng-if="!isViewMsg" ng-click="viewedMsg()" id="notify_box">'
+        template: '<div class="general_animate" ng-if="!isViewMsg" ng-click="viewedMsg()" id="notify_box">'
                 +   '{{msgNotifyBox.msg}}'
                 +   '<audio autoplay>'
                 +       '<source src="public/sound/beep.ogg" type="audio/ogg">'
@@ -13,13 +13,17 @@ angular.module('ShinyaApp.beepDirective', [])
         controller: ['$scope', function ($scope){
             /*
              * 新消息抵達提醒
-             *
+             *      `$scope.isViewMsg`：新消息是否已閱
              */
             $scope.isViewMsg = true
             $scope.msgNotifyBox = {}
-            $scope.viewedMsg = function (){
-                $scope.isViewMsg = true
-                syPosHelper.scrollToBottom()
+            $scope.viewedMsg = function (type){
+                if (type && type === 'dontScroll'){
+                    $scope.isViewMsg = true
+                } else {
+                    $scope.isViewMsg = true
+                    syPosHelper.scrollToBottom()
+                }
             }
             $scope.msgNotify = function(type, msg){
                 $scope.$apply(function (){

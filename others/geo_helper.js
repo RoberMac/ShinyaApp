@@ -18,7 +18,7 @@ var geo_helper = {
         freegeoip.geocode(ip, function (err, data){
             if (err){
                 console.log(err)
-                callback('', '')
+                callback('CN', 'beijing')
                 return err
             }
             console.log(data[0])
@@ -98,16 +98,18 @@ var geo_helper = {
             url: url,
             json: true
         }, function (err, res, body){
+            console.log(body)
             if (!err && res.statusCode == 200) {
-                console.log(body)
                 callback({
                     description: body.weather[0].description,
-                    code: body.weather[0].id
+                    code: body.weather[0].id,
+                    isNight: new Date() > body.sys.sunset
                 })
             } else {
                 callback({
-                    description: '多雲',
-                    code: '802'
+                    description: '獲取天氣失敗',
+                    code: 802,
+                    isNight: false
                 })
             }
         })
@@ -119,11 +121,24 @@ var geo_helper = {
                     + '&lon='
                     + lon
                     + '&lang=zh_tw&units=metric';
-        request(url, function (err, res, body){
-            if (!error && response.statusCode == 200) {
-                callback(body)
+        request({
+            url: url,
+            json: true
+        }, function (err, res, body){
+            console.log('here is geoweather')
+            console.log(body)
+            if (!err && res.statusCode == 200) {
+                callback({
+                    description: body.weather[0].description,
+                    code: body.weather[0].id,
+                    isNight: new Date() > body.sys.sunset
+                })
             } else {
-                callback()
+                callback({
+                    description: '獲取天氣失敗',
+                    code: 802,
+                    isNight: false
+                })
             }
         })
     }

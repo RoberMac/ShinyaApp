@@ -30,7 +30,6 @@ angular.module('ShinyaApp.posHelperServices', [])
     }
     this.isBottom = function (){
         var chatBoxElem = document.querySelector('#chat_box')
-        console.log(isScrolling)
         return !(chatBoxElem.scrollHeight - chatBoxElem.clientHeight - chatBoxElem.scrollTop) || isScrolling
     }
     this.scrollToBottom = function (){
@@ -39,7 +38,6 @@ angular.module('ShinyaApp.posHelperServices', [])
             angular.element(document.querySelector('#chat_box'))
             .scrollTo(0, this.getBottomPos(), 717)
             .then(function(){
-                console.log('srcoll finished')
                 isScrolling = false
             })
         } else {
