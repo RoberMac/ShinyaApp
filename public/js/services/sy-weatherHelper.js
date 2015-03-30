@@ -94,7 +94,6 @@ angular.module('ShinyaApp.weatherHelperServices', [])
 
         if (code in weather_condition_codes){
             if (isNight){
-                console.log('night')
                 return weather_condition_codes[code]['icon'] + ' moon'
             } else {
                 return weather_condition_codes[code]['icon'] + ' sun'

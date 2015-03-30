@@ -197,12 +197,20 @@ angular.module('ShinyaApp.chatController', [])
      **************
      * 地理位置相關
      **************
-     *
      * 若已開啟，自動獲取
+     * 
+     * `$scope.geoBox`：地理位置信息
+     * `$scope.weatherBox`：天氣信息
+     * `$scope.isGeoOn`：是否已開啟「位置服務」
+     * `$scope.isSameDay`：判斷是否同一天
+     * `$scope.toggleGeoServices`：開關「位置服務」
+     *
+     *
      */
     $scope.geoBox = {}
     $scope.weatherBox = {}
     $scope.isGeoOn = false
+    $scope.isSameDay = false
     if (decodeToken.isGeoServices){
         $scope.isGeoOn = true
         $window.navigator.geolocation.getCurrentPosition(function (pos){
@@ -215,17 +223,20 @@ angular.module('ShinyaApp.chatController', [])
                 }
             }).
             success(function (data, status, headers, config){
-                var last_code = data.msg.last_geo.weather.code,
-                    now_code  = data.msg.now_geo.weather.code,
-                    last_isNight= data.msg.last_geo.weather.isNight,
-                    now_isNight = data.msg.now_geo.weather.isNight
+
+                var last_code    = data.msg.last_geo.weather.code,
+                    last_isNight = data.msg.last_geo.weather.isNight,
+                    now_code     = data.msg.now_geo.weather.code,
+                    now_isNight  = data.msg.now_geo.weather.isNight
                     last_weather = syWeatherHelper.getGeoWeatherType(last_code, last_isNight),
-                    now_weather = syWeatherHelper.getGeoWeatherType(now_code, now_isNight);
+                    now_weather  = syWeatherHelper.getGeoWeatherType(now_code, now_isNight);
+                
                 $scope.geoBox = data.msg
                 $scope.weatherBox = {
                     'last_weather': last_weather,
                     'now_weather': now_weather
                 }
+                $scope.isSameDay = syTimeHelper.isSameDay($scope.geoBox.now_geo.date, $scope.geoBox.last_geo.date)
             }).
             error(function (data, status, headers, config){
 

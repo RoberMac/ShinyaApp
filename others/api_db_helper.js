@@ -96,7 +96,7 @@ var api_db_helper = {
             if (!found){
                 res.status(400).json({'status': 'error', 'msg': '用戶不存在'})
             } else {
-                if (geo_helper.isSamePlace(found.last_geo, coords) && (Date.now() - found.last_geo.date) < 86400000){
+                if (geo_helper.isSamePlace(found.last_geo, coords) && (new Date() - geo_helper.getTodayMs(found.last_geo.date)) < 86400000){
                     // 同一天同一位置多次請求
                     var msg = {
                         distance: '0 km',
@@ -105,11 +105,20 @@ var api_db_helper = {
                             lat: coords.lat,
                             lon: coords.lon,
                             location: found.last_geo.location,
-                            date: geo_helper.getTodayMs(),
+                            date: new Date(),
                             weather: found.last_geo.weather
                         }
                     }
-                    res.send({'status': 'ok', 'msg': msg})
+                    // 更新座標、日期
+                    User.findOneAndUpdate({username: user.username}, {
+                        last_geo: msg.now_geo
+                    }, function (err, found){
+                        if (err){
+                            next({'code': 500, 'status': 'error', 'msg': '服務器出錯'})
+                            return err
+                        }
+                        res.send({'status': 'ok', 'msg': msg})
+                    })
                 } else {
                     geo_helper.getGeoWeather(coords.lat, coords.lon, function (weather){
                         geo_helper.getStreetName(coords, function (streetName){
@@ -124,12 +133,12 @@ var api_db_helper = {
                                         lat: coords.lat,
                                         lon: coords.lon,
                                         location: streetName,
-                                        date: geo_helper.getTodayMs(),
+                                        date: new Date(),
                                         weather: weather
                                     }
                                 }
                                 console.log(msg)
-                                // 更新座標
+                                // 更新座標、街道名、日期、天氣
                                 User.findOneAndUpdate({username: user.username}, {
                                     last_geo: msg.now_geo
                                 }, function (err, found){
@@ -139,11 +148,9 @@ var api_db_helper = {
                                     }
                                     res.send({'status': 'ok', 'msg': msg})
                                 })
-                                // 天氣服務
                             })
                         })
                     })
-
                 }
             }
         })

@@ -78,8 +78,8 @@ var geo_helper = {
         ? false
         : true
     },
-    getTodayMs: function (){
-        var date = new Date()
+    getTodayMs: function (date){
+
         return Date.parse(
                 new Date(
                     date.getUTCFullYear(),
@@ -103,7 +103,7 @@ var geo_helper = {
                 callback({
                     description: body.weather[0].description,
                     code: body.weather[0].id,
-                    isNight: new Date() > body.sys.sunset
+                    isNight: new Date() > body.sys.sunset * 1000
                 })
             } else {
                 callback({
@@ -131,7 +131,7 @@ var geo_helper = {
                 callback({
                     description: body.weather[0].description,
                     code: body.weather[0].id,
-                    isNight: new Date() > body.sys.sunset
+                    isNight: new Date() > body.sys.sunset * 1000
                 })
             } else {
                 callback({

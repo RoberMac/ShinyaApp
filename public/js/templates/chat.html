@@ -92,11 +92,16 @@
             <div ng-if="currentPage === 'geoBox' && isGeoOn" id="geo_outer_box">
                 <div id="now_geo" class="all_geo">
                     <h3>現在</h3>
-                    <a ng-href="http://maps.google.com/maps?z=12&t=h&q=loc:{{geoBox.last_geo.lat}}+{{geoBox.last_geo.lon}}" target="_blank">{{geoBox.last_geo.location}}</a>
+                    <a ng-href="http://maps.google.com/maps?z=12&t=h&q=loc:{{geoBox.now_geo.lat}}+{{geoBox.now_geo.lon}}" target="_blank">{{geoBox.now_geo.location}}</a>
                 </div>
                 <div id="last_geo" class="all_geo">
-                    <a ng-href="http://maps.google.com/maps?z=12&t=h&q=loc:{{geoBox.now_geo.lat}}+{{geoBox.now_geo.lon}}" target="_blank">{{geoBox.now_geo.location}}</a>
-                    <h3>{{geoBox.now_geo.date | date: 'yyyy 年 M 月 d 日'}}</h3>
+                    <a ng-href="http://maps.google.com/maps?z=12&t=h&q=loc:{{geoBox.last_geo.lat}}+{{geoBox.last_geo.lon}}" target="_blank">{{geoBox.last_geo.location}}</a>
+                    <h3 ng-show="!isSameDay">
+                        {{geoBox.last_geo.date | date: 'yyyy 年 M 月 d 日'}}
+                    </h3>
+                    <h3 ng-show="isSameDay">
+                        {{geoBox.last_geo.date | date: 'HH 時 mm 分'}}
+                    </h3>
                 </div>
                 <div class="bottom_left_corner">
                     <div class="geoStatus">
