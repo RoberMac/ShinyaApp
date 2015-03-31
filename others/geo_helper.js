@@ -1,15 +1,59 @@
 var request   = require('request'),
-    distance  = require('google-distance'),
-    API_KEY   = 'AIzaSyAbDnuQxB6VIAjG7O6Te4p_a1NvQws6Hy0',
     geocoder  = require('node-geocoder');
-    
 
-var google_geocoder  = geocoder('google', 'https', {
-        apiKey: API_KEY,
+var API_KEY = {
+    'Google': 'AIzaSyAbDnuQxB6VIAjG7O6Te4p_a1NvQws6Hy0',
+    'OpenWeatherMap': 'aaa8cad9839995223b58ea36eaa93c2b'
+},
+    google_geocoder = geocoder('google', 'https', {
+        apiKey: API_KEY['Google'],
         language: 'zh-HK'
     }),
     freegeoip = geocoder('freegeoip', 'https');
 
+//:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+//:::                                                                         :::
+//:::  This routine calculates the distance between two points (given the     :::
+//:::  latitude/longitude of those points). It is being used to calculate     :::
+//:::  the distance between two locations using GeoDataSource (TM) prodducts  :::
+//:::                                                                         :::
+//:::  Definitions:                                                           :::
+//:::    South latitudes are negative, east longitudes are positive           :::
+//:::                                                                         :::
+//:::  Passed to function:                                                    :::
+//:::    lat1, lon1 = Latitude and Longitude of point 1 (in decimal degrees)  :::
+//:::    lat2, lon2 = Latitude and Longitude of point 2 (in decimal degrees)  :::
+//:::    unit = the unit you desire for results                               :::
+//:::           where: 'M' is statute miles (default)                         :::
+//:::                  'K' is kilometers                                      :::
+//:::                  'N' is nautical miles                                  :::
+//:::                                                                         :::
+//:::  Worldwide cities and other features databases with latitude longitude  :::
+//:::  are available at http://www.geodatasource.com                          :::
+//:::                                                                         :::
+//:::  For enquiries, please contact sales@geodatasource.com                  :::
+//:::                                                                         :::
+//:::  Official Web site: http://www.geodatasource.com                        :::
+//:::                                                                         :::
+//:::               GeoDataSource.com (C) All Rights Reserved 2015            :::
+//:::                                                                         :::
+//:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+function distanceHelper(lat1, lon1, lat2, lon2, unit) {
+    var radlat1 = Math.PI * lat1/180
+    var radlat2 = Math.PI * lat2/180
+    var radlon1 = Math.PI * lon1/180
+    var radlon2 = Math.PI * lon2/180
+    var theta = lon1-lon2
+    var radtheta = Math.PI * theta/180
+    var dist = Math.sin(radlat1) * Math.sin(radlat2) + Math.cos(radlat1) * Math.cos(radlat2) * Math.cos(radtheta);
+    dist = Math.acos(dist)
+    dist = dist * 180/Math.PI
+    dist = dist * 60 * 1.1515
+    if (unit=="K") { dist = dist * 1.609344 }
+    if (unit=="N") { dist = dist * 0.8684 }
+    return dist
+}
 
 var geo_helper = {
     // 地理位置
@@ -43,34 +87,9 @@ var geo_helper = {
     // 距離
     getDistance: function (origin, destination, callback){
 
-        distance.get({
-            origin: origin.lat + ', ' + origin.lon,
-            destination: destination.lat + ', ' + destination.lon
-        }, function (err, data){
-            if (err) {
-                callback({
-                    distance: null,
-                    location: null,
-                    destination: '逍遙谷'
-                })
-                return err
-            }
-            callback(data)
-        })
+        var distance = ~~distanceHelper(origin.lat, origin.lon, destination.lat, destination.lon, 'K')
+        callback(!!distance ? distance + ' km' : '+∞ km')
     },
-    // initCoords: function (country){
-    //     var coords = {
-    //         'CN': '30.254258, 120.163803',
-    //         'HK': '22.231148, 114.251095',
-    //         'TW': '25.049465, 121.542131',
-    //         'US': '37.340193, -122.068768',
-    //         'BR': '-22.911926, -43.230145',
-    //         'JP': '35.693433, 139.699471',
-    //         'FR': '43.701732, 7.300161',
-    //         'KR': '',
-    //         'RU': ''
-    //     }
-    // },
     isSamePlace: function (last, now){
 
         return Math.abs(last.lat - now.lat) > 0.001
@@ -93,7 +112,8 @@ var geo_helper = {
 
         var url = 'http://api.openweathermap.org/data/2.5/weather?q='
                     + city
-                    +'&lang=zh_tw&units=metric';
+                    +'&lang=zh_tw&units=metric&APPID='
+                    + API_KEY['OpenWeatherMap'];
         request({
             url: url,
             json: true
@@ -102,6 +122,7 @@ var geo_helper = {
             if (!err && res.statusCode == 200) {
                 callback({
                     description: body.weather[0].description,
+                    temp: body.main.temp,
                     code: body.weather[0].id,
                     isNight: new Date() > body.sys.sunset * 1000
                 })
@@ -120,16 +141,17 @@ var geo_helper = {
                     + lat
                     + '&lon='
                     + lon
-                    + '&lang=zh_tw&units=metric';
+                    + '&lang=zh_tw&units=metric&APPID='
+                    + API_KEY['OpenWeatherMap'];
         request({
             url: url,
             json: true
         }, function (err, res, body){
-            console.log('here is geoweather')
             console.log(body)
             if (!err && res.statusCode == 200) {
                 callback({
                     description: body.weather[0].description,
+                    temp: Math.round(body.main.temp),
                     code: body.weather[0].id,
                     isNight: new Date() > body.sys.sunset * 1000
                 })

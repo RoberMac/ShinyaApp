@@ -150,17 +150,22 @@ angular.module('ShinyaApp.chatController', [])
             }
             console.log($scope.selectDateNewsBox)
         } else {
+            // 過場動畫
+            $scope.toggleCurrentPage('loadBox')
             getSelectedDateNews(function (status, news){
                 if (status === 'ok'){
                     $scope.newsBox[$scope.selectDate] = news
                     $scope.selectDateNewsBox = $scope.newsBox[$scope.selectDate]
-                    if ($scope.currentPage === 'infoBox'){
+                    if ($scope.currentPage === 'loadBox'){
                         $scope.toggleCurrentPage('newsBox')
                     }
                     if (!$scope.isNewsExist){
                         $scope.toggleNewsExist()
                     }
                 } else {
+                    if ($scope.currentPage === 'loadBox'){
+                        $scope.toggleCurrentPage('newsBox')
+                    }
                     if ($scope.isNewsExist){
                         $scope.toggleNewsExist()
                     }
@@ -197,14 +202,13 @@ angular.module('ShinyaApp.chatController', [])
      **************
      * 地理位置相關
      **************
-     * 若已開啟，自動獲取
      * 
      * `$scope.geoBox`：地理位置信息
      * `$scope.weatherBox`：天氣信息
      * `$scope.isGeoOn`：是否已開啟「位置服務」
      * `$scope.isSameDay`：判斷是否同一天
+     * `$scope.getGeoServices`：獲取位置信息
      * `$scope.toggleGeoServices`：開關「位置服務」
-     *
      *
      */
     $scope.geoBox = {}
@@ -213,38 +217,56 @@ angular.module('ShinyaApp.chatController', [])
     $scope.isSameDay = false
     if (decodeToken.isGeoServices){
         $scope.isGeoOn = true
-        $window.navigator.geolocation.getCurrentPosition(function (pos){
-            console.log(pos.coords.latitude, pos.coords.longitude)
-            $http.
-            post('/api/getGeoServices', {
-                coords: {
-                    lat: pos.coords.latitude,
-                    lon: pos.coords.longitude
-                }
-            }).
-            success(function (data, status, headers, config){
-
-                var last_code    = data.msg.last_geo.weather.code,
-                    last_isNight = data.msg.last_geo.weather.isNight,
-                    now_code     = data.msg.now_geo.weather.code,
-                    now_isNight  = data.msg.now_geo.weather.isNight
-                    last_weather = syWeatherHelper.getGeoWeatherType(last_code, last_isNight),
-                    now_weather  = syWeatherHelper.getGeoWeatherType(now_code, now_isNight);
-                
-                $scope.geoBox = data.msg
-                $scope.weatherBox = {
-                    'last_weather': last_weather,
-                    'now_weather': now_weather
-                }
-                $scope.isSameDay = syTimeHelper.isSameDay($scope.geoBox.now_geo.date, $scope.geoBox.last_geo.date)
-            }).
-            error(function (data, status, headers, config){
-
-            })
-        })
-    } else {
-        console.log('geo services off')
     }
+    $scope.getGeoServices = function (){
+        if ($scope.geoBox.distance){
+            if ($scope.currentPage === 'infoBox'){
+                $scope.toggleCurrentPage('geoBox')
+            }
+        } else {
+            if ($scope.currentPage === 'infoBox'){
+                $scope.toggleCurrentPage('loadBox')
+            }
+            if (decodeToken.isGeoServices){
+                $scope.isGeoOn = true
+                $window.navigator.geolocation.getCurrentPosition(function (pos){
+                    console.log(pos.coords.latitude, pos.coords.longitude)
+                    $http.
+                    post('/api/getGeoServices', {
+                        coords: {
+                            lat: pos.coords.latitude,
+                            lon: pos.coords.longitude
+                        }
+                    }).
+                    success(function (data, status, headers, config){
+
+                        var last_code    = data.msg.last_geo.weather.code,
+                            last_isNight = data.msg.last_geo.weather.isNight,
+                            now_code     = data.msg.now_geo.weather.code,
+                            now_isNight  = data.msg.now_geo.weather.isNight
+                            last_weather = syWeatherHelper.getGeoWeatherType(last_code, last_isNight),
+                            now_weather  = syWeatherHelper.getGeoWeatherType(now_code, now_isNight);
+                        
+                        $scope.geoBox = data.msg
+                        $scope.weatherBox = {
+                            'last_weather': last_weather,
+                            'now_weather': now_weather
+                        }
+                        $scope.isSameDay = syTimeHelper.isSameDay($scope.geoBox.now_geo.date, $scope.geoBox.last_geo.date)
+                        if ($scope.currentPage === 'loadBox'){
+                            $scope.toggleCurrentPage('geoBox')
+                        }
+                    }).
+                    error(function (data, status, headers, config){
+                        // 提示獲取服務失敗
+                    })
+                })
+            } else {
+                console.log('geo services off')
+            }
+        }
+    }
+
     $scope.toggleGeoServices = function (){
         if (!$scope.isGeoOn){
             $http.

@@ -21,7 +21,7 @@
             <div id="user_info_box">
                 <div ng-switch on="currentPage">
                     <!-- 基本信息 -->
-                    <div ng-switch-when="infoBox">
+                    <div ng-switch-when="infoBox" id="info_inner_box" class="general_animate">
                         <div id="info_username_box">
                             <!-- 用戶名 -->
                             <h2>{{infoBox.username}}</h2>
@@ -45,7 +45,7 @@
                         </div>
                     </div>
                     <!-- 註冊當日新聞：主體 -->
-                    <div ng-switch-when="newsBox" id="news_inner_box">
+                    <div ng-switch-when="newsBox" id="news_inner_box" class="general_animate">
                         <div class="general_animate" ng-if="isNewsExist" ng-repeat="news in selectDateNewsBox" id="news_source_box">
                             <div ng-repeat="item in news.news">
                                 <div id="news_content_box">
@@ -62,7 +62,7 @@
                         </div>
                     </div>
                     <!-- 地理位置服務 -->
-                    <div ng-switch-when="geoBox" id="geo_inner_box">
+                    <div ng-switch-when="geoBox" id="geo_inner_box" class="general_animate">
                         <div ng-if="!isGeoOn" id="turnOnGeoServices">
                             <div class="geoStatus">
                                 <div class="geoOnAndOff" ng-click="toggleGeoServices()">
@@ -73,23 +73,32 @@
                         <div ng-if="isGeoOn">
                             <div class="all_weather" id="now_weather">
                                 <span class="climacon" ng-class="weatherBox.now_weather"></span>
+                                <div class="all_weather_description" id="now_weather_description">
+                                    {{geoBox.now_geo.weather.description}}、{{geoBox.now_geo.weather.temp}}
+                                    <span class="climacon celcius all_celcius"></span>
+                                </div>
                             </div>
                             <div id="distance">
-                                <span>
-                                    <a ng-href="https://maps.google.com?saddr={{geoBox.last_geo.lat}}, {{geoBox.last_geo.lon}}&daddr={{geoBox.now_geo.lat}}, {{geoBox.now_geo.lon}}" target="_blank">
-                                        {{geoBox.distance}}
-                                    </a>
-                                </span>
+                                <a ng-href="https://maps.google.com?saddr={{geoBox.last_geo.lat}}, {{geoBox.last_geo.lon}}&daddr={{geoBox.now_geo.lat}}, {{geoBox.now_geo.lon}}" target="_blank">
+                                    {{geoBox.distance}}
+                                </a>
                             </div>
                             <div class="all_weather" id="last_weather">
+                                <div class="all_weather_description" id="last_weather_description">
+                                    {{geoBox.last_geo.weather.description}}、{{geoBox.last_geo.weather.temp}}
+                                    <span class="climacon celcius all_celcius"></span>
+                                </div>
                                 <span class="climacon" ng-class="weatherBox.last_weather"></span>
                             </div>
                         </div>
                     </div>
+                    <div ng-switch-when="loadBox" id="load_inner_box" class="general_animate">
+                        <div id="load_animate"></div>    
+                    </div>
                 </div>
             </div>
             <!-- 地理位置服務：外部部件 -->
-            <div ng-if="currentPage === 'geoBox' && isGeoOn" id="geo_outer_box">
+            <div ng-if="currentPage === 'geoBox' && isGeoOn" id="geo_outer_box" class="general_animate">
                 <div id="now_geo" class="all_geo">
                     <h3>現在</h3>
                     <a ng-href="http://maps.google.com/maps?z=12&t=h&q=loc:{{geoBox.now_geo.lat}}+{{geoBox.now_geo.lon}}" target="_blank">{{geoBox.now_geo.location}}</a>
@@ -111,7 +120,7 @@
                 </div>
             </div>
             <!-- 註冊當日新聞：外部部件-->
-            <div ng-if="currentPage === 'newsBox'" id="news_outer_box">
+            <div ng-if="currentPage === 'newsBox'" id="news_outer_box" class="general_animate">
                 <div id="news_title">
                     <h3>當日新聞</h3>
                 </div>
@@ -124,10 +133,10 @@
                 </div>
             </div>
             <!-- 基本信息：外部部件 -->
-            <div ng-if="currentPage === 'infoBox'" id="geo_box">
+            <div ng-if="currentPage === 'infoBox'" id="geo_box" class="general_animate">
                 <!-- 進入：地理位置服務 -->
                 <div class="bottom_left_corner">
-                    <div id="getGeoServices" ng-click="toggleCurrentPage('geoBox')">
+                    <div id="getGeoServices" ng-click="getGeoServices()">
                     </div>
                 </div>
                 <div ng-if="isMobile" class="bottom_center_corner">
@@ -139,7 +148,7 @@
                 </div>
             </div>
             <!-- 返回上一層按鈕 -->
-            <div ng-show="currentPage !== 'infoBox'" id="returnToPreviousStep" ng-click="toggleCurrentPage('infoBox')">
+            <div ng-if="currentPage !== 'infoBox'" id="returnToPreviousStep" ng-click="toggleCurrentPage('infoBox')" class="general_animate">
             </div>
         </div>
     </div>

@@ -123,11 +123,10 @@ var api_db_helper = {
                     geo_helper.getGeoWeather(coords.lat, coords.lon, function (weather){
                         geo_helper.getStreetName(coords, function (streetName){
                             console.log(streetName)
-                            geo_helper.getDistance(found.last_geo, coords, function (data){
-                                console.log(data)
+                            geo_helper.getDistance(found.last_geo, coords, function (distance){
                                 // 距離服務
                                 var msg = {
-                                    distance: !!data.distance ? data.distance : '+∞ km',
+                                    distance: distance,
                                     last_geo: found.last_geo,
                                     now_geo : {
                                         lat: coords.lat,

@@ -294,15 +294,20 @@ ul {
     width: 60%;
     height: 70%;
 }
-    #user_info_box #info_username_box {
+    #info_inner_box {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+    }
+    #info_inner_box #info_username_box {
            
     }
-    #user_info_box #info_numero_box {
+    #info_inner_box #info_numero_box {
         margin-bottom: 10%;
         font-size: 12px;
         color: #555;
     }
-        #user_info_box #info_numero_box span {
+        #info_inner_box #info_numero_box span {
             padding: 1px 5px;
             border-radius: 5px;
             border-left-style: solid;
@@ -310,23 +315,23 @@ ul {
             border-right-style: solid;
             border-right-width: 2px;
         }
-            #user_info_box #info_numero_box span.gold {
+            #info_inner_box #info_numero_box span.gold {
                 border-color: #D4AF37;
             }
-            #user_info_box #info_numero_box span.aluminum {
+            #info_inner_box #info_numero_box span.aluminum {
                 border-color: #999;
             }
-            #user_info_box #info_numero_box span.steel {
+            #info_inner_box #info_numero_box span.steel {
                 border-color: #666;
             }
-    #user_info_box #info_date_box > div {
+    #info_inner_box #info_date_box > div {
         margin: 3% auto;
     }
-    #user_info_box #info_date_box .register_date span:first-child {
+    #info_inner_box #info_date_box .register_date span:first-child {
         cursor: pointer;
         border-bottom: 1px solid #000;
     }
-    #user_info_box #info_date_box .all {
+    #info_inner_box #info_date_box .all {
         width: 34px;
         height: 34px;
         font-size: 12px;
@@ -336,20 +341,20 @@ ul {
         -webkit-border-radius: 17px;    
         cursor: pointer;
     }
-        #user_info_box #info_date_box .all span {
+        #info_inner_box #info_date_box .all span {
             cursor: pointer;
         }
-        #user_info_box #info_date_box .all.clouds {
+        #info_inner_box #info_date_box .all.clouds {
             width: 77px;
             height: 77px;
             border-radius: 38.5px;
             background-color: #CECECF;
             border: 1px solid #CECECF;
         }
-        #user_info_box #info_date_box .daytime {
+        #info_inner_box #info_date_box .daytime {
             border: 1px solid #000;
         }
-            #user_info_box #info_date_box .daytime.rain {
+            #info_inner_box #info_date_box .daytime.rain {
                 width: 30px;
                 height: 30px;
                 border-top-left-radius: 0px;
@@ -357,7 +362,7 @@ ul {
                 -webkit-transform: rotate(45deg);
                 transform: rotate(45deg);
             }
-            #user_info_box #info_date_box .daytime.wind {
+            #info_inner_box #info_date_box .daytime.wind {
                 width: 50px;
                 height: 25px;
                 margin-top: 8%;
@@ -365,7 +370,7 @@ ul {
                 -webkit-transform: rotate(1440deg);
                 transform: rotate(1440deg);
             }
-            #user_info_box #info_date_box .daytime.sun {
+            #info_inner_box #info_date_box .daytime.sun {
                 margin-top: 5%;
                 border: 1px solid #000;
                 border-top: 17px solid #000;
@@ -373,7 +378,7 @@ ul {
                 -moz-box-shadow: 0px 0px 17px 7px rgba(0, 0, 0, .50);
                 box-shadow: 0px 0px 17px 7px rgba(0, 0, 0, .50);
             }
-            #user_info_box #info_date_box .daytime.fog {
+            #info_inner_box #info_date_box .daytime.fog {
                 margin-top: 7%;
                 border: 1px solid rgba(206, 206, 207, 0.7);
                 border-right: 1px solid rgba(206, 206, 207, 0);
@@ -381,12 +386,12 @@ ul {
                 -moz-box-shadow: 17px 17px 37px 37px rgba(206,206,207,0.7);
                 box-shadow: 17px 17px 37px 37px rgba(206,206,207,0.7);
             }
-        #user_info_box #info_date_box .night {
+        #info_inner_box #info_date_box .night {
             color: #fff;
             background-color: #000;
             border: 1px solid #000;
         }
-            #user_info_box #info_date_box .night.rain {
+            #info_inner_box #info_date_box .night.rain {
                 width: 30px;
                 height: 30px;
                 background-color: #fff;
@@ -395,7 +400,7 @@ ul {
                 -webkit-transform: rotate(45deg);
                 transform: rotate(45deg);
             }
-            #user_info_box #info_date_box .night.wind {
+            #info_inner_box #info_date_box .night.wind {
                 width: 50px;
                 height: 25px;
                 margin-top: 8%;
@@ -403,7 +408,7 @@ ul {
                 -webkit-transform: rotate(1440deg);
                 transform: rotate(1440deg);
             }
-            #user_info_box #info_date_box .night.sun {
+            #info_inner_box #info_date_box .night.sun {
                 margin-top: 5%;
                 border: 1px solid #000;
                 border-top: 17px solid #000;
@@ -411,7 +416,7 @@ ul {
                 -moz-box-shadow: 0px 0px 17px 7px rgba(0, 0, 0, .50);
                 box-shadow: 0px 0px 17px 7px rgba(0, 0, 0, .50);
             }
-            #user_info_box #info_date_box .night.fog {
+            #info_inner_box #info_date_box .night.fog {
                 margin-top: 7%;
                 border: 1px solid rgba(0, 0, 0, 0.7);
                 border-right: 1px solid rgba(0, 0, 0, 0.3);
@@ -425,6 +430,7 @@ ul {
     width: 100%;
     height: 100%;
     overflow: auto;
+    -webkit-overflow-scrolling: touch;
 }
     #news_inner_box #news_dont_exist {
         position: relative;
@@ -520,15 +526,39 @@ ul {
     #geo_inner_box .all_weather {
         position: absolute;
         width: 100%;
-        font-size: 77px;
+        height: 50%;
     }
+    #geo_inner_box .all_weather_description {
+        position: absolute;
+        right: 0px;
+        font-size: 11px;
+    }
+        #geo_inner_box .all_weather_description .all_celcius {
+            font-size: 17px !important;
+        }
     #geo_inner_box #now_weather {
-        top: 17px;
+        top: 0px;
         color: #000;
     }
+        #geo_inner_box #now_weather span {
+            position: relative;
+            top: 15%;
+            font-size: 77px;
+        }
+    #geo_inner_box #now_weather_description {
+        bottom: 0px;
+    }
     #geo_inner_box #last_weather {
-        bottom: 17px;
+        bottom: 0px;
         color: #CECECF;
+    }
+        #geo_inner_box #last_weather span {
+            position: relative;
+            top: 35%;
+            font-size: 77px;
+        }
+    #geo_inner_box #last_weather_description {
+        top: 0px;
     }
     /* http://stackoverflow.com/a/2812830/3786947 */
     #geo_inner_box #distance {
@@ -539,7 +569,7 @@ ul {
         background-color: #000;
         font-size: 10px;
     }
-        #geo_inner_box #distance span {
+        #geo_inner_box #distance a {
             position: relative;
             top: -0.5em;
             padding: 5px;
@@ -597,6 +627,31 @@ ul {
         #geo_outer_box .bottom_left_corner .geoStatus .geoOn {
             background-color: #CECECF;
         }
+/* loadBox */
+#load_inner_box {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+}
+    #load_inner_box #load_animate {
+        position: absolute;
+        top: 43%;
+        left: 47%;
+        width: 40px;
+        height: 40px;
+        border: 1px solid #CECECF;
+        border-radius: 20px;
+    }
+    #load_inner_box #load_animate:before {
+        content: '';
+        position: absolute;
+        width: 10px;
+        height: 10px;
+        background-color: #000;
+        border-radius: 5px;
+        top: 0px;
+        left: 0px;
+    }
 /* chat_submit_box */
 #chat_submit_box {
     position: absolute;
@@ -648,7 +703,7 @@ ul {
     font-size: 12px;
     color: #CECECF;
 }
-/* Animate */
+/* Transition */
 input,
 .sunAndMoon,
 .geoOnAndOff,
@@ -676,6 +731,7 @@ input,
     -webkit-transition: all .7s ease-in-out .7s;
     transition:         all .7s ease-in-out .7s;
 }
+    /* 觸法動畫 */
     input.submit_animate:hover {
         border-color: #000;
         color: #000;
@@ -686,13 +742,13 @@ input,
         -webkit-transform: rotate(-45deg);
         transform: rotate(-45deg);
     }
-        input.ng-invalid-email,
-        input.ng-invalid-maxlength {
-            border: 1px solid #CB1B45;
-        }
-        input.ng-touched.ng-invalid-required {
-            border: 1px solid #FCD20A;
-        }
+    input.ng-invalid-email,
+    input.ng-invalid-maxlength {
+        border: 1px solid #CB1B45;
+    }
+    input.ng-touched.ng-invalid-required {
+        border: 1px solid #FCD20A;
+    }
     .general_animate.ng-enter,
     .general_animate.ng-leave.ng-leave-active,
     .general_animate.ng-hide {
@@ -702,6 +758,11 @@ input,
     .general_animate.ng-enter.ng-enter-active {
       opacity:1;
     }
+/* Animate */
+#load_animate {
+    animation: load_animate 1.7s infinite linear;
+    -webkit-animation: load_animate 1.7s infinite linear;
+}
 .input_shake_animate {
     animation: input_shake_animate .5s ease-in-out;
     -webkit-animation: input_shake_animate .5s ease-in-out;
@@ -758,6 +819,36 @@ input,
         transform: translateX(0);
     }
 }
+@keyframes load_animate {
+    0% {
+        border-color: #000;
+        -webkit-transform: rotate(0deg);
+        transform: rotate(0deg);
+    }
+    50% {
+        border-color: #CECECF;
+    }
+    100% {
+        border-color: #000;
+        -webkit-transform: rotate(360deg);
+        transform: rotate(360deg);
+    }
+}
+@-webkit-keyframes load_animate {
+    0% {
+        border-color: #000;
+        -webkit-transform: rotate(0deg);
+        transform: rotate(0deg);
+    }
+    50% {
+        border-color: #CECECF;
+    }
+    100% {
+        border-color: #000;
+        -webkit-transform: rotate(360deg);
+        transform: rotate(360deg);
+    }
+}
 @keyframes notify_box_animate {
     from {
         opacity: 0;
@@ -787,6 +878,7 @@ input,
     top: 11.5%;
     -webkit-touch-callout: default;
 }
+
 /* Mobile Phone in portrait and landscape */
 @media (max-device-width : 767px), (max-width: 767px) {
     .main_box {
@@ -843,10 +935,10 @@ input,
         width: 80%;
         height: 70%;
     }
-        #user_info_box #info_numero_box {
+        #info_inner_box #info_numero_box {
             margin-bottom: 40%;
         }
-        #user_info_box #info_date_box > div {
+        #info_inner_box #info_date_box > div {
             margin: 7% auto;
         }
     #news_inner_box #news_source_box {
@@ -855,6 +947,16 @@ input,
     #geo_inner_box #turnOnGeoServices {
         position: relative;
         top: 35%;
+    }
+    #geo_inner_box #now_weather span {
+        top: 17%;
+    }
+    #geo_inner_box #last_weather span {
+        top: 44%;
+    }
+    #load_inner_box #load_animate {
+        top: 44.74%;
+        left: 41.70%;
     }
     #chat_submit_box {
         top: 92.5%;
@@ -894,11 +996,18 @@ input,
     #chat_box {
         height: 91.96%;
     }
-    #user_info_box #info_numero_box {
+    #info_inner_box #info_numero_box {
         margin-bottom: 7%;
     }
-    #user_info_box #info_date_box > div {
+    #info_inner_box #info_date_box > div {
         margin: 4% auto;
+    }
+    #geo_inner_box #last_weather span {
+        top: 19%;
+    }
+    #load_inner_box #load_animate {
+        top: 40.78%;
+        left: 45.46%;
     }
     #notify_box {
         top: 80%;
@@ -965,15 +1074,25 @@ input,
         border-radius: 4px;
         color: #fff;
     }
-    #user_info_box #info_numero_box {
+    #info_inner_box #info_numero_box {
         margin-bottom: 40%;
     }
-    #user_info_box #info_date_box > div {
+    #info_inner_box #info_date_box > div {
         margin: 7% auto;
     }
     #geo_inner_box #turnOnGeoServices {
         position: relative;
         top: 37%;
+    }
+    #geo_inner_box #now_weather span {
+        top: 20%;
+    }
+    #geo_inner_box #last_weather span {
+        top: 53%;
+    }
+    #load_inner_box #load_animate {
+        top: 47.09%;
+        left: 45.48%;
     }
     #chat_submit_box {
         top: 91.5%;
@@ -994,11 +1113,18 @@ input,
     .main_box .logo {
         max-width: 15%;
     }
-    #user_info_box #info_numero_box {
+    #info_inner_box #info_numero_box {
         margin-bottom: 22%;
     }
-    #user_info_box #info_date_box > div {
+    #info_inner_box #info_date_box > div {
         margin: 5% auto;
+    }
+    #geo_inner_box #last_weather span {
+        top: 47%;
+    }
+    #load_inner_box #load_animate {
+        top: 46.61%;
+        left: 46.12%;
     }
     #notify_box {
         top: 87%;

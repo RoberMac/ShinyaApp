@@ -73,7 +73,6 @@ var db_helper = {
                                                             'weather': weather
                                                         }
                                                     })
-                                                    console.log('*' * 10 + 'REGISTER' + '*' * 10)
                                                     console.log(user)
                                                     user.save(function (err){
                                                         if (err){

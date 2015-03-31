@@ -45,6 +45,7 @@ angular.module('ShinyaApp.timeHelperServices', [])
         : 'night'
     },
     this.isSameDay = function (now, last){
+        
         var now  = new Date(now),
             last = new Date(last);
             getTodayMs = function (date){
