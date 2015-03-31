@@ -1,4 +1,4 @@
-<div class="main_box" ng-class="{'input_shake_animate': input_shake_animate, 'chat_box': isChatBox}" ng-swipe-left="toggleChatBox('infoBox')" ng-swipe-right="toggleChatBox('chatBox')" ng-swipe-disable-mouse>
+<div class="main_box" ng-class="{'input_shake_animate': input_shake_animate, 'chat_box': isChatBox, 'show_back_button': currentPage !== 'infoBox'}" ng-swipe-left="toggleChatBox('left')" ng-swipe-right="toggleChatBox('right')" ng-swipe-disable-mouse>
     <div ng-switch on="isChatBox">
         <!-- 聊天頁面 -->
         <div id="chat_box" class="general_animate" ng-switch-when="true" sy-autoscroll>
@@ -147,14 +147,14 @@
                     <a ng-click="quit()">註銷用戶</a>
                 </div>
             </div>
-            <!-- 返回上一層按鈕 -->
-            <div ng-if="currentPage !== 'infoBox'" id="returnToPreviousStep" ng-click="toggleCurrentPage('infoBox')" class="general_animate">
-            </div>
         </div>
     </div>
 </div>
+<!-- 返回上一層按鈕 -->
+<div ng-if="!isMobile" class="back_button general_animate" ng-click="toggleCurrentPage('infoBox')">
+</div>
 <!-- 頁面切換提示標誌 -->
-<div ng-if="!isMobile" class="sunAndMoon" ng-class="{'sun': isSun, 'moon': !isSun}" ng-click="toggleChatBox()"> 
+<div ng-if="!isMobile" class="sunAndMoon" ng-class="{'sun': isSun, 'moon': !isSun}" ng-click="toggleChatBox()">
 </div>
 <sy-usercount></sy-usercount>
 <sy-beep></sy-beep>

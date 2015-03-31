@@ -127,31 +127,6 @@ ul {
                 border: 1px solid #CECECF;
                 cursor: pointer;
             }
-    #returnToPreviousStep {
-        position: absolute;
-        top: 20px;
-        left: 20px;
-        width: 40px;
-        height: 40px;
-        color: #555;
-        font-size: 20px;
-        background-color: transparent;
-        border: 1px solid #CECECF;
-        border-radius: 20px;
-        -webkit-transform: rotate(135deg);
-        transform: rotate(135deg);
-        cursor: pointer;
-    }
-    #returnToPreviousStep:before {
-        content: '';
-        position: absolute;
-        width: 10px;
-        height: 10px;
-        background-color: #000;
-        border-radius: 5px;
-        top: 0px;
-        left: 0px;
-    }
 /* form_box */
 .form_box {
     position: absolute;
@@ -679,6 +654,20 @@ ul {
     overflow: hidden;
     -webkit-appearance: none;
 }
+.show_back_button {
+    border-radius: 70px 10px 10px 10px;
+}
+.back_button {
+    position: absolute;
+    top: 20%;
+    left: 21.875%;
+    width: 70px;
+    height: 70px;
+    background: #fff;
+    border-radius: 10px;
+    z-index: -1;
+    cursor: pointer;
+}
 .sunAndMoon {
     position: absolute;
     top: 17%;
@@ -692,6 +681,8 @@ ul {
 }
 .sunAndMoon.sun {
     border-right: 17px solid #fff;
+    -moz-box-shadow: 0px 3px 15px 0px rgba(0,0,0,0.50);
+    box-shadow: 0px 3px 15px 0px rgba(0,0,0,0.50);
 }
 .sunAndMoon.moon {
     border-right: 3px solid #fff;
@@ -703,7 +694,7 @@ ul {
     font-size: 12px;
     color: #CECECF;
 }
-/* Transition */
+/* Animate */
 input,
 .sunAndMoon,
 .geoOnAndOff,
@@ -713,9 +704,10 @@ input,
     -webkit-transition: all .7s ease-in-out;
     transition: all .7s ease-in-out;
 }
-#returnToPreviousStep {
-    -webkit-transition: all .7s cubic-bezier(0.6, -0.28, 0.735, 0.045);
-    transition:         all .7s cubic-bezier(0.6, -0.28, 0.735, 0.045);
+
+.main_box {
+    -webkit-transition: all 1s linear;
+    transition: all 1s linear;
 }
 #info_date_box .all.rain {
     -webkit-transition: all .7s cubic-bezier(0.55, 0.055, 0.675, 0.19) .7s;
@@ -736,12 +728,6 @@ input,
         border-color: #000;
         color: #000;
     }
-    #returnToPreviousStep:hover {
-        border-color: #000;
-        color: #000;
-        -webkit-transform: rotate(-45deg);
-        transform: rotate(-45deg);
-    }
     input.ng-invalid-email,
     input.ng-invalid-maxlength {
         border: 1px solid #CB1B45;
@@ -758,7 +744,6 @@ input,
     .general_animate.ng-enter.ng-enter-active {
       opacity:1;
     }
-/* Animate */
 #load_animate {
     animation: load_animate 1.7s infinite linear;
     -webkit-animation: load_animate 1.7s infinite linear;
@@ -969,6 +954,11 @@ input,
     #img_404 img {
         height: 50%;
         top: 25%;
+    }
+    /* Animate */
+    .general_animate.ng-animate {
+        -webkit-transition: all .3s ease-in-out;
+        transition: all .3s ease-in-out;
     }
 }
 /* Mobile Phone in landscape */

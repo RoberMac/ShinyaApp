@@ -117,7 +117,9 @@ var geo_helper = {
         request({
             url: url,
             json: true
+            // timeout: 2500
         }, function (err, res, body){
+            console.log('now: getCityWeather')
             console.log(body)
             if (!err && res.statusCode == 200) {
                 callback({
@@ -146,7 +148,9 @@ var geo_helper = {
         request({
             url: url,
             json: true
+            // timeout: 2500
         }, function (err, res, body){
+            console.log('now: getGeoWeather')
             console.log(body)
             if (!err && res.statusCode == 200) {
                 callback({

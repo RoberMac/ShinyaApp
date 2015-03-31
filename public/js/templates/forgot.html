@@ -1,4 +1,4 @@
-<div class="main_box" ng-class="{'input_shake_animate': input_shake_animate}">
+<div class="main_box" ng-class="{'input_shake_animate': input_shake_animate, 'show_back_button': step !== 2}">
     <div class="form_box">
         <h2>尋找你的帳戶</h2>
         <form novalidate name="form">
@@ -20,5 +20,5 @@
         </form>
         <sy-notify></sy-notify>
     </div>
-    <div ng-if="step!==2" id="returnToPreviousStep" ng-click="returnToPreviousStep()"></div>
 </div>
+<div ng-if="!isMobile" ng-class="{'input_shake_animate': input_shake_animate}" class="back_button general_animate" ng-click="returnToPreviousStep()"></div>

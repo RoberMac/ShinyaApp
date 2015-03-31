@@ -53,6 +53,13 @@ router.post('/forgot_email', function (req, res, next){
 
 router.post('/forgot_code', function (req, res, next){
 
+    if (!req.body.password){
+        next({'code': 400, 'status': 'error', 'msg': '請填寫新密碼'})
+        return null
+    } else if (!req.body.code) {
+        next({'code': 400, 'status': 'error', 'msg': '請填寫驗證碼'})
+        return null
+    }
     // 電郵地址信息
     var forgot_code_form = {
         code: req.body.code,

@@ -10,29 +10,37 @@ angular.module('ShinyaApp.chatController', [])
      *  `$scope.isSun`：提示標誌
      *  `$scope.toggleChatBox`：切換頁面
      *      移動端：根據滑動切換
-     *          左滑：若處於 `chat_box`，切換到 `info_box`
-     *          右滑：若處於 `info_box`，切換到 `chat_box`
+     *          右滑：若處於 `chat_box`，切換到 `info_box`
+     *               若處於 `geo_box / news_box / load_box`，切換到 `info_box`
+     *
+     *          左滑：若處於 `info_box`，切換到 `chat_box`
+     *
      *      桌面段：根據點擊 `.sunAndMoon` 切換
      *
      */
     $scope.isChatBox = true
     $scope.isSun     = false
+    $scope.isInfoBox = false
     $scope.toggleChatBox = function (action){
 
         if (!!action){
             // 移動端
-            if (action === 'infoBox' && $scope.isChatBox){
+            if (action === 'left'){
                 // 切換到 #info_box 前保存當前位置
                 if ($scope.isChatBox){
                     syPosHelper.storeNowPos()
+                    $scope.isChatBox = !$scope.isChatBox
                 }
-                $scope.isChatBox = !$scope.isChatBox
-            } else if (action === 'chatBox' && !$scope.isChatBox){
-                $scope.isChatBox = !$scope.isChatBox
-                // 切換回 #chat_box 後會滾到之前位置
-                $timeout(function (){
-                    syPosHelper.setNowPos(syPosHelper.nowPos)
-                }, 0)
+            } else if (action === 'right'){
+                if (!$scope.isChatBox && $scope.currentPage === 'infoBox'){
+                    $scope.isChatBox = !$scope.isChatBox
+                    // 切換回 #chat_box 後回滾到之前位置
+                    $timeout(function (){
+                        syPosHelper.setNowPos(syPosHelper.nowPos)
+                    }, 0)
+                } else {
+                    $scope.toggleCurrentPage('infoBox')
+                }
             }
         } else {
             // 桌面端
@@ -219,52 +227,59 @@ angular.module('ShinyaApp.chatController', [])
         $scope.isGeoOn = true
     }
     $scope.getGeoServices = function (){
-        if ($scope.geoBox.distance){
+        if (!decodeToken.isGeoServices){
             if ($scope.currentPage === 'infoBox'){
                 $scope.toggleCurrentPage('geoBox')
             }
         } else {
-            if ($scope.currentPage === 'infoBox'){
-                $scope.toggleCurrentPage('loadBox')
-            }
-            if (decodeToken.isGeoServices){
-                $scope.isGeoOn = true
-                $window.navigator.geolocation.getCurrentPosition(function (pos){
-                    console.log(pos.coords.latitude, pos.coords.longitude)
-                    $http.
-                    post('/api/getGeoServices', {
-                        coords: {
-                            lat: pos.coords.latitude,
-                            lon: pos.coords.longitude
-                        }
-                    }).
-                    success(function (data, status, headers, config){
-
-                        var last_code    = data.msg.last_geo.weather.code,
-                            last_isNight = data.msg.last_geo.weather.isNight,
-                            now_code     = data.msg.now_geo.weather.code,
-                            now_isNight  = data.msg.now_geo.weather.isNight
-                            last_weather = syWeatherHelper.getGeoWeatherType(last_code, last_isNight),
-                            now_weather  = syWeatherHelper.getGeoWeatherType(now_code, now_isNight);
-                        
-                        $scope.geoBox = data.msg
-                        $scope.weatherBox = {
-                            'last_weather': last_weather,
-                            'now_weather': now_weather
-                        }
-                        $scope.isSameDay = syTimeHelper.isSameDay($scope.geoBox.now_geo.date, $scope.geoBox.last_geo.date)
-                        if ($scope.currentPage === 'loadBox'){
-                            $scope.toggleCurrentPage('geoBox')
-                        }
-                    }).
-                    error(function (data, status, headers, config){
-                        // 提示獲取服務失敗
-                    })
-                })
+            if ($scope.geoBox.distance){
+                if ($scope.currentPage === 'infoBox'){
+                    $scope.toggleCurrentPage('geoBox')
+                }
             } else {
-                console.log('geo services off')
+                if ($scope.currentPage === 'infoBox'){
+                    $scope.toggleCurrentPage('loadBox')
+                }
+                if (decodeToken.isGeoServices){
+                    $scope.isGeoOn = true
+                    $window.navigator.geolocation.getCurrentPosition(function (pos){
+                        console.log(pos.coords.latitude, pos.coords.longitude)
+                        $http.
+                        post('/api/getGeoServices', {
+                            coords: {
+                                lat: pos.coords.latitude,
+                                lon: pos.coords.longitude
+                            }
+                        }).
+                        success(function (data, status, headers, config){
+
+                            var last_code    = data.msg.last_geo.weather.code,
+                                last_isNight = data.msg.last_geo.weather.isNight,
+                                now_code     = data.msg.now_geo.weather.code,
+                                now_isNight  = data.msg.now_geo.weather.isNight
+                                last_weather = syWeatherHelper.getGeoWeatherType(last_code, last_isNight),
+                                now_weather  = syWeatherHelper.getGeoWeatherType(now_code, now_isNight);
+                            
+                            $scope.geoBox = data.msg
+                            $scope.weatherBox = {
+                                'last_weather': last_weather,
+                                'now_weather': now_weather
+                            }
+                            $scope.isSameDay = syTimeHelper.isSameDay($scope.geoBox.now_geo.date, $scope.geoBox.last_geo.date)
+                            if ($scope.currentPage === 'loadBox'){
+                                $scope.toggleCurrentPage('geoBox')
+                            }
+                        }).
+                        error(function (data, status, headers, config){
+                            // 提示獲取服務失敗
+                        })
+                    })
+                } else {
+                    console.log('geo services off')
+                }
             }
         }
+
     }
 
     $scope.toggleGeoServices = function (){
@@ -324,6 +339,7 @@ angular.module('ShinyaApp.chatController', [])
                 'username'  : data.username
             })
         })
+        console.log('new msg')
         /* 
          * 當用戶處於 chat_box 底部，新消息到來時自動滾動到底部
          * 當用戶回滾查看歷史消息時，新消息到來時不會自動滾動到底部
