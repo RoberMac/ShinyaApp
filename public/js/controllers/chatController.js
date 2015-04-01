@@ -7,11 +7,11 @@ angular.module('ShinyaApp.chatController', [])
      * 頁面切換
      **********
      *  `$scope.isChatBox`：是否處於 `chat_box` 頁面
-     *  `$scope.isSun`：提示標誌
+     *  `$scope.isSun`：提示標誌(白天／夜晚)
      *  `$scope.toggleChatBox`：切換頁面
      *      移動端：根據滑動切換
      *          右滑：若處於 `chat_box`，切換到 `info_box`
-     *               若處於 `geo_box / news_box / load_box`，切換到 `info_box`
+     *               若處於 `geo_box` / `news_box / `load_box`，切換到 `info_box`
      *
      *          左滑：若處於 `info_box`，切換到 `chat_box`
      *
@@ -19,42 +19,35 @@ angular.module('ShinyaApp.chatController', [])
      *
      */
     $scope.isChatBox = true
-    $scope.isSun     = false
+    if (syTimeHelper.getDaytimeOrNight(new Date().getHours()) === 'daytime'){
+        $scope.isSun = true        
+    } else {
+        $scope.isSun = false
+    }
     $scope.isInfoBox = false
     $scope.toggleChatBox = function (action){
 
         if (!!action){
             // 移動端
             if (action === 'left'){
-                // 切換到 #info_box 前保存當前位置
                 if ($scope.isChatBox){
-                    syPosHelper.storeNowPos()
                     $scope.isChatBox = !$scope.isChatBox
                 }
             } else if (action === 'right'){
                 if (!$scope.isChatBox && $scope.currentPage === 'infoBox'){
                     $scope.isChatBox = !$scope.isChatBox
-                    // 切換回 #chat_box 後回滾到之前位置
-                    $timeout(function (){
-                        syPosHelper.setNowPos(syPosHelper.nowPos)
-                    }, 0)
                 } else {
                     $scope.toggleCurrentPage('infoBox')
                 }
             }
         } else {
             // 桌面端
-            if ($scope.isChatBox){
-                syPosHelper.storeNowPos()
+            if (!$scope.isChatBox){
+                // 從 `geo_box` / `news_box` 返回 `chat_box` 時，重置 `user_info_box`
+                $scope.toggleCurrentPage('infoBox')
             }
             $scope.isChatBox = !$scope.isChatBox
             $scope.isSun     = !$scope.isSun
-            // 切換回 #chat_box 後會滾到之前位置
-            $timeout(function (){
-                if ($scope.isChatBox){
-                    syPosHelper.setNowPos(syPosHelper.nowPos)
-                }
-            }, 0)
         }
     }
     $scope.currentPage = 'infoBox'
@@ -307,10 +300,16 @@ angular.module('ShinyaApp.chatController', [])
     }
     /*
      ************
-     * Socket.IO
+     * 文本消息抵達與發送[Socket.IO]
      ************
      *  
-     * 文本消息抵達與發送
+     *  `$scope.msgInbox`：存儲消息
+     *  `$scope.msgOutbox`：待發送消息
+     *  `isShowDate`：判斷是否顯示當前時間
+     *  `onTextMsg`：處理新消息抵達
+     *  `$scope.emitTextMsg`：處理新消息發送
+     *  `connectSIO`：連接到服務器
+     *  `reconnectSIO`：重新連接服務器
      *
      */
     $scope.msgInbox = []
@@ -339,7 +338,6 @@ angular.module('ShinyaApp.chatController', [])
                 'username'  : data.username
             })
         })
-        console.log('new msg')
         /* 
          * 當用戶處於 chat_box 底部，新消息到來時自動滾動到底部
          * 當用戶回滾查看歷史消息時，新消息到來時不會自動滾動到底部

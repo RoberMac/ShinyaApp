@@ -1,10 +1,27 @@
 angular.module('ShinyaApp.forgotController', [])
 .controller('forgotController', ['$scope', '$http', '$timeout', '$location', function($scope, $http, $timeout, $location){
 
-    // init
+    /*
+     *  `$scope.forgot`：存儲用戶需提交的信息
+     *  `$scope.step`：當前處於第幾步
+     *  `$scope.returnToPreviousStep`：返回上一步
+     *  `$scope.gotoStepThree`：跳轉到第三步
+     *  `$scope.forgotEmailSubmit`：提交「電郵地址」
+     *  `$scope.forgotCodeSubmit`：提交「驗證碼」和「新密碼」
+     */
     $scope.forgot = {}
     $scope.step = 1
-
+    $scope.returnToPreviousStep = function (){
+        if ($scope.step === 1){
+            $location.path('/')
+        } else {
+            $scope.step = $scope.step - 1
+        }
+    }
+    $scope.gotoStepThree = function (){
+        $scope.step = 3
+        $scope.msgNotify('ok', {'msg': '請輸入新密碼'})
+    }
     $scope.forgotEmailSubmit = function (){
 
         $http.
@@ -19,19 +36,6 @@ angular.module('ShinyaApp.forgotController', [])
             $scope.msgNotify('error', data)
         })
         $scope.forgot = {}
-    }
-    $scope.returnToPreviousStep = function (){
-        if ($scope.step > 1){
-            $scope.step = $scope.step - 1
-            $scope.forgot = {}            
-        } else {
-            $location.path('/')
-        }
-
-    }
-    $scope.gotoStepThree = function (){
-        $scope.step = 3
-        $scope.msgNotify('ok', {'msg': '請輸入新密碼'})
     }
     $scope.forgotCodeSubmit = function (){
 
