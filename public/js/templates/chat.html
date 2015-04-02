@@ -11,7 +11,7 @@
                     <span>{{contentItem.username}}</span>
                 </div>
                 <div class="content_box">
-                    <pre>{{contentItem.msg}}</pre>
+                    <pre id="{{contentItem.date}}">{{contentItem.msg}}</pre>
                 </div>
             </div>
         </div>
@@ -157,9 +157,17 @@
 </div>
 <sy-usercount></sy-usercount>
 <sy-beep></sy-beep>
+<div id="at_box" class="all_notify_box">
+    <span ng-repeat="username in atUser track by $index" class="general_animate">
+        <span ng-class="{'online': isUserOnline(username), 'offline': !isUserOnline(username)}">
+            @
+        </span>
+        {{username.slice(1)}}
+    </span>
+</div>
 <!-- 聊天輸入框 -->
 <div id="chat_submit_box" class="general_animate" ng-show="isChatBox">
     <form sy-hide-keyboard novalidate ng-submit="emitTextMsg()" name="form">
-        <input type="text" ng-model="msgOutbox.textMsg" sy-autofocus ng-maxlength="1024">
+        <input type="text" ng-model="msgOutbox.textMsg" sy-autofocus ng-maxlength="1024" ng-model-options="{ debounce: 500 }">
     </form>
 </div>

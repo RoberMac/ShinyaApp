@@ -1,6 +1,6 @@
 angular.module('ShinyaApp.chatController', [])
-.controller('chatController', ['$rootScope', '$scope', '$http', '$timeout', '$window', '$location', '$filter', 'jwtHelper','store', 'syPosHelper', 'syTimeHelper', 'syWeatherHelper', 
-    function ($rootScope, $scope, $http, $timeout, $window, $location, $filter, jwtHelper, store, syPosHelper, syTimeHelper, syWeatherHelper){
+.controller('chatController', ['$rootScope', '$scope', '$http', '$timeout', '$window', '$location', '$filter', 'jwtHelper','store', 'syPosHelper', 'syTimeHelper', 'syGeoHelper', 
+    function ($rootScope, $scope, $http, $timeout, $window, $location, $filter, jwtHelper, store, syPosHelper, syTimeHelper, syGeoHelper){
 
     /*
      **********
@@ -54,7 +54,7 @@ angular.module('ShinyaApp.chatController', [])
     $scope.toggleCurrentPage = function (name){
         $timeout(function (){
             $scope.currentPage = name
-        }, 0)
+        })
     }
     /*
      **************
@@ -85,13 +85,13 @@ angular.module('ShinyaApp.chatController', [])
     $scope.getDaytimeOrNight = syTimeHelper.getDaytimeOrNight(~~($filter('date')(decodeToken.date, 'H')))
     $scope.partWeather = ''
     $scope.togglePartWeather = function (){
-        if ($scope.partWeather == syWeatherHelper.getCityWeatherType(decodeToken.weather.code)){
+        if ($scope.partWeather == syGeoHelper.getCityWeatherType(decodeToken.weather.code)){
             $scope.partWeather = ''
             $timeout(function (){
                 $scope.infoBox.title = '加入於'
             }, 777)
         } else {
-            $scope.partWeather = syWeatherHelper.getCityWeatherType(decodeToken.weather.code)
+            $scope.partWeather = syGeoHelper.getCityWeatherType(decodeToken.weather.code)
             $timeout(function (){
                 $scope.infoBox.title = '當日天氣'
             }, 777)
@@ -192,7 +192,6 @@ angular.module('ShinyaApp.chatController', [])
             $scope.getSelectedDateNews()
         }
     }
-
     // 註銷
     $scope.quit = function (){
         store.remove('id_token')
@@ -250,10 +249,11 @@ angular.module('ShinyaApp.chatController', [])
                                 last_isNight = data.msg.last_geo.weather.isNight,
                                 now_code     = data.msg.now_geo.weather.code,
                                 now_isNight  = data.msg.now_geo.weather.isNight
-                                last_weather = syWeatherHelper.getGeoWeatherType(last_code, last_isNight),
-                                now_weather  = syWeatherHelper.getGeoWeatherType(now_code, now_isNight);
-                            
+                                last_weather = syGeoHelper.getGeoWeatherType(last_code, last_isNight),
+                                now_weather  = syGeoHelper.getGeoWeatherType(now_code, now_isNight);
+
                             $scope.geoBox = data.msg
+                            $scope.geoBox.distance = syGeoHelper.getDistance(data.msg.last_geo, data.msg.now_geo)
                             $scope.weatherBox = {
                                 'last_weather': last_weather,
                                 'now_weather': now_weather
@@ -264,7 +264,9 @@ angular.module('ShinyaApp.chatController', [])
                             }
                         }).
                         error(function (data, status, headers, config){
-                            // 提示獲取服務失敗
+                            if (status === 401){
+                                $location.path('/')
+                            }
                         })
                     })
                 } else {
@@ -272,9 +274,7 @@ angular.module('ShinyaApp.chatController', [])
                 }
             }
         }
-
     }
-
     $scope.toggleGeoServices = function (){
         if (!$scope.isGeoOn){
             $http.
@@ -284,7 +284,9 @@ angular.module('ShinyaApp.chatController', [])
                 $scope.quit()
             }).
             error(function (data, status, headers, config){
-                
+                if (status === 401){
+                    $location.path('/')
+                }
             })
         } else {
             $http.
@@ -294,20 +296,22 @@ angular.module('ShinyaApp.chatController', [])
                 $scope.quit()
             }).
             error(function (data, status, headers, config){
-                
+                if (status === 401){
+                    $location.path('/')
+                }
             })
         }
     }
     /*
-     ************
-     * 文本消息抵達與發送[Socket.IO]
-     ************
+     *******************
+     * 文本消息抵達與發送
+     *******************
      *  
      *  `$scope.msgInbox`：存儲消息
      *  `$scope.msgOutbox`：待發送消息
      *  `isShowDate`：判斷是否顯示當前時間
-     *  `onTextMsg`：處理新消息抵達
-     *  `$scope.emitTextMsg`：處理新消息發送
+     *  `onTextMsg`：文本消息抵達
+     *  `$scope.emitTextMsg`：文本消息發送
      *  `connectSIO`：連接到服務器
      *  `reconnectSIO`：重新連接服務器
      *
@@ -316,6 +320,31 @@ angular.module('ShinyaApp.chatController', [])
     $scope.msgOutbox = {
         'textMsg': ''
     }
+    // @username
+    $scope.atUser = []
+    $scope.isUserOnline = function (username){
+        return $scope.onlineUser.indexOf(username.slice(1)) >= 0
+    }
+    $scope.$watch('msgOutbox.textMsg', function (newVal, oldVal){
+
+        var at_list = newVal.match(/\@([^\s\@]){1,16}/g)
+        if (at_list && at_list !== $scope.atUser){
+            // 是否需要「新增」
+            for (var i = 0; i < at_list.length; i ++){
+                if ($scope.atUser.indexOf(at_list[i]) < 0){
+                    $scope.atUser.push(at_list[i])
+                }
+            }
+            // 是否需要「刪減」
+            for(var i = 0; i < $scope.atUser.length; i ++){
+                if (at_list.indexOf($scope.atUser[i]) < 0){
+                    $scope.atUser.splice(i, 1)
+                }
+            }
+        } else {
+            $scope.atUser = []
+        }
+    })
     // 間隔 60 秒顯示時間
     var now = Date.now()
     function isShowDate(date){
@@ -338,16 +367,21 @@ angular.module('ShinyaApp.chatController', [])
                 'username'  : data.username
             })
         })
-        /* 
-         * 當用戶處於 chat_box 底部，新消息到來時自動滾動到底部
-         * 當用戶回滾查看歷史消息時，新消息到來時不會自動滾動到底部
-         * 當用戶發送新消息時，滾動到底部
+        /* 新消息抵達時：
+         *      當用戶處於 chat_box 底部，滾動到底部
+         *      若不處於 chat_box，新消息提醒
+         *      當用戶回滾查看歷史消息時，新消息提醒
+         *      當用戶發送新消息時，滾動到底部
          *
          */
-        if (isBottom || isMe){
-            syPosHelper.scrollToBottom()
+        if ((isBottom || isMe) && $scope.isChatBox){
+            syPosHelper.scrollToPos()
         } else {
-            if (!isMe){
+            if (data.at && data.at.indexOf('@' + decodeToken.username) >= 0){
+                var pos = syPosHelper.getElementPos(data.date)
+                $scope.msgNotify('atMsg', data.username, pos)
+                console.log(data.at, data.at.indexOf('@' + decodeToken.username))
+            } else if (!isMe){
                 $scope.msgNotify('newMsg', '新消息')
             }
         }
@@ -357,13 +391,18 @@ angular.module('ShinyaApp.chatController', [])
         if(jwtHelper.isTokenExpired(token)){
             $window.location.reload()
         } else {
+
+            var at_list = $scope.msgOutbox.textMsg.match(/\@([^\s\@]){1,16}/g)
             // 屏蔽純空白輸入，由於 ngInput 默認 trim，故只需判斷是否為空，無需判斷空白字符
             if ($scope.msgOutbox.textMsg !== ''){
                 $rootScope.socket.emit('textMsg', {
                     'id'      : $rootScope.socket.id,
                     'msg'     : $scope.msgOutbox.textMsg,
-                    'username': $scope.infoBox.username
+                    'username': $scope.infoBox.username,
+                    'at'      : at_list
                 })
+                // 重置 `$scope.atUser` & `$scope.msgOutbox.textMsg`
+                $scope.atUser = ''
                 $scope.msgOutbox.textMsg = ''
             }
         }
@@ -402,11 +441,11 @@ angular.module('ShinyaApp.chatController', [])
          * `disconnect`: 有用戶退出
          *
          */
-        $rootScope.socket.on('userJoin', function (count){
-            $scope.onUserIO(count)
+        $rootScope.socket.on('userJoin', function (msg){
+            $scope.onUserIO(msg)
         })
-        $rootScope.socket.on('disconnect', function (count){
-            $scope.onUserIO(count)
+        $rootScope.socket.on('disconnect', function (msg){
+            $scope.onUserIO(msg)
         })
     }
     function reconnectSIO(){

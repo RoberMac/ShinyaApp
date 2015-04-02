@@ -7,7 +7,7 @@ angular.module('ShinyaApp', [
     'angular-storage',
     'ShinyaApp.posHelperServices',
     'ShinyaApp.timeHelperServices',
-    'ShinyaApp.weatherHelperServices',
+    'ShinyaApp.geoHelperServices',
     'ShinyaApp.notifyDirective',
     'ShinyaApp.autofocusDirective',
     'ShinyaApp.hideKeyboardDirective',

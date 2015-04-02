@@ -20,6 +20,11 @@ angular.module('ShinyaApp.posHelperServices', [])
         var chatBoxElem = document.querySelector('#chat_box')
         this.nowPos = chatBoxElem.scrollTop
     }
+    this.getElementPos = function (id){
+        var contentItemElem = document.getElementById(id),
+            chatBoxElem = document.querySelector('#chat_box');
+        return contentItemElem.offsetTop - chatBoxElem.clientHeight / 2
+    }
     this.setNowPos = function (nowPos){
         var chatBoxElem = document.querySelector('#chat_box')
         chatBoxElem.scrollTop = nowPos
@@ -28,20 +33,23 @@ angular.module('ShinyaApp.posHelperServices', [])
         var chatBoxElem = document.querySelector('#chat_box')
         return chatBoxElem.scrollHeight - chatBoxElem.clientHeight
     }
-    this.isBottom = function (){
+    this.isBottom = function (currentPage){
         var chatBoxElem = document.querySelector('#chat_box')
         return !(chatBoxElem.scrollHeight - chatBoxElem.clientHeight - chatBoxElem.scrollTop) || isScrolling
     }
-    this.scrollToBottom = function (){
+    this.scrollToPos = function (pos){
+
+        // 默認滾動到底部
+        var target_pos = pos || this.getBottomPos()
         if (!$rootScope.isMobile){
             isScrolling = true
             angular.element(document.querySelector('#chat_box'))
-            .scrollTo(0, this.getBottomPos(), 717)
+            .scrollTo(0, target_pos, 717)
             .then(function(){
                 isScrolling = false
             })
         } else {
-            this.setNowPos(this.getBottomPos())
+            this.setNowPos(target_pos)
         }
     }
 }])
