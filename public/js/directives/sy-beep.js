@@ -14,25 +14,52 @@ angular.module('ShinyaApp.beepDirective', [])
             /*
              * 新消息抵達提醒
              *      `$scope.isViewMsg`：新消息是否已閱
+             *      `$scope.msgNotifyBox`：提醒消息的內容
+             *      `$scope.isAtMsg`：判斷是否為提到（@）你的信息
+             *      `$scope.contentItem`：存儲提到（@）你的消息 id
              */
             $scope.isViewMsg = true
             $scope.msgNotifyBox = {}
-            $scope.contentItemPos = 0
+            $scope.contentItem = 0
+            /* 滾動到消息位置後改變消息樣式 */
+            $scope.isAtMsgShow = false
+            function atMsg(id){
+                $scope.isAtMsgShow = true
+                var elem = document.getElementById(id)
+                elem.classList.add('atMsg')
+                $timeout(function (){
+                    elem.classList.remove('atMsg')
+                    $timeout(function (){
+                        $scope.isAtMsgShow = false
+                    }, 717)
+                }, 717)
+            }
+            function scrollToSpecPos(){
+                $scope.isViewMsg = true
+                if ($scope.contentItem){
+                    // 有用戶提到（@）你，滾動到相應位置
+                    var pos = syPosHelper.getElementPos($scope.contentItem)
+                    syPosHelper.scrollToPos(pos || null)
+                    atMsg($scope.contentItem)
+                    $scope.contentItem = 0
+                } else {
+                    // 新消息，滾動到底部
+                    syPosHelper.scrollToPos()
+                }   
+            }
             $scope.viewedMsg = function (type){
                 // 當前不處於 chat_box，切換到 chat_box 後滾動
                 if (!$scope.isChatBox){
                     $scope.isChatBox = !$scope.isChatBox
                     $timeout(function (){
-                        $scope.isViewMsg = true
-                        syPosHelper.scrollToPos()
+                        scrollToSpecPos()
                     })
                 } else {
-                    // 1: Scroll, 2: Don't Scroll
                     if (type === 1){
-                        $scope.isViewMsg = true
-                        syPosHelper.scrollToPos($scope.contentItemPos || null)
-                        $scope.contentItemPos = 0
+                        // 滾動並抹除提醒
+                        scrollToSpecPos()
                     } else if (type === 2){
+                        // 不滾動，只抹除提醒
                         $scope.isViewMsg = true
                     }
                 }
@@ -51,7 +78,7 @@ angular.module('ShinyaApp.beepDirective', [])
                             'type': 'atMsg',
                             'msg' : '@' + msg + ' 提到了你'
                         }
-                        $scope.contentItemPos = pos
+                        $scope.contentItem = pos
                         $scope.isViewMsg = false
                     }
                 })

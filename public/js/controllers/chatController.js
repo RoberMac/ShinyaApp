@@ -302,25 +302,14 @@ angular.module('ShinyaApp.chatController', [])
             })
         }
     }
-    /*
-     *******************
-     * 文本消息抵達與發送
-     *******************
-     *  
-     *  `$scope.msgInbox`：存儲消息
-     *  `$scope.msgOutbox`：待發送消息
-     *  `isShowDate`：判斷是否顯示當前時間
-     *  `onTextMsg`：文本消息抵達
-     *  `$scope.emitTextMsg`：文本消息發送
-     *  `connectSIO`：連接到服務器
-     *  `reconnectSIO`：重新連接服務器
+    /********
+     * @user
+     ********
+     *
+     *  `$scope.atUser`：當前 @ 的用戶列表
+     *  `$scope.isUserOnline`：判斷用戶是否在線
      *
      */
-    $scope.msgInbox = []
-    $scope.msgOutbox = {
-        'textMsg': ''
-    }
-    // @username
     $scope.atUser = []
     $scope.isUserOnline = function (username){
         return $scope.onlineUser.indexOf(username.slice(1)) >= 0
@@ -345,6 +334,24 @@ angular.module('ShinyaApp.chatController', [])
             $scope.atUser = []
         }
     })
+    /*
+     *******************
+     * 文本消息抵達與發送
+     *******************
+     *  
+     *  `$scope.msgInbox`：存儲消息
+     *  `$scope.msgOutbox`：待發送消息
+     *  `isShowDate`：判斷是否顯示當前時間
+     *  `onTextMsg`：文本消息抵達
+     *  `$scope.emitTextMsg`：文本消息發送
+     *  `connectSIO`：連接到服務器
+     *  `reconnectSIO`：重新連接服務器
+     *
+     */
+    $scope.msgInbox = []
+    $scope.msgOutbox = {
+        'textMsg': ''
+    }
     // 間隔 60 秒顯示時間
     var now = Date.now()
     function isShowDate(date){
@@ -378,10 +385,8 @@ angular.module('ShinyaApp.chatController', [])
             syPosHelper.scrollToPos()
         } else {
             if (data.at && data.at.indexOf('@' + decodeToken.username) >= 0){
-                var pos = syPosHelper.getElementPos(data.date)
-                $scope.msgNotify('atMsg', data.username, pos)
-                console.log(data.at, data.at.indexOf('@' + decodeToken.username))
-            } else if (!isMe){
+                $scope.msgNotify('atMsg', data.username, data.date)
+            } else if (!isMe && !$scope.contentItem){
                 $scope.msgNotify('newMsg', '新消息')
             }
         }
@@ -407,10 +412,8 @@ angular.module('ShinyaApp.chatController', [])
             }
         }
     }
-    /*
-     * Socket.IO 連接與重連
-     *
-     */
+
+    /* Socket.IO */
     function connectSIO(){
         $rootScope.socket = io(':8080', {
             'query': 'token=' + token
@@ -433,17 +436,15 @@ angular.module('ShinyaApp.chatController', [])
                 })
             })
         })
+        /* 新文本消息抵達 */
         $rootScope.socket.on('textMsg', function (msg){
             onTextMsg(msg)
         })
-        /*
-         * `userJoin`: 有用戶加入
-         * `disconnect`: 有用戶退出
-         *
-         */
+         /* 有用戶加入 */
         $rootScope.socket.on('userJoin', function (msg){
             $scope.onUserIO(msg)
         })
+         /* 有用戶退出 */
         $rootScope.socket.on('disconnect', function (msg){
             $scope.onUserIO(msg)
         })

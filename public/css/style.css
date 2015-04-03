@@ -247,6 +247,10 @@ ul {
             color: #000;
             background-color: #CECECF;
         }
+            #chat_box .others .content_box.atMsg {
+                color: #FFF;
+                background-color: #000;
+            }
 /* #notify_box & #at_box */
 .all_notify_box {
     position: absolute;
@@ -718,6 +722,7 @@ ul {
 input,
 .sunAndMoon,
 .geoOnAndOff,
+.syShow,
 #info_date_box .register_date,
 #info_date_box .all,
 .general_animate.ng-animate {
@@ -928,7 +933,7 @@ input,
         border-radius: 4px;
         color: #fff;
     }
-        .all_notify_box span {
+        .all_notify_box > span {
             padding: 4px 7px;
             background-color: #000;
         }
@@ -1081,7 +1086,7 @@ input,
         border-radius: 4px;
         color: #fff;
     }
-        .all_notify_box span {
+        .all_notify_box > span {
             padding: 4px 7px;
             background-color: #000;
         }

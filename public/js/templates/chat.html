@@ -10,8 +10,8 @@
                 <div ng-if="!contentItem.isMe" class="username_box">
                     <span>{{contentItem.username}}</span>
                 </div>
-                <div class="content_box">
-                    <pre id="{{contentItem.date}}">{{contentItem.msg}}</pre>
+                <div id="{{contentItem.date}}" class="content_box" ng-class="{'syShow': isAtMsgShow}">
+                    <pre>{{contentItem.msg}}</pre>
                 </div>
             </div>
         </div>
