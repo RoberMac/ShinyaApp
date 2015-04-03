@@ -48,6 +48,7 @@ angular.module('ShinyaApp.chatController', [])
             }
             $scope.isChatBox = !$scope.isChatBox
             $scope.isSun     = !$scope.isSun
+            console.log('try to toggleChatBox')
         }
     }
     $scope.currentPage = 'infoBox'
@@ -364,7 +365,7 @@ angular.module('ShinyaApp.chatController', [])
     }
     function onTextMsg(data) {
         var isMe       = $rootScope.socket.id === data.id,
-            isBottom   = syPosHelper.isBottom();
+            isBottom   = syPosHelper.isBottom($scope.isScrollDown);
         $scope.$apply(function (){
             $scope.msgInbox.push({
                 'isMe'      : isMe,

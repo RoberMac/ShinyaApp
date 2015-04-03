@@ -13,7 +13,8 @@ var feed_list = {
         // {'source_name': '華爾街見闻', 'url': 'http://wallstreetcn.com/rss.xml'}, // 華爾街見闻
         // {'source_name': '紐約時報中文網', 'url': 'http://cn.nytimes.com/rss.html'}, // 紐約時報中文網
         // {'source_name': 'BBC 中文網', 'url': 'http://www.bbc.co.uk/zhongwen/trad/index.xml'}, // BBC 中文網
-        {'source_name': 'cnBeta', 'url': 'http://rss.cnbeta.com/rss'}// cnBeta
+        {'source_name': 'cnBeta', 'url': 'http://rss.cnbeta.com/rss'}, // cnBeta
+        {'source_name': '灣區日報', 'url': 'http://wanqu.co/feed'} // 灣區日報
         // {'source_name': 'Engadget 中文版', 'url': 'http://cn.engadget.com/rss.xml'} // Engadget 中文版
     ],
     // 'DE': [
@@ -74,6 +75,8 @@ var feed_list = {
         // {'source_name': 'Engadget 中文版', 'url': 'http://chinese.engadget.com/rss.xml'} // Engadget 中文版
     // ],
     'US': [
+        {'source_name': 'Reddit - worldnews', 'url': 'https://www.reddit.com/r/worldnews/new/.rss'}, // Reddit - worldnews
+        {'source_name': 'Reddit - news', 'url': 'https://www.reddit.com/r/news/new/'}, // Reddit - news
     //     {'source_name': 'BBC World', 'url': 'http://feeds.bbci.co.uk/news/world/rss.xml'}, // BBC World
     //     {'source_name': 'NYT International', 'url': 'http://www.nytimes.com/services/xml/rss/nyt/InternationalHome.xml'}, // NYT International
         {'source_name': 'Yahoo', 'url': 'https://news.yahoo.com/rss'} // Yahoo - Latest News & Headlines
@@ -81,102 +84,28 @@ var feed_list = {
     ]
 }
 function updateCountryNews(country, now, news, callback){
-    if (country === 'BR'){
-        News.findOneAndUpdate({date: now}, {
-            'BR': news
-        }, function (err){
+
+    var list = {
+        'BR': {'BR': news},
+        'CN': {'CN': news},
+        'DE': {'DE': news},
+        'FR': {'FR': news},
+        'HK': {'HK': news},
+        'IN': {'IN': news},
+        'JP': {'JP': news},
+        'KR': {'BR': news},
+        'RU': {'RU': news},
+        'TW': {'TW': news},
+        'US': {'US': news}
+    }
+    if (country in list){
+        News.findOneAndUpdate({date: now}, list[country], function (err){
             if (err) return err
             callback()
-            console.log('BR OK')
-        })
-    } else if (country === 'CN'){
-        News.findOneAndUpdate({date: now}, {
-            'CN': news
-        }, function (err){
-            if (err) return err
-            callback()
-            console.log('CN OK')
-        })
-    } else if (country === 'DE'){
-        News.findOneAndUpdate({date: now}, {
-            'DE': news
-        }, function (err){
-            if (err) return err
-            callback()
-            console.log('DE OK')
-        })
-    } else if (country === 'FR'){
-        News.findOneAndUpdate({date: now}, {
-            'FR': news
-        }, function (err){
-            if (err) return err
-            callback()
-            console.log('FR OK')
-        })
-    } else if (country === 'HK'){
-        News.findOneAndUpdate({date: now}, {
-            'HK': news
-        }, function (err){
-            if (err) return err
-            callback()
-            console.log('HK OK')
-        })
-    } else if (country === 'IN'){
-        News.findOneAndUpdate({date: now}, {
-            'IN': news
-        }, function (err){
-            if (err) return err
-            callback()
-            console.log('IN OK')
-        })
-    } else if (country === 'JP'){
-        News.findOneAndUpdate({date: now}, {
-            'JP': news
-        }, function (err){
-            if (err) return err
-            callback()
-            console.log('JP OK')
-        })
-    } else if (country === 'KR'){
-        News.findOneAndUpdate({date: now}, {
-            'KR': news
-        }, function (err){
-            if (err) return err
-            callback()
-            console.log('KR OK')
-        })
-    } else if (country === 'RU'){
-        News.findOneAndUpdate({date: now}, {
-            'RU': news
-        }, function (err){
-            if (err) return err
-            callback()
-            console.log('RU OK')
-        })
-    } else if (country === 'TW'){
-        News.findOneAndUpdate({date: now}, {
-            'TW': news
-        }, function (err){
-            if (err) return err
-            callback()
-            console.log('TW OK')
-        })
-    } else if (country === 'KR'){
-        News.findOneAndUpdate({date: now}, {
-            'KR': news
-        }, function (err){
-            if (err) return err
-            callback()
-            console.log('KR OK')
+            console.log(country + ' OK')
         })
     } else {
-        News.findOneAndUpdate({date: now}, {
-            'US': news
-        }, function (err){
-            if (err) return err
-            callback()
-            console.log('US OK')
-        })
+        console.log(country + ' not found')
     }
 }
 function getNews(frequency){

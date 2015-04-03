@@ -39,12 +39,12 @@ angular.module('ShinyaApp.beepDirective', [])
                 if ($scope.contentItem){
                     // 有用戶提到（@）你，滾動到相應位置
                     var pos = syPosHelper.getElementPos($scope.contentItem)
-                    syPosHelper.scrollToPos(pos || null)
+                    syPosHelper.scrollToPos(pos || null, $scope.isScrollDown)
                     atMsg($scope.contentItem)
                     $scope.contentItem = 0
                 } else {
                     // 新消息，滾動到底部
-                    syPosHelper.scrollToPos()
+                    syPosHelper.scrollToPos(null, $scope.isScrollDown)
                 }   
             }
             $scope.viewedMsg = function (type){
