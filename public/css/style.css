@@ -194,13 +194,14 @@ ul {
 /* form_box */
 .form_box {
     position: absolute;
+    display: table;
     top: 25%;
     left: 20%;
     width: 60%;
     height: 50%;
 }
     .form_box h2 {
-        margin: 0px auto 33px;
+        margin: 0px auto 17px;
     }
     .form_box .form_title {
         margin-bottom: 20px;
@@ -354,7 +355,11 @@ ul {
     text-align: left;
     z-index: 2;
 }
-/* infoBox */
+/* user_info_box */
+.vertically_center {
+    display: table-cell;
+    vertical-align: middle;
+}
 #user_info_box {
     position: absolute;
     top: 15%;
@@ -362,140 +367,145 @@ ul {
     width: 60%;
     height: 70%;
 }
-    #info_inner_box {
+/* infoBox */
+#info_inner_box {
+    position: absolute;
+    display: table;
+    width: 100%;
+    height: 100%;
+}
+#info_inner_box #info_date_box > div {
+    margin: 3% auto;
+}
+#info_inner_box #info_date_box .register_date span:first-child {
+    cursor: pointer;
+    border-bottom: 1px solid #000;
+}
+#info_inner_box #info_date_box .all {
+    width: 34px;
+    height: 34px;
+    font-size: 12px;
+    line-height: 34px;
+    border: 1px solid #FFF;
+    border-radius: 17px;
+    -webkit-border-radius: 17px;    
+    cursor: pointer;
+}
+    #info_inner_box #info_date_box .all span {
+        cursor: pointer;
+    }
+    #info_inner_box #info_date_box .all.clouds {
+        width: 77px;
+        height: 77px;
+        -webkit-border-radius: 38.5px;
+        border-radius: 38.5px;
+        background-color: #CECECF;
+        border: 1px solid #CECECF;
+    }
+    #info_inner_box #info_date_box .daytime {
+        border: 1px solid #000;
+    }
+        #info_inner_box #info_date_box .daytime.rain {
+            width: 30px;
+            height: 30px;
+            border-top-left-radius: 0px;
+            margin-top: 20%;
+            -webkit-transform: rotate(45deg);
+            transform: rotate(45deg);
+        }
+        #info_inner_box #info_date_box .daytime.wind {
+            width: 50px;
+            height: 25px;
+            margin-top: 8%;
+            -webkit-border-radius: 0 25px 0 25px;
+            border-radius: 0 25px 0 25px;
+            -webkit-transform: rotate(1440deg);
+            transform: rotate(1440deg);
+        }
+        #info_inner_box #info_date_box .daytime.sun {
+            margin-top: 5%;
+            border: 1px solid #000;
+            border-top: 17px solid #000;
+            border-bottom: 17px solid #000;
+            -moz-box-shadow: 0px 0px 17px 7px rgba(0, 0, 0, .50);
+            box-shadow: 0px 0px 17px 7px rgba(0, 0, 0, .50);
+        }
+        #info_inner_box #info_date_box .daytime.fog {
+            margin-top: 7%;
+            border: 1px solid rgba(206, 206, 207, 0.7);
+            border-right: 1px solid rgba(206, 206, 207, 0);
+            background-color: rgba(206, 206, 207, 0.7);
+            -moz-box-shadow: 17px 17px 37px 37px rgba(206,206,207,0.7);
+            box-shadow: 17px 17px 37px 37px rgba(206,206,207,0.7);
+        }
+    #info_inner_box #info_date_box .night {
+        color: #fff;
+        background-color: #000;
+        border: 1px solid #000;
+    }
+        #info_inner_box #info_date_box .night.rain {
+            width: 30px;
+            height: 30px;
+            background-color: #fff;
+            border-top-left-radius: 0px;
+            margin-top: 20%;
+            -webkit-transform: rotate(45deg);
+            transform: rotate(45deg);
+        }
+        #info_inner_box #info_date_box .night.wind {
+            width: 50px;
+            height: 25px;
+            margin-top: 8%;
+            -webkit-border-radius: 0 25px 0 25px;
+            border-radius: 0 25px 0 25px;
+            -webkit-transform: rotate(1440deg);
+            transform: rotate(1440deg);
+        }
+        #info_inner_box #info_date_box .night.sun {
+            margin-top: 5%;
+            border: 1px solid #000;
+            border-top: 17px solid #000;
+            border-bottom: 17px solid #000;
+            -moz-box-shadow: 0px 0px 17px 7px rgba(0, 0, 0, .50);
+            box-shadow: 0px 0px 17px 7px rgba(0, 0, 0, .50);
+        }
+        #info_inner_box #info_date_box .night.fog {
+            margin-top: 7%;
+            border: 1px solid rgba(0, 0, 0, 0.7);
+            border-right: 1px solid rgba(0, 0, 0, 0.3);
+            background-color: rgba(0, 0, 0, 0.8);
+            -moz-box-shadow: 17px 17px 37px 37px rgba(0, 0, 0,0.7);
+            box-shadow: 17px 17px 37px 37px rgba(0, 0, 0,0.7);
+        }
+/* infoBox: outer */
+#info_outer_box {
+
+}
+    #info_username_box {
         position: absolute;
+        top: 30px;
         width: 100%;
-        height: 100%;
     }
-    #info_inner_box #info_username_box {
-           
-    }
-    #info_inner_box #info_numero_box {
-        margin-bottom: 10%;
+    #info_numero_box {
         font-size: 12px;
         color: #555;
     }
-        #info_inner_box #info_numero_box span {
-            padding: 1px 5px;
-            -webkit-border-radius: 5px;
-            border-radius: 5px;
-            border-left-style: solid;
-            border-left-width: 2px;
-            border-right-style: solid;
-            border-right-width: 2px;
-        }
-            #info_inner_box #info_numero_box span.gold {
-                border-color: #D4AF37;
-            }
-            #info_inner_box #info_numero_box span.aluminum {
-                border-color: #999;
-            }
-            #info_inner_box #info_numero_box span.steel {
-                border-color: #666;
-            }
-    #info_inner_box #info_date_box > div {
-        margin: 3% auto;
+    #info_numero_box span {
+        padding: 1px 5px;
+        -webkit-border-radius: 5px;
+        border-radius: 5px;
+        border-left: 2px solid;
+        border-right: 2px solid;
     }
-    #info_inner_box #info_date_box .register_date span:first-child {
-        cursor: pointer;
-        border-bottom: 1px solid #000;
-    }
-    #info_inner_box #info_date_box .all {
-        width: 34px;
-        height: 34px;
-        font-size: 12px;
-        line-height: 34px;
-        border: 1px solid #FFF;
-        border-radius: 17px;
-        -webkit-border-radius: 17px;    
-        cursor: pointer;
-    }
-        #info_inner_box #info_date_box .all span {
-            cursor: pointer;
+        #info_numero_box span.gold {
+            border-color: #D4AF37;
         }
-        #info_inner_box #info_date_box .all.clouds {
-            width: 77px;
-            height: 77px;
-            -webkit-border-radius: 38.5px;
-            border-radius: 38.5px;
-            background-color: #CECECF;
-            border: 1px solid #CECECF;
+        #info_numero_box span.aluminum {
+            border-color: #999;
         }
-        #info_inner_box #info_date_box .daytime {
-            border: 1px solid #000;
+        #info_numero_box span.steel {
+            border-color: #666;
         }
-            #info_inner_box #info_date_box .daytime.rain {
-                width: 30px;
-                height: 30px;
-                border-top-left-radius: 0px;
-                margin-top: 20%;
-                -webkit-transform: rotate(45deg);
-                transform: rotate(45deg);
-            }
-            #info_inner_box #info_date_box .daytime.wind {
-                width: 50px;
-                height: 25px;
-                margin-top: 8%;
-                -webkit-border-radius: 0 25px 0 25px;
-                border-radius: 0 25px 0 25px;
-                -webkit-transform: rotate(1440deg);
-                transform: rotate(1440deg);
-            }
-            #info_inner_box #info_date_box .daytime.sun {
-                margin-top: 5%;
-                border: 1px solid #000;
-                border-top: 17px solid #000;
-                border-bottom: 17px solid #000;
-                -moz-box-shadow: 0px 0px 17px 7px rgba(0, 0, 0, .50);
-                box-shadow: 0px 0px 17px 7px rgba(0, 0, 0, .50);
-            }
-            #info_inner_box #info_date_box .daytime.fog {
-                margin-top: 7%;
-                border: 1px solid rgba(206, 206, 207, 0.7);
-                border-right: 1px solid rgba(206, 206, 207, 0);
-                background-color: rgba(206, 206, 207, 0.7);
-                -moz-box-shadow: 17px 17px 37px 37px rgba(206,206,207,0.7);
-                box-shadow: 17px 17px 37px 37px rgba(206,206,207,0.7);
-            }
-        #info_inner_box #info_date_box .night {
-            color: #fff;
-            background-color: #000;
-            border: 1px solid #000;
-        }
-            #info_inner_box #info_date_box .night.rain {
-                width: 30px;
-                height: 30px;
-                background-color: #fff;
-                border-top-left-radius: 0px;
-                margin-top: 20%;
-                -webkit-transform: rotate(45deg);
-                transform: rotate(45deg);
-            }
-            #info_inner_box #info_date_box .night.wind {
-                width: 50px;
-                height: 25px;
-                margin-top: 8%;
-                -webkit-border-radius: 0 25px 0 25px;
-                border-radius: 0 25px 0 25px;
-                -webkit-transform: rotate(1440deg);
-                transform: rotate(1440deg);
-            }
-            #info_inner_box #info_date_box .night.sun {
-                margin-top: 5%;
-                border: 1px solid #000;
-                border-top: 17px solid #000;
-                border-bottom: 17px solid #000;
-                -moz-box-shadow: 0px 0px 17px 7px rgba(0, 0, 0, .50);
-                box-shadow: 0px 0px 17px 7px rgba(0, 0, 0, .50);
-            }
-            #info_inner_box #info_date_box .night.fog {
-                margin-top: 7%;
-                border: 1px solid rgba(0, 0, 0, 0.7);
-                border-right: 1px solid rgba(0, 0, 0, 0.3);
-                background-color: rgba(0, 0, 0, 0.8);
-                -moz-box-shadow: 17px 17px 37px 37px rgba(0, 0, 0,0.7);
-                box-shadow: 17px 17px 37px 37px rgba(0, 0, 0,0.7);
-            }
 /* newsBox: inner */
 #news_inner_box {
     position: absolute;
@@ -562,6 +572,7 @@ ul {
 /* geoBox: inner */
 #geo_inner_box {
     position: absolute;
+    display: table;
     width: 100%;
     height: 100%;
 }
@@ -602,9 +613,7 @@ ul {
         height: 50%;
     }
         #geo_inner_box .all_weather .vertically_center {
-            display: table-cell;
             width: 100%;
-            vertical-align: middle;
         }
     #geo_inner_box .all_weather_description {
         position: absolute;
@@ -674,9 +683,10 @@ ul {
         #geo_outer_box #last_geo a {
             color: #CECECF;
         }
-/* setting_inner_box */
+/* setting_box: inner */
 #setting_inner_box {
     position: absolute;
+    display: table;
     width: 100%;
     height: 100%;
 }
@@ -702,10 +712,6 @@ ul {
         width: 50%;
         height: 50%;
     }
-        #setting_inner_box .setting_all_corner .vertically_center{
-            display: table-cell;
-            vertical-align: middle;
-        }
     #setting_inner_box #setting_top_left {
         top: 0px;
         left: 0px;
@@ -794,7 +800,7 @@ ul {
     /* setting title */
     #setting_inner_box .setting_all_title {
         position: absolute;
-        padding: 0px 7px;
+        padding: 3px 7px;
         font-size: 11px;
         color: #CECECF;
     }
@@ -809,17 +815,13 @@ ul {
             left: 0px;
             bottom: 0px;
         }
-/* loadBox */
+/* loadBox: inner */
 #load_inner_box {
     position: absolute;
     display: table;
     width: 100%;
     height: 100%;
 }
-    #load_inner_box .vertically_center {
-        display: table-cell;
-        vertical-align: middle;
-    }
     #load_inner_box #load_animate {
         position: relative;
         top: 43%;
@@ -924,7 +926,8 @@ input,
     transition: all .7s ease-in-out;
 }
 
-.main_box {
+.main_box,
+.back_button {
     -webkit-transition: all 1s linear;
     transition: all 1s linear;
 }
@@ -1091,6 +1094,10 @@ input,
         top: 3.5%;
         left: 3%;
     }
+    .back_button {
+        top: 3.5%;
+        left: 3%;
+    }
         .main_box .logo {
             display: block;
             max-width: 30%;
@@ -1138,9 +1145,6 @@ input,
         width: 80%;
         height: 70%;
     }
-        #info_inner_box #info_numero_box {
-            margin-bottom: 40%;
-        }
         #info_inner_box #info_date_box > div {
             margin: 7% auto;
         }
@@ -1188,6 +1192,10 @@ input,
         top: 1.5%;
         left: 1.5%;
     }
+    .back_button {
+        top: 1.5%;
+        left: 1.5%;
+    }
     .main_box .logo {
         max-width: 10%;
     }
@@ -1203,9 +1211,6 @@ input,
         }
     #chat_box {
         height: 91.96%;
-    }
-    #info_inner_box #info_numero_box {
-        margin-bottom: 7%;
     }
     #info_inner_box #info_date_box > div {
         margin: 4% auto;
@@ -1243,6 +1248,10 @@ input,
     .main_box {
         width: 96%;
         height: 96%;
+        top: 2%;
+        left: 2%;
+    }
+    .back_button {
         top: 2%;
         left: 2%;
     }
@@ -1287,9 +1296,6 @@ input,
             padding: 4px 7px;
             background-color: #000;
         }
-    #info_inner_box #info_numero_box {
-        margin-bottom: 40%;
-    }
     #info_inner_box #info_date_box > div {
         margin: 7% auto;
     }
@@ -1325,9 +1331,6 @@ input,
   (min-width: 768px) and (max-width: 1024px) and (orientation : landscape) { 
     .main_box .logo {
         max-width: 15%;
-    }
-    #info_inner_box #info_numero_box {
-        margin-bottom: 22%;
     }
     #info_inner_box #info_date_box > div {
         margin: 5% auto;

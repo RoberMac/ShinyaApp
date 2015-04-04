@@ -22,25 +22,19 @@
             <div ng-switch on="currentPage">
                 <!-- 基本信息 -->
                 <div ng-switch-when="infoBox" id="info_inner_box" class="general_animate">
-                    <div id="info_username_box">
-                        <!-- 用戶名 -->
-                        <h2>{{infoBox.username}}</h2>
-                    </div>
-                    <div id="info_numero_box">
-                        <!-- 註冊序號 -->
-                        <p>第 <span ng-class="numero">{{infoBox.numero}}</span> 號用戶</p>
-                    </div>
-                    <div id="info_date_box">
-                        <!-- 註冊日期／註冊當日天氣 -->
-                        <h3>{{infoBox.title}}</h3>
-                        <div class="register_date">
-                            <span ng-show="infoBox.title == '加入於'">
-                                <a ng-click="getSelectedDateNews()">{{infoBox.date}}</a>
-                            </span>
-                            <span ng-show="infoBox.title != '加入於'">{{infoBox.weather}}</span>
-                        </div>
-                        <div class="all" ng-class="[getDaytimeOrNight, partWeather]" ng-click="togglePartWeather()">
-                            <span class="general_animate" ng-show="!partWeather">{{infoBox.partsOfADay}}</span>
+                    <div class="vertically_center">
+                        <div id="info_date_box">
+                            <!-- 註冊日期／註冊當日天氣 -->
+                            <h3>{{infoBox.title}}</h3>
+                            <div class="register_date">
+                                <span ng-show="infoBox.title == '加入於'">
+                                    <a ng-click="getSelectedDateNews()">{{infoBox.date}}</a>
+                                </span>
+                                <span ng-show="infoBox.title != '加入於'">{{infoBox.weather}}</span>
+                            </div>
+                            <div class="all" ng-class="[getDaytimeOrNight, partWeather]" ng-click="togglePartWeather()">
+                                <span class="general_animate" ng-show="!partWeather">{{infoBox.partsOfADay}}</span>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -107,7 +101,7 @@
                         <div class="vertically_center">
                             <div ng-class="{'voiced': isMuted, 'setting_on': isMuted}" id="mute" class="general_animate" ng-click="toggleMuted()"></div>
                         </div>
-                        <div id="mute_title" class="setting_all_title" ng-class="{'setting_on': isMuted}">靜音</div>    
+                        <div id="mute_title" class="setting_all_title" ng-class="{'setting_on': isMuted}">聲音</div>    
                     </div>
                     <div id="setting_top_right" class="setting_all_corner">
                         <!-- 位置服務 -->
@@ -127,11 +121,49 @@
                     </div>
                 </div>
                 <!-- 過場動畫 -->
-                <div ng-switch-when="loadBox" id="load_inner_box" class="general_animate">
+                <div ng-show="currentPage === 'loadBox'" id="load_inner_box" class="general_animate">
                     <div class="vertically_center">
                         <div id="load_animate"></div>
                     </div>
                 </div>
+            </div>
+        </div>
+        <!-- 基本信息：外部部件 -->
+        <div ng-if="currentPage === 'infoBox'" id="info_outer_box" class="general_animate">
+            <div id="info_username_box">
+                <!-- 用戶名 -->
+                <h2>{{infoBox.username}}</h2>
+                <div id="info_numero_box">
+                    <!-- 註冊序號 -->
+                    <p>第 <span ng-class="numero">{{infoBox.numero}}</span> 號用戶</p>
+                </div>
+            </div>
+            <!-- 進入：地理位置服務 -->
+            <div class="bottom_left_corner">
+                <div id="getGeoServices" ng-click="getGeoServices()" ng-class="{'mobile': isMobile}">
+                </div>
+            </div>
+            <div ng-if="isMobile" class="bottom_center_corner">
+                在線人數：{{userCount}}
+            </div>
+            <!-- 註銷用戶 -->
+            <div class="bottom_right_corner">
+                <div id="setting" ng-click="gotoSettingBox()" ng-class="{'mobile': isMobile}">
+                </div>
+                <!-- <a ng-click="quit()">註銷用戶</a> -->
+            </div>
+        </div>
+        <!-- 註冊當日新聞：外部部件-->
+        <div ng-if="currentPage === 'newsBox'" id="news_outer_box" class="general_animate">
+            <div id="news_title">
+                <h3>當日新聞</h3>
+            </div>
+            <div id="news_select_date">
+                <span ng-click="previousHour()">&lt;</span>
+                <div id="news_now">
+                    <span>{{selectDate}}:00</span>
+                </div>
+                <span ng-click="nextHour()">&gt;</span>                    
             </div>
         </div>
         <!-- 地理位置服務：外部部件 -->
@@ -148,36 +180,6 @@
                 <h3 ng-show="isSameDay">
                     {{geoBox.last_geo.date | date: 'HH 時 mm 分'}}
                 </h3>
-            </div>
-        </div>
-        <!-- 註冊當日新聞：外部部件-->
-        <div ng-if="currentPage === 'newsBox'" id="news_outer_box" class="general_animate">
-            <div id="news_title">
-                <h3>當日新聞</h3>
-            </div>
-            <div id="news_select_date">
-                <span ng-click="previousHour()">&lt;</span>
-                <div id="news_now">
-                    <span>{{selectDate}}:00</span>
-                </div>
-                <span ng-click="nextHour()">&gt;</span>                    
-            </div>
-        </div>
-        <!-- 基本信息：外部部件 -->
-        <div ng-if="currentPage === 'infoBox'" id="geo_box" class="general_animate">
-            <!-- 進入：地理位置服務 -->
-            <div class="bottom_left_corner">
-                <div id="getGeoServices" ng-click="getGeoServices()" ng-class="{'mobile': isMobile}">
-                </div>
-            </div>
-            <div ng-if="isMobile" class="bottom_center_corner">
-                在線人數：{{userCount}}
-            </div>
-            <!-- 註銷用戶 -->
-            <div class="bottom_right_corner">
-                <div id="setting" ng-click="gotoSettingBox()" ng-class="{'mobile': isMobile}">
-                </div>
-                <!-- <a ng-click="quit()">註銷用戶</a> -->
             </div>
         </div>
     </div>

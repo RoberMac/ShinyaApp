@@ -1,7 +1,7 @@
 <div class="main_box" ng-class="{'input_shake_animate': input_shake_animate}">
     <img class="logo" src="/public/img/logo.svg" alt="logo">
     <div class="form_box">
-        <div ng-switch on="isLogin">
+        <div ng-switch on="isLogin" class="vertically_center">
             <!-- login -->
             <div ng-switch-when="true">
                 <form novalidate ng-submit="loginSubmit()" name="form">
