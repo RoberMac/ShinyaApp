@@ -75,7 +75,6 @@ var feed_list = {
         // {'source_name': 'Engadget 中文版', 'url': 'http://chinese.engadget.com/rss.xml'} // Engadget 中文版
     // ],
     'US': [
-        {'source_name': 'Reddit - worldnews', 'url': 'https://www.reddit.com/r/worldnews/new/.rss'}, // Reddit - worldnews
         {'source_name': 'Reddit - news', 'url': 'https://www.reddit.com/r/news/new/'}, // Reddit - news
     //     {'source_name': 'BBC World', 'url': 'http://feeds.bbci.co.uk/news/world/rss.xml'}, // BBC World
     //     {'source_name': 'NYT International', 'url': 'http://www.nytimes.com/services/xml/rss/nyt/InternationalHome.xml'}, // NYT International

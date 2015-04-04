@@ -71,7 +71,9 @@ var db_helper = {
                                                             'country': country,
                                                             'city'   : city,
                                                             'weather': weather
-                                                        }
+                                                        },
+                                                        'isGeoServices': false,
+                                                        'isMuted': false
                                                     })
                                                     console.log(user)
                                                     user.save(function (err){
@@ -118,11 +120,12 @@ var db_helper = {
                         var compare_password = found.password
                         if (bcrypt.compareSync(login_form.password, compare_password)){
                             var token = jwt.sign({
-                                username: found.username,
-                                numero: found.register_info.numero,
-                                date: found.register_info.date,
-                                weather: found.geo_info.weather,
-                                isGeoServices: found.isGeoServices
+                                'username': found.username,
+                                'numero': found.register_info.numero,
+                                'date': found.register_info.date,
+                                'weather': found.geo_info.weather,
+                                'isGeoServices': found.isGeoServices,
+                                'isMuted': found.isMuted
                             }, key, {
                                 expiresInMinutes: 30
                             })
@@ -149,11 +152,12 @@ var db_helper = {
                         var compare_password = found.password
                         if (bcrypt.compareSync(login_form.password, compare_password)){
                             var token = jwt.sign({
-                                username: found.username,
-                                numero: found.register_info.numero,
-                                date: found.register_info.date,
-                                weather: found.geo_info.weather,
-                                isGeoServices: found.isGeoServices
+                                'username': found.username,
+                                'numero': found.register_info.numero,
+                                'date': found.register_info.date,
+                                'weather': found.geo_info.weather,
+                                'isGeoServices': found.isGeoServices,
+                                'isMuted': found.isMuted
                             }, key, {
                                 expiresInMinutes: 30
                             })
@@ -174,20 +178,18 @@ var db_helper = {
         }, key, {
             expiresInMinutes: 60
         })
-        console.log(code)
         User.findOneAndUpdate({email: forgot_email_form.email}, {forgot_code: code}, function (err, found){
             if (err) return err
             // 檢查電郵地址是否存在
             if (!found){
-                console.log('email not found')
                 next({'code': 400, 'status': 'error', 'msg': '電郵地址不存在'}) 
             } else {
                 // 發送驗證碼到用戶郵箱
                 var transporter = nodemailer.createTransport({
                     service: 'Yahoo',
                     auth: {
-                        user: 'shenyepoxiao@yahoo.com',
-                        pass: '4sfaxiLHMMvNnT('
+                        'user': 'shenyepoxiao@yahoo.com',
+                        'pass': '4sfaxiLHMMvNnT('
                     }
                 });
                 var mailOptions = {
@@ -224,8 +226,8 @@ var db_helper = {
                 // 驗證碼最新鮮
                 if (found.forgot_code === update_form.code){
                     User.findOneAndUpdate({email: update_form.email}, {
-                        password: update_form.password,
-                        forgot_code: '',
+                        'password': update_form.password,
+                        'forgot_code': '',
                     }, function (err, found){
                         if (err) return err
                         if (!found) {

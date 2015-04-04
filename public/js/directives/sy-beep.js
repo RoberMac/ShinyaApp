@@ -5,7 +5,11 @@ angular.module('ShinyaApp.beepDirective', [])
         replace : true,
         template: '<div class="all_notify_box general_animate" ng-if="!isViewMsg" id="notify_box">'
                 +   '<span ng-click="viewedMsg(1)">{{msgNotifyBox.msg}}</span>'
-                +   '<audio autoplay>'
+                +   '<audio ng-if="!isMuted" autoplay>'
+                +       '<source src="public/sound/beep.ogg" type="audio/ogg">'
+                +       '<source src="public/sound/beep.m4a" type="audio/x-m4a">'
+                +   '</audio>'
+                +   '<audio ng-if="isMuted" autoplay muted>'
                 +       '<source src="public/sound/beep.ogg" type="audio/ogg">'
                 +       '<source src="public/sound/beep.m4a" type="audio/x-m4a">'
                 +   '</audio>'
@@ -50,6 +54,10 @@ angular.module('ShinyaApp.beepDirective', [])
             $scope.viewedMsg = function (type){
                 // 當前不處於 chat_box，切換到 chat_box 後滾動
                 if (!$scope.isChatBox){
+                    if (!$scope.isChatBox){
+                        // 從 `geo_box` / `news_box` 返回 `chat_box` 時，重置 `user_info_box`
+                        $scope.toggleCurrentPage('infoBox')
+                    }
                     $scope.isChatBox = !$scope.isChatBox
                     $timeout(function (){
                         scrollToSpecPos()

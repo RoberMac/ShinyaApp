@@ -63,19 +63,21 @@
                 </div>
                 <!-- 地理位置服務 -->
                 <div ng-switch-when="geoBox" id="geo_inner_box" class="general_animate">
-                    <div ng-if="!isGeoOn" id="turnOnGeoServices">
+                    <div ng-if="!isGeoServices" id="turnOnGeoServices">
                         <div class="geoStatus">
                             <div class="geoOnAndOff" ng-click="toggleGeoServices()">
                             </div>
                         </div>
                         <h4>位置服務</h4>
                     </div>
-                    <div ng-if="isGeoOn">
+                    <div ng-if="isGeoServices">
                         <div class="all_weather" id="now_weather">
-                            <span class="climacon" ng-class="weatherBox.now_weather"></span>
                             <div class="all_weather_description" id="now_weather_description">
                                 {{geoBox.now_geo.weather.description}}、{{geoBox.now_geo.weather.temp}}
                                 <span class="climacon celcius all_celcius"></span>
+                            </div>
+                            <div class="vertically_center">
+                                <span class="climacon" ng-class="weatherBox.now_weather"></span>
                             </div>
                         </div>
                         <div id="distance">
@@ -84,21 +86,56 @@
                             </a>
                         </div>
                         <div class="all_weather" id="last_weather">
+                            <div class="vertically_center">
+                                <span class="climacon" ng-class="weatherBox.last_weather"></span>
+                            </div>
                             <div class="all_weather_description" id="last_weather_description">
                                 {{geoBox.last_geo.weather.description}}、{{geoBox.last_geo.weather.temp}}
                                 <span class="climacon celcius all_celcius"></span>
                             </div>
-                            <span class="climacon" ng-class="weatherBox.last_weather"></span>
                         </div>
                     </div>
                 </div>
+                <!-- 設置界面 -->
+                <div ng-switch-when="settingBox" id="setting_inner_box" class="general_animate">
+                    <!-- 骨架 -->
+                    <div id="horizontal"></div>
+                    <div id="vertically"></div>
+                    <!-- 內容 -->
+                    <div id="setting_top_left" class="setting_all_corner">
+                        <!-- 靜音 -->
+                        <div class="vertically_center">
+                            <div ng-class="{'voiced': isMuted, 'setting_on': isMuted}" id="mute" class="general_animate" ng-click="toggleMuted()"></div>
+                        </div>
+                        <div id="mute_title" class="setting_all_title" ng-class="{'setting_on': isMuted}">靜音</div>    
+                    </div>
+                    <div id="setting_top_right" class="setting_all_corner">
+                        <!-- 位置服務 -->
+                        <div class="vertically_center">
+                            <div class="geoStatus">
+                                <div ng-class="{'geoOn': isGeoServices}" class="geoOnAndOff" ng-click="toggleGeoServices()">
+                                </div>
+                            </div>
+                        </div>
+                        <div id="geoStatus_title" class="setting_all_title" ng-class="{'setting_on': isGeoServices}">位置</div>
+                    </div>
+                    <div id="setting_bottom_left" class="setting_all_corner">
+                        
+                    </div>
+                    <div id="setting_bottom_right" class="setting_all_corner">
+                        
+                    </div>
+                </div>
+                <!-- 過場動畫 -->
                 <div ng-switch-when="loadBox" id="load_inner_box" class="general_animate">
-                    <div id="load_animate"></div>    
+                    <div class="vertically_center">
+                        <div id="load_animate"></div>
+                    </div>
                 </div>
             </div>
         </div>
         <!-- 地理位置服務：外部部件 -->
-        <div ng-if="currentPage === 'geoBox' && isGeoOn" id="geo_outer_box" class="general_animate">
+        <div ng-if="currentPage === 'geoBox' && isGeoServices" id="geo_outer_box" class="general_animate">
             <div id="now_geo" class="all_geo">
                 <h3>現在</h3>
                 <a ng-href="http://maps.google.com/maps?z=12&t=h&q=loc:{{geoBox.now_geo.lat}}+{{geoBox.now_geo.lon}}" target="_blank">{{geoBox.now_geo.location}}</a>
@@ -111,12 +148,6 @@
                 <h3 ng-show="isSameDay">
                     {{geoBox.last_geo.date | date: 'HH 時 mm 分'}}
                 </h3>
-            </div>
-            <div class="bottom_left_corner">
-                <div class="geoStatus">
-                    <div ng-class="{'geoOn': isGeoOn}" class="geoOnAndOff" ng-click="toggleGeoServices()">
-                    </div>
-                </div>
             </div>
         </div>
         <!-- 註冊當日新聞：外部部件-->
@@ -136,7 +167,7 @@
         <div ng-if="currentPage === 'infoBox'" id="geo_box" class="general_animate">
             <!-- 進入：地理位置服務 -->
             <div class="bottom_left_corner">
-                <div id="getGeoServices" ng-click="getGeoServices()">
+                <div id="getGeoServices" ng-click="getGeoServices()" ng-class="{'mobile': isMobile}">
                 </div>
             </div>
             <div ng-if="isMobile" class="bottom_center_corner">
@@ -144,7 +175,9 @@
             </div>
             <!-- 註銷用戶 -->
             <div class="bottom_right_corner">
-                <a ng-click="quit()">註銷用戶</a>
+                <div id="setting" ng-click="gotoSettingBox()" ng-class="{'mobile': isMobile}">
+                </div>
+                <!-- <a ng-click="quit()">註銷用戶</a> -->
             </div>
         </div>
     </div>
@@ -157,11 +190,9 @@
 </div>
 <sy-usercount></sy-usercount>
 <sy-beep></sy-beep>
-<div id="at_box" class="all_notify_box">
+<div id="at_box" class="all_notify_box general_animate" ng-show="isChatBox" >
     <span ng-repeat="username in atUser track by $index" class="general_animate">
-        <span ng-class="{'online': isUserOnline(username), 'offline': !isUserOnline(username)}">
-            @
-        </span>
+        <span ng-class="{'online': isUserOnline(username), 'offline': !isUserOnline(username)}">@</span>
         {{username.slice(1)}}
     </span>
 </div>

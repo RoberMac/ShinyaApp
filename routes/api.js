@@ -11,14 +11,14 @@ router.post('/getSelectedDateNews', function (req, res, next){
     api_db_helper.getSelectedDateNews(req.user, req.body, User, res, next)
 })
 
-router.get('/turnOnGeoServices', function (req, res, next){
+router.post('/toggleGeoServices', function (req, res, next){
 
-    api_db_helper.turnOnGeoServices(req.user, User, res, next)
+    api_db_helper.toggleGeoServices(req.user, req.body, User, res, next)
 })
 
-router.get('/turnOffGeoServices', function (req, res, next){
+router.post('/toggleMuted', function (req, res, next){
 
-    api_db_helper.turnOffGeoServices(req.user, User, res, next)
+    api_db_helper.toggleMuted(req.user, req.body, User, res, next)
 })
 
 router.post('/getGeoServices', function (req, res, next){

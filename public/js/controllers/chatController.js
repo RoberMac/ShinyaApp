@@ -48,7 +48,6 @@ angular.module('ShinyaApp.chatController', [])
             }
             $scope.isChatBox = !$scope.isChatBox
             $scope.isSun     = !$scope.isSun
-            console.log('try to toggleChatBox')
         }
     }
     $scope.currentPage = 'infoBox'
@@ -193,11 +192,61 @@ angular.module('ShinyaApp.chatController', [])
             $scope.getSelectedDateNews()
         }
     }
-    // 註銷
+    /**********
+     * 設置界面
+     **********
+     *
+     *  `$scope.gotoSettingBox`：跳轉到「設置界面」
+     *  `$scope.quit`：註銷
+     *  `$scope.toggleGeoServices`：開關「位置服務」
+     *
+     */
+    $scope.gotoSettingBox = function (){
+        if ($scope.currentPage === 'infoBox'){
+            $scope.toggleCurrentPage('settingBox')
+        }
+     }
+    $scope.isMuted = store.get('isMuted') || decodeToken.isMuted
+    $scope.toggleMuted = function (){
+        $scope.isMuted = !$scope.isMuted
+        store.set('isMuted', $scope.isMuted)
+        $http.
+        post('/api/toggleMuted', {
+            'isMuted': $scope.isMuted
+        }).
+        success(function (data, status, headers, config){
+            console.log(data.msg)
+        }).
+        error(function (data, status, headers, config){
+            console.log(data.msg)
+        })
+    }
     $scope.quit = function (){
         store.remove('id_token')
         $rootScope.socket.disconnect()
         $location.path('/')
+    }
+    $scope.isGeoServices = store.get('isGeoServices') || decodeToken.isGeoServices
+    $scope.toggleGeoServices = function (){
+        $http.
+        post('/api/toggleGeoServices', {
+            'isGeoServices': !$scope.isGeoServices
+        }).
+        success(function (data, status, headers, config){
+            if (data.msg === 'on'){
+                store.set('isGeoServices', true)
+                $scope.$emit('preTurnOnGeoServices', '驗證身份以開啟服務')
+            } else {
+                store.set('isGeoServices', false)
+                $scope.$emit('preTurnOffGeoServices', '驗證身份以關閉服務')
+            }
+            $scope.quit()
+        }).
+        error(function (data, status, headers, config){
+            if (status === 401){
+                $location.path('/')
+            }
+        })
     }
     /*
      **************
@@ -206,35 +255,34 @@ angular.module('ShinyaApp.chatController', [])
      * 
      * `$scope.geoBox`：地理位置信息
      * `$scope.weatherBox`：天氣信息
-     * `$scope.isGeoOn`：是否已開啟「位置服務」
+     * `$scope.isGeoServices`：是否已開啟「位置服務」
      * `$scope.isSameDay`：判斷是否同一天
      * `$scope.getGeoServices`：獲取位置信息
-     * `$scope.toggleGeoServices`：開關「位置服務」
      *
      */
     $scope.geoBox = {}
     $scope.weatherBox = {}
-    $scope.isGeoOn = false
     $scope.isSameDay = false
-    if (decodeToken.isGeoServices){
-        $scope.isGeoOn = true
-    }
     $scope.getGeoServices = function (){
         if (!decodeToken.isGeoServices){
+            // 未開啟「位置服務」
             if ($scope.currentPage === 'infoBox'){
                 $scope.toggleCurrentPage('geoBox')
             }
         } else {
+            // 已開啟「位置服務」
             if ($scope.geoBox.distance){
+                // 已獲取「位置服務」所需信息，跳轉到 `geo_box`
                 if ($scope.currentPage === 'infoBox'){
                     $scope.toggleCurrentPage('geoBox')
                 }
             } else {
+                // 未獲取「位置服務」所需信息，跳轉到「過場動畫」
                 if ($scope.currentPage === 'infoBox'){
                     $scope.toggleCurrentPage('loadBox')
                 }
                 if (decodeToken.isGeoServices){
-                    $scope.isGeoOn = true
+                    $scope.isGeoServices = true
                     $window.navigator.geolocation.getCurrentPosition(function (pos){
                         console.log(pos.coords.latitude, pos.coords.longitude)
                         $http.
@@ -274,33 +322,6 @@ angular.module('ShinyaApp.chatController', [])
                     console.log('geo services off')
                 }
             }
-        }
-    }
-    $scope.toggleGeoServices = function (){
-        if (!$scope.isGeoOn){
-            $http.
-            get('/api/turnOnGeoServices').
-            success(function (data, status, headers, config){
-                $scope.$emit('preTurnOnGeoServices', '驗證身份以開啟服務')
-                $scope.quit()
-            }).
-            error(function (data, status, headers, config){
-                if (status === 401){
-                    $location.path('/')
-                }
-            })
-        } else {
-            $http.
-            get('/api/turnOffGeoServices').
-            success(function (data, status, headers, config){
-                $scope.$emit('preTurnOffGeoServices', '驗證身份以取消服務')
-                $scope.quit()
-            }).
-            error(function (data, status, headers, config){
-                if (status === 401){
-                    $location.path('/')
-                }
-            })
         }
     }
     /********

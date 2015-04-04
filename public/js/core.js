@@ -100,11 +100,11 @@ angular.module('ShinyaApp', [
     $scope.$on('preTurnOnGeoServices', function (msg){
         $timeout(function (){
             $scope.$broadcast('turnOnGeoServices', msg)
-        }, 0)
+        }, 100)
     })
     $scope.$on('preTurnOffGeoServices', function (msg){
         $timeout(function (){
             $scope.$broadcast('turnOffGeoServices', msg)
-        }, 0)
+        }, 100)
     })
 }])

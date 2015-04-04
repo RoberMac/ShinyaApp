@@ -40,6 +40,7 @@ var userSchema = new Schema({
     forgot_code  : String,
     news         : Array,
     isGeoServices: Boolean,
+    isMuted      : Boolean,
     last_geo     : Schema.Types.Mixed
 }),
     newsSchema = new Schema({

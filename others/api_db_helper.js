@@ -60,28 +60,31 @@ var api_db_helper = {
             }
         })
     },
-    // 開啟「位置服務」
-    turnOnGeoServices: function (user, User, res, next){
+    // 開啟／關閉「位置服務」
+    toggleGeoServices: function (user, body, User, res, next){
 
-        User.findOneAndUpdate({username: user.username}, {isGeoServices: true}, function (err){
+        User.findOneAndUpdate({username: user.username}, {
+            isGeoServices: body.isGeoServices
+        }, function (err){
 
             if (err){
                 next({'code': 500, 'status': 'error', 'msg': '服務器出錯'})
                 return err
             }
-            res.send({'status': 'ok', 'msg': '已開啟位置服務，請重新登錄'})
+            res.send({'status': 'ok', 'msg': body.isGeoServices ? 'on' : 'off'})
         })
     },
-    // 關閉「位置服務」
-    turnOffGeoServices: function (user, User, res, next){
+    toggleMuted: function (user, body, User, res, next){
 
-        User.findOneAndUpdate({username: user.username}, {isGeoServices: false}, function (err){
+        User.findOneAndUpdate({username: user.username}, {
+            isMuted: body.isMuted
+        }, function (err){
 
-            if (err){
+            if(err){
                 next({'code': 500, 'status': 'error', 'msg': '服務器出錯'})
                 return err
             }
-            res.send({'status': 'ok', 'msg': '已關閉位置服務，請重新登錄'})
+            res.send({'status': 'ok', 'msg': body.isMuted ? 'on' : 'off'})
         })
     },
     // 獲取「位置服務」
