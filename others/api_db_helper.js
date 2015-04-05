@@ -74,19 +74,6 @@ var api_db_helper = {
             res.send({'status': 'ok', 'msg': body.isGeoServices ? 'on' : 'off'})
         })
     },
-    toggleMuted: function (user, body, User, res, next){
-
-        User.findOneAndUpdate({username: user.username}, {
-            isMuted: body.isMuted
-        }, function (err){
-
-            if(err){
-                next({'code': 500, 'status': 'error', 'msg': '服務器出錯'})
-                return err
-            }
-            res.send({'status': 'ok', 'msg': body.isMuted ? 'on' : 'off'})
-        })
-    },
     // 獲取「位置服務」
     getGeoServices: function (user, coords, User, res, next){
 

@@ -40,22 +40,9 @@ var userSchema = new Schema({
     forgot_code  : String,
     news         : Array,
     isGeoServices: Boolean,
-    isMuted      : Boolean,
     last_geo     : Schema.Types.Mixed
 }),
     newsSchema = new Schema({
-
-        // 'BR': Schema.Types.Mixed,
-        // 'CN': Schema.Types.Mixed,
-        // 'DE': Schema.Types.Mixed,
-        // 'FR': Schema.Types.Mixed,
-        // 'HK': Schema.Types.Mixed,
-        // 'IN': Schema.Types.Mixed,
-        // 'JP': Schema.Types.Mixed,
-        // 'KR': Schema.Types.Mixed,
-        // 'RU': Schema.Types.Mixed,
-        // 'TW': Schema.Types.Mixed,
-        // 'US': Schema.Types.Mixed
         date: Number,
         'BR': Schema.Types.Mixed,
         'CN': Schema.Types.Mixed,

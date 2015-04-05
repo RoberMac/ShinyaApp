@@ -114,10 +114,14 @@
                         <div id="geoStatus_title" class="setting_all_title" ng-class="{'setting_on': isGeoServices}">位置</div>
                     </div>
                     <div id="setting_bottom_left" class="setting_all_corner">
-                        
                     </div>
                     <div id="setting_bottom_right" class="setting_all_corner">
-                        
+                        <!-- 位置服務 -->
+                        <div class="vertically_center" ng-click="quit()">
+                            <div id="quit" ng-class="{'sun': !isSun, 'moon': isSun}">
+                            </div>
+                        </div>
+                        <div id="quit_title" class="setting_all_title">註銷</div>
                     </div>
                 </div>
                 <!-- 過場動畫 -->
@@ -140,6 +144,7 @@
             </div>
             <!-- 進入：地理位置服務 -->
             <div class="bottom_left_corner">
+                <!-- BUG: Chrome 下抖動 -->
                 <div id="getGeoServices" ng-click="getGeoServices()" ng-class="{'mobile': isMobile}">
                 </div>
             </div>
@@ -148,6 +153,7 @@
             </div>
             <!-- 註銷用戶 -->
             <div class="bottom_right_corner">
+                <!-- BUG: Chrome 下抖動 -->
                 <div id="setting" ng-click="gotoSettingBox()" ng-class="{'mobile': isMobile}">
                 </div>
                 <!-- <a ng-click="quit()">註銷用戶</a> -->

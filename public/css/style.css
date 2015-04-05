@@ -69,9 +69,6 @@ ul {
     -moz-box-shadow: 0px 3px 15px 0px rgba(0,0,0,0.50);
     box-shadow:      0px 3px 15px 0px rgba(0,0,0,0.50);
     border-radius: 10px;
-    overflow-x: hidden;
-    overflow-y: auto;
-    -webkit-overflow-scrolling: touch;
 }
     .main_box .logo {
         display: none;
@@ -717,9 +714,6 @@ ul {
         left: 0px;
     }
         #mute {
-          position: relative;
-          display: inline-block;
-          top: 25%;
           width: 80px;
           height: 80px;
           border-left: 7px solid #000;
@@ -761,9 +755,6 @@ ul {
         right: 0px;
     }
         #setting_inner_box #setting_top_right .geoStatus {
-            position: relative;
-            display: inline-block;
-            top: 25%;
             width: 80px;
             height: 80px;
             border-radius: 40px;
@@ -797,6 +788,51 @@ ul {
         bottom: 0px;
         right: 0px;
     }
+        #setting_inner_box #setting_bottom_right > div:first-child {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            cursor: pointer;
+        }
+            #setting_inner_box #setting_bottom_right #quit {
+                position: relative;
+                top: 61.8%;
+                width: 80px;
+                height: 1px;
+                background-color: #000;
+            }
+                #setting_inner_box #setting_bottom_right #quit.sun:before {
+                    content: '';
+                    position: absolute;
+                    bottom: -7px;
+                    left: 47%;
+                    width: 0px;
+                    height: 14px;
+                    -webkit-border-radius: 50%;
+                    border-radius: 50%;
+                    border-right: 14px solid #000;
+                }
+                #setting_inner_box #setting_bottom_right > div:first-child:hover #quit.sun:before {
+                    width: 14px;
+                    left: 80%;
+                    border-right: 3px solid #000;
+                }
+                #setting_inner_box #setting_bottom_right #quit.moon:before {
+                    content: '';
+                    position: absolute;
+                    bottom: -7px;
+                    left: 47%;
+                    width: 14px;
+                    height: 14px;
+                    -webkit-border-radius: 50%;
+                    border-radius: 50%;
+                    border-right: 3px solid #000;
+                }
+                #setting_inner_box #setting_bottom_right > div:first-child:hover #quit.moon:before {
+                    width: 0px;
+                    left: 90%;
+                    border-right: 14px solid #000;
+                }
     /* setting title */
     #setting_inner_box .setting_all_title {
         position: absolute;
@@ -815,6 +851,10 @@ ul {
             left: 0px;
             bottom: 0px;
         }
+        #setting_inner_box .setting_all_title#quit_title{
+            left: 0px;
+            top: 0px;
+        }
 /* loadBox: inner */
 #load_inner_box {
     position: absolute;
@@ -823,8 +863,6 @@ ul {
     height: 100%;
 }
     #load_inner_box #load_animate {
-        position: relative;
-        top: 43%;
         width: 40px;
         height: 40px;
         border: 1px solid #CECECF;
@@ -919,6 +957,7 @@ input,
 .setting_all_title,
 .syShow,
 #mute,
+#quit:before,
 #info_date_box .register_date,
 #info_date_box .all,
 .general_animate.ng-animate {

@@ -16,11 +16,6 @@ router.post('/toggleGeoServices', function (req, res, next){
     api_db_helper.toggleGeoServices(req.user, req.body, User, res, next)
 })
 
-router.post('/toggleMuted', function (req, res, next){
-
-    api_db_helper.toggleMuted(req.user, req.body, User, res, next)
-})
-
 router.post('/getGeoServices', function (req, res, next){
 
     api_db_helper.getGeoServices(req.user, req.body.coords, User, res, next)

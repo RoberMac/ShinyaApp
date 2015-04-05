@@ -72,8 +72,7 @@ var db_helper = {
                                                             'city'   : city,
                                                             'weather': weather
                                                         },
-                                                        'isGeoServices': false,
-                                                        'isMuted': false
+                                                        'isGeoServices': false
                                                     })
                                                     console.log(user)
                                                     user.save(function (err){
@@ -124,8 +123,7 @@ var db_helper = {
                                 'numero': found.register_info.numero,
                                 'date': found.register_info.date,
                                 'weather': found.geo_info.weather,
-                                'isGeoServices': found.isGeoServices,
-                                'isMuted': found.isMuted
+                                'isGeoServices': found.isGeoServices
                             }, key, {
                                 expiresInMinutes: 30
                             })
@@ -156,8 +154,7 @@ var db_helper = {
                                 'numero': found.register_info.numero,
                                 'date': found.register_info.date,
                                 'weather': found.geo_info.weather,
-                                'isGeoServices': found.isGeoServices,
-                                'isMuted': found.isMuted
+                                'isGeoServices': found.isGeoServices
                             }, key, {
                                 expiresInMinutes: 30
                             })

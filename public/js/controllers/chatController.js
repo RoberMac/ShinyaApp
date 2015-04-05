@@ -206,20 +206,10 @@ angular.module('ShinyaApp.chatController', [])
             $scope.toggleCurrentPage('settingBox')
         }
      }
-    $scope.isMuted = store.get('isMuted') || decodeToken.isMuted
+    $scope.isMuted = store.get('isMuted')
     $scope.toggleMuted = function (){
         $scope.isMuted = !$scope.isMuted
         store.set('isMuted', $scope.isMuted)
-        $http.
-        post('/api/toggleMuted', {
-            'isMuted': $scope.isMuted
-        }).
-        success(function (data, status, headers, config){
-            console.log(data.msg)
-        }).
-        error(function (data, status, headers, config){
-            console.log(data.msg)
-        })
     }
     $scope.quit = function (){
         store.remove('id_token')
