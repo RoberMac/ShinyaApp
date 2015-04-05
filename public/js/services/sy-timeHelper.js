@@ -33,15 +33,26 @@ angular.module('ShinyaApp.timeHelperServices', [])
             return 'steel'
         }
     },
-    /*
-     * 用戶註冊時刻：「白天」／「夜晚」
-     *     「白天」：CSS Class -> daytime -> 黑邊黑字
-     *     「夜晚」：CSS Class -> night -> 黑底白字
-     */
-    this.getDaytimeOrNight = function (day){
+    // 判斷「白天」／「夜晚」
+    this.getDaytimeOrNight = function (hour){
 
-        return 6 < day && day < 18
+        return 6 < hour && hour < 18
         ? 'daytime'
         : 'night'
+    },
+    this.isSameDay = function (now, last){
+        
+        var now  = new Date(now),
+            last = new Date(last);
+            getTodayMs = function (date){
+                return Date.parse(
+                        new Date(
+                            date.getUTCFullYear(),
+                            date.getUTCMonth(),
+                            date.getUTCDate()
+                            )
+                        )
+            }
+        return getTodayMs(now) === getTodayMs(last)
     }
 })

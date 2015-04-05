@@ -7,7 +7,7 @@ angular.module('ShinyaApp', [
     'angular-storage',
     'ShinyaApp.posHelperServices',
     'ShinyaApp.timeHelperServices',
-    'ShinyaApp.weatherHelperServices',
+    'ShinyaApp.geoHelperServices',
     'ShinyaApp.notifyDirective',
     'ShinyaApp.autofocusDirective',
     'ShinyaApp.hideKeyboardDirective',
@@ -21,8 +21,8 @@ angular.module('ShinyaApp', [
     ])
 .config(['$routeProvider', '$locationProvider', '$httpProvider', 'jwtInterceptorProvider', 
     function ($routeProvider, $locationProvider, $httpProvider, jwtInterceptorProvider) {
-    
-    $locationProvider.html5Mode(false).hashPrefix('!')
+    // $locationProvider.html5Mode(false).hashPrefix('!')
+    $locationProvider.html5Mode(true)
     $routeProvider.
         when('/', {
             templateUrl: '/public/js/templates/submit.html',
@@ -83,15 +83,15 @@ angular.module('ShinyaApp', [
         if ($location.path() === '/'){
             if (store.get('id_token')){
                 if (!jwtHelper.isTokenExpired(store.get('id_token'))){
-                    $location.path('/chat')
+                    $location.path('/chat').replace()
                 }
             }
         } else if ($location.path() === '/chat'){
             if(!store.get('id_token')){
-                $location.path('/')
+                $location.path('/').replace()
             } else {
                 if (jwtHelper.isTokenExpired(store.get('id_token'))){
-                    $location.path('/')
+                    $location.path('/').replace()
                 }
             }
         }
@@ -100,11 +100,11 @@ angular.module('ShinyaApp', [
     $scope.$on('preTurnOnGeoServices', function (msg){
         $timeout(function (){
             $scope.$broadcast('turnOnGeoServices', msg)
-        }, 0)
+        }, 100)
     })
     $scope.$on('preTurnOffGeoServices', function (msg){
         $timeout(function (){
             $scope.$broadcast('turnOffGeoServices', msg)
-        }, 0)
+        }, 100)
     })
 }])

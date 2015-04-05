@@ -13,12 +13,18 @@
         - 移動端：回彈效果，滾動 √
         - 收藏消息 X
         - @user
-            - 滾動到消息位置
+            - 滾動到消息位置 √
+                - 閃爍提醒 √
+            - 不處於 chat_box 時，有人 @ 時切換到 chat_box 後滾動到相應位置 √
+            - 移動端 at_box 不能滾動
+            - 當已輸入好要 @ 的在線用戶後，若在發送消息前，該用戶下線，更新此元素的樣式
+
         - Moile Browser:
             - 取消訪問 autofocus √
             - 提交消息後隱藏 Keyboard √
         - Web Notification X
         - 消息中的用戶名，當夜晚，用 金／鋁／鐵標示 X
+        - 靜音 √
     - Info
         - 註銷 √
         - 天氣
@@ -38,7 +44,8 @@
                     - 優化新聞源
         - 根據上次登陸與本次登陸 IP 判斷地理位置信息：距離
             - 根據當前地理位置選擇顯示語言
-        - 開啟／關閉「位置服務」提醒 BUG
+        - 開啟／關閉「位置服務」提醒 BUG √
+        - 垂直居中 √
 - #!forgot
     - back 按鈕更換 √
 - DB
@@ -61,4 +68,4 @@
     - 定義服務器 500 錯誤：app.js[60]
     - 屏蔽非瀏覽器發出的請求
 
-http POST http://localhost:8080/api/getSelectedDateNews Authorization:Bearer\ eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6IlJvYmVyTWFjIiwibnVtZXJvIjowLCJkYXRlIjoiMjAxNS0wMy0yOVQxMjo1ODo0OC4yNTdaIiwid2VhdGhlciI6eyJpc05pZ2h0Ijp0cnVlLCJjb2RlIjo1MDEsImRlc2NyaXB0aW9uIjoi5Lit6ZuoIn0sImlzR2VvU2VydmljZXMiOnRydWUsImlhdCI6MTQyNzYzNjExNiwiZXhwIjoxNDI3NjM3OTE2fQ.ojEv8dziqIjr-lbtk2OyEM6u5DxerfF4tq5hr7BuXM0 selectDate='18' timezoneOffset='-8'
+@RoberMac @RoberQi @Ro @RobeMac @Roberi @ro @Roberac @RobeQi @RoberMc @RberQi @berMac @berQi @RssoberMac @RobQi

@@ -1,35 +1,28 @@
-<div class="main_box" ng-class="{'input_shake_animate': input_shake_animate, 'chat_box': isChatBox}" ng-swipe-left="toggleChatBox('infoBox')" ng-swipe-right="toggleChatBox('chatBox')" ng-swipe-disable-mouse>
-    <div ng-switch on="isChatBox">
-        <!-- 聊天頁面 -->
-        <div id="chat_box" class="general_animate" ng-switch-when="true" sy-autoscroll>
-            <div ng-repeat="contentItem in msgInbox">
-                <div class="all" ng-class="{'me': contentItem.isMe, 'others': !contentItem.isMe}">
-                    <div ng-if="contentItem.isShowDate" class="info_box">
-                        <span>{{contentItem.date | date: 'H:mm:ss'}}</span>
-                    </div>
-                    <div ng-if="!contentItem.isMe" class="username_box">
-                        <span>{{contentItem.username}}</span>
-                    </div>
-                    <div class="content_box">
-                        <pre>{{contentItem.msg}}</pre>
-                    </div>
+<div class="main_box" ng-class="{'input_shake_animate': input_shake_animate, 'chat_box': isChatBox, 'show_back_button': currentPage !== 'infoBox' && !isMobile}" ng-swipe-left="toggleChatBox('left')" ng-swipe-right="toggleChatBox('right')" ng-swipe-disable-mouse>
+    <!-- 聊天頁面 -->
+    <!-- 由於 ng-switch 會操作 DOM，故若不處於 `chat_box` 時，新消息抵達時不能處理 -->
+    <div ng-show="isChatBox" id="chat_box" class="general_animate" sy-autoscroll>
+        <div ng-repeat="contentItem in msgInbox">
+            <div class="all" ng-class="{'me': contentItem.isMe, 'others': !contentItem.isMe}">
+                <div ng-if="contentItem.isShowDate" class="info_box">
+                    <span>{{contentItem.date | date: 'H:mm:ss'}}</span>
+                </div>
+                <div ng-if="!contentItem.isMe" class="username_box">
+                    <span>{{contentItem.username}}</span>
+                </div>
+                <div id="{{contentItem.date}}" class="content_box" ng-class="{'syShow': isAtMsgShow}">
+                    <pre>{{contentItem.msg}}</pre>
                 </div>
             </div>
         </div>
-        <!-- 信息頁面 -->
-        <div class="general_animate" ng-switch-when="false">
-            <div id="user_info_box">
-                <div ng-switch on="currentPage">
-                    <!-- 基本信息 -->
-                    <div ng-switch-when="infoBox">
-                        <div id="info_username_box">
-                            <!-- 用戶名 -->
-                            <h2>{{infoBox.username}}</h2>
-                        </div>
-                        <div id="info_numero_box">
-                            <!-- 註冊序號 -->
-                            <p>第 <span ng-class="numero">{{infoBox.numero}}</span> 號用戶</p>
-                        </div>
+    </div>
+    <!-- 信息頁面 -->
+    <div ng-show="!isChatBox" class="general_animate">
+        <div id="user_info_box">
+            <div ng-switch on="currentPage">
+                <!-- 基本信息 -->
+                <div ng-switch-when="infoBox" id="info_inner_box" class="general_animate">
+                    <div class="vertically_center">
                         <div id="info_date_box">
                             <!-- 註冊日期／註冊當日天氣 -->
                             <h3>{{infoBox.title}}</h3>
@@ -44,109 +37,176 @@
                             </div>
                         </div>
                     </div>
-                    <!-- 註冊當日新聞：主體 -->
-                    <div ng-switch-when="newsBox" id="news_inner_box">
-                        <div class="general_animate" ng-if="isNewsExist" ng-repeat="news in selectDateNewsBox" id="news_source_box">
-                            <div ng-repeat="item in news.news">
-                                <div id="news_content_box">
-                                    <span>{{item.date | date: 'HH:mm'}}</span>
-                                    <a ng-href="{{item.url}}" target="_blank">{{item.title}}</a>
-                                </div>
-                            </div>
-                            <div id="news_source">
-                                <span>來源：{{news.source_name}}</span>
+                </div>
+                <!-- 註冊當日新聞：主體 -->
+                <div ng-switch-when="newsBox" id="news_inner_box" class="general_animate">
+                    <div class="general_animate" ng-if="isNewsExist" ng-repeat="news in selectDateNewsBox" id="news_source_box">
+                        <div ng-repeat="item in news.news">
+                            <div id="news_content_box">
+                                <span>{{item.date | date: 'HH:mm'}}</span>
+                                <a ng-href="{{item.url}}" target="_blank">{{item.title}}</a>
                             </div>
                         </div>
-                        <div ng-if="!isNewsExist" id="news_dont_exist">
-                            <h3>此時段新聞不存在</h3>
+                        <div id="news_source">
+                            <span>來源：{{news.source_name}}</span>
                         </div>
                     </div>
-                    <!-- 地理位置服務 -->
-                    <div ng-switch-when="geoBox" id="geo_inner_box">
-                        <div ng-if="!isGeoOn" id="turnOnGeoServices">
-                            <div class="geoStatus">
-                                <div class="geoOnAndOff" ng-click="toggleGeoServices()">
-                                </div>
+                    <div ng-if="!isNewsExist" id="news_dont_exist">
+                        <h3>此時段新聞不存在</h3>
+                    </div>
+                </div>
+                <!-- 地理位置服務 -->
+                <div ng-switch-when="geoBox" id="geo_inner_box" class="general_animate">
+                    <div ng-if="!isGeoServices" id="turnOnGeoServices">
+                        <div class="geoStatus">
+                            <div class="geoOnAndOff" ng-click="toggleGeoServices()">
                             </div>
-                            <h4>位置服務</h4>
                         </div>
-                        <div ng-if="isGeoOn">
-                            <div class="all_weather" id="now_weather">
+                        <h4>位置服務</h4>
+                    </div>
+                    <div ng-if="isGeoServices">
+                        <div class="all_weather" id="now_weather">
+                            <div class="all_weather_description" id="now_weather_description">
+                                {{geoBox.now_geo.weather.description}}、{{geoBox.now_geo.weather.temp}}
+                                <span class="climacon celcius all_celcius"></span>
+                            </div>
+                            <div class="vertically_center">
                                 <span class="climacon" ng-class="weatherBox.now_weather"></span>
                             </div>
-                            <div id="distance">
-                                <span>
-                                    <a ng-href="https://maps.google.com?saddr={{geoBox.last_geo.lat}}, {{geoBox.last_geo.lon}}&daddr={{geoBox.now_geo.lat}}, {{geoBox.now_geo.lon}}" target="_blank">
-                                        {{geoBox.distance}}
-                                    </a>
-                                </span>
-                            </div>
-                            <div class="all_weather" id="last_weather">
+                        </div>
+                        <div id="distance">
+                            <a ng-href="https://maps.google.com?saddr={{geoBox.last_geo.lat}}, {{geoBox.last_geo.lon}}&daddr={{geoBox.now_geo.lat}}, {{geoBox.now_geo.lon}}" target="_blank">
+                                {{geoBox.distance}}
+                            </a>
+                        </div>
+                        <div class="all_weather" id="last_weather">
+                            <div class="vertically_center">
                                 <span class="climacon" ng-class="weatherBox.last_weather"></span>
                             </div>
+                            <div class="all_weather_description" id="last_weather_description">
+                                {{geoBox.last_geo.weather.description}}、{{geoBox.last_geo.weather.temp}}
+                                <span class="climacon celcius all_celcius"></span>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            <!-- 地理位置服務：外部部件 -->
-            <div ng-if="currentPage === 'geoBox' && isGeoOn" id="geo_outer_box">
-                <div id="now_geo" class="all_geo">
-                    <h3>現在</h3>
-                    <a ng-href="http://maps.google.com/maps?z=12&t=h&q=loc:{{geoBox.last_geo.lat}}+{{geoBox.last_geo.lon}}" target="_blank">{{geoBox.last_geo.location}}</a>
-                </div>
-                <div id="last_geo" class="all_geo">
-                    <a ng-href="http://maps.google.com/maps?z=12&t=h&q=loc:{{geoBox.now_geo.lat}}+{{geoBox.now_geo.lon}}" target="_blank">{{geoBox.now_geo.location}}</a>
-                    <h3>{{geoBox.now_geo.date | date: 'yyyy 年 M 月 d 日'}}</h3>
-                </div>
-                <div class="bottom_left_corner">
-                    <div class="geoStatus">
-                        <div ng-class="{'geoOn': isGeoOn}" class="geoOnAndOff" ng-click="toggleGeoServices()">
+                <!-- 設置界面 -->
+                <div ng-switch-when="settingBox" id="setting_inner_box" class="general_animate">
+                    <!-- 骨架 -->
+                    <div id="horizontal"></div>
+                    <div id="vertically"></div>
+                    <!-- 內容 -->
+                    <div id="setting_top_left" class="setting_all_corner">
+                        <!-- 靜音 -->
+                        <div class="vertically_center">
+                            <div ng-class="{'voiced': isMuted, 'setting_on': isMuted}" id="mute" class="general_animate" ng-click="toggleMuted()"></div>
                         </div>
+                        <div id="mute_title" class="setting_all_title" ng-class="{'setting_on': isMuted}">聲音</div>    
+                    </div>
+                    <div id="setting_top_right" class="setting_all_corner">
+                        <!-- 位置服務 -->
+                        <div class="vertically_center">
+                            <div class="geoStatus">
+                                <div ng-class="{'geoOn': isGeoServices}" class="geoOnAndOff" ng-click="toggleGeoServices()">
+                                </div>
+                            </div>
+                        </div>
+                        <div id="geoStatus_title" class="setting_all_title" ng-class="{'setting_on': isGeoServices}">位置</div>
+                    </div>
+                    <div id="setting_bottom_left" class="setting_all_corner">
+                    </div>
+                    <div id="setting_bottom_right" class="setting_all_corner">
+                        <!-- 位置服務 -->
+                        <div class="vertically_center" ng-click="quit()">
+                            <div id="quit" ng-class="{'sun': !isSun, 'moon': isSun}">
+                            </div>
+                        </div>
+                        <div id="quit_title" class="setting_all_title">註銷</div>
+                    </div>
+                </div>
+                <!-- 過場動畫 -->
+                <div ng-show="currentPage === 'loadBox'" id="load_inner_box" class="general_animate">
+                    <div class="vertically_center">
+                        <div id="load_animate"></div>
                     </div>
                 </div>
             </div>
-            <!-- 註冊當日新聞：外部部件-->
-            <div ng-if="currentPage === 'newsBox'" id="news_outer_box">
-                <div id="news_title">
-                    <h3>當日新聞</h3>
-                </div>
-                <div id="news_select_date">
-                    <span ng-click="previousHour()">&lt;</span>
-                    <div id="news_now">
-                        <span>{{selectDate}}:00</span>
-                    </div>
-                    <span ng-click="nextHour()">&gt;</span>                    
+        </div>
+        <!-- 基本信息：外部部件 -->
+        <div ng-if="currentPage === 'infoBox'" id="info_outer_box" class="general_animate">
+            <div id="info_username_box">
+                <!-- 用戶名 -->
+                <h2>{{infoBox.username}}</h2>
+                <div id="info_numero_box">
+                    <!-- 註冊序號 -->
+                    <p>第 <span ng-class="numero">{{infoBox.numero}}</span> 號用戶</p>
                 </div>
             </div>
-            <!-- 基本信息：外部部件 -->
-            <div ng-if="currentPage === 'infoBox'" id="geo_box">
-                <!-- 進入：地理位置服務 -->
-                <div class="bottom_left_corner">
-                    <div id="getGeoServices" ng-click="toggleCurrentPage('geoBox')">
-                    </div>
-                </div>
-                <div ng-if="isMobile" class="bottom_center_corner">
-                    在線人數：{{userCount}}
-                </div>
-                <!-- 註銷用戶 -->
-                <div class="bottom_right_corner">
-                    <a ng-click="quit()">註銷用戶</a>
+            <!-- 進入：地理位置服務 -->
+            <div class="bottom_left_corner">
+                <!-- BUG: Chrome 下抖動 -->
+                <div id="getGeoServices" ng-click="getGeoServices()" ng-class="{'mobile': isMobile}">
                 </div>
             </div>
-            <!-- 返回上一層按鈕 -->
-            <div ng-show="currentPage !== 'infoBox'" id="returnToPreviousStep" ng-click="toggleCurrentPage('infoBox')">
+            <div ng-if="isMobile" class="bottom_center_corner">
+                在線人數：{{userCount}}
+            </div>
+            <!-- 註銷用戶 -->
+            <div class="bottom_right_corner">
+                <!-- BUG: Chrome 下抖動 -->
+                <div id="setting" ng-click="gotoSettingBox()" ng-class="{'mobile': isMobile}">
+                </div>
+                <!-- <a ng-click="quit()">註銷用戶</a> -->
+            </div>
+        </div>
+        <!-- 註冊當日新聞：外部部件-->
+        <div ng-if="currentPage === 'newsBox'" id="news_outer_box" class="general_animate">
+            <div id="news_title">
+                <h3>當日新聞</h3>
+            </div>
+            <div id="news_select_date">
+                <span ng-click="previousHour()">&lt;</span>
+                <div id="news_now">
+                    <span>{{selectDate}}:00</span>
+                </div>
+                <span ng-click="nextHour()">&gt;</span>                    
+            </div>
+        </div>
+        <!-- 地理位置服務：外部部件 -->
+        <div ng-if="currentPage === 'geoBox' && isGeoServices" id="geo_outer_box" class="general_animate">
+            <div id="now_geo" class="all_geo">
+                <h3>現在</h3>
+                <a ng-href="http://maps.google.com/maps?z=12&t=h&q=loc:{{geoBox.now_geo.lat}}+{{geoBox.now_geo.lon}}" target="_blank">{{geoBox.now_geo.location}}</a>
+            </div>
+            <div id="last_geo" class="all_geo">
+                <a ng-href="http://maps.google.com/maps?z=12&t=h&q=loc:{{geoBox.last_geo.lat}}+{{geoBox.last_geo.lon}}" target="_blank">{{geoBox.last_geo.location}}</a>
+                <h3 ng-show="!isSameDay">
+                    {{geoBox.last_geo.date | date: 'yyyy 年 M 月 d 日'}}
+                </h3>
+                <h3 ng-show="isSameDay">
+                    {{geoBox.last_geo.date | date: 'HH 時 mm 分'}}
+                </h3>
             </div>
         </div>
     </div>
 </div>
+<!-- 返回上一層按鈕 -->
+<div ng-if="!isMobile" class="back_button general_animate" ng-click="toggleCurrentPage('infoBox')">
+</div>
 <!-- 頁面切換提示標誌 -->
-<div ng-if="!isMobile" class="sunAndMoon" ng-class="{'sun': isSun, 'moon': !isSun}" ng-click="toggleChatBox()"> 
+<div ng-if="!isMobile" class="sunAndMoon" ng-class="{'sun': isSun, 'moon': !isSun}" ng-click="toggleChatBox()">
 </div>
 <sy-usercount></sy-usercount>
 <sy-beep></sy-beep>
+<div id="at_box" class="all_notify_box general_animate" ng-show="isChatBox" >
+    <span ng-repeat="username in atUser track by $index" class="general_animate">
+        <span ng-class="{'online': isUserOnline(username), 'offline': !isUserOnline(username)}">@</span>
+        {{username.slice(1)}}
+    </span>
+</div>
 <!-- 聊天輸入框 -->
 <div id="chat_submit_box" class="general_animate" ng-show="isChatBox">
     <form sy-hide-keyboard novalidate ng-submit="emitTextMsg()" name="form">
-        <input type="text" ng-model="msgOutbox.textMsg" sy-autofocus ng-maxlength="1024">
+        <input type="text" ng-model="msgOutbox.textMsg" sy-autofocus ng-maxlength="1024" ng-model-options="{ debounce: 500 }">
     </form>
 </div>

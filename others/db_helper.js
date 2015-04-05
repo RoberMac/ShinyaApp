@@ -3,7 +3,8 @@ var nodemailer        = require('nodemailer'),
     getBeginPlace     = require('./begin_place_helper'),
     getCountryAndCity = geo_helper.getCountryAndCity,
     getCityWeather    = geo_helper.getCityWeather,
-    getTodayMs        = geo_helper.getTodayMs;
+    getTodayMs        = geo_helper.getTodayMs,
+    getGeoWeather     = geo_helper.getGeoWeather;
 
 var db_helper = {
     register: function (register_form, validator, User, res, next){
@@ -45,41 +46,46 @@ var db_helper = {
                                         }
                                         // 獲取 國家代碼 和 城市名
                                         getCountryAndCity('14.18.190.188', function (country, city){
-                                            // 獲取城市天氣
-                                            getCityWeather(city, function (weather){
-                                                // 保存到數據庫
-                                                var user = new User({
-                                                    'username': username,
-                                                    'email': email,
-                                                    'password': password,
-                                                    'register_info': {
-                                                        'ip'      : register_form.register_info.ip,
-                                                        'date'    : register_form.register_info.date,
-                                                        'platform': register_form.register_info.platform,
-                                                        'numero'  : count,
-                                                    },
-                                                    'last_geo': {
-                                                        lat: place.lat,
-                                                        lon: place.lon,
-                                                        location: place.name,
-                                                        date: getTodayMs()
-                                                    },
-                                                    geo_info: {
-                                                        'country': country,
-                                                        'city'   : city,
-                                                        'weather': weather
-                                                    }
-                                                })
-                                                console.log(user)
-                                                user.save(function (err){
-                                                    if (err){
-                                                        next({'code': 400, 'status': 'error', 'msg': '用戶名或電郵地址已存在'})
-                                                        return err
-                                                    }
-                                                    res.json({'status': 'ok', 'msg': '註冊成功'})
-                                                    console.log('地理位置信息已保存')
+                                            getGeoWeather(place.lat, place.lon, function (beginWeather){
+                                                // 獲取城市天氣
+                                                getCityWeather(city, function (weather){
+                                                    // 保存到數據庫
+                                                    var user = new User({
+                                                        'username': username,
+                                                        'email': email,
+                                                        'password': password,
+                                                        'register_info': {
+                                                            'ip'      : register_form.register_info.ip,
+                                                            'date'    : register_form.register_info.date,
+                                                            'platform': register_form.register_info.platform,
+                                                            'numero'  : count,
+                                                        },
+                                                        'last_geo': {
+                                                            lat: place.lat,
+                                                            lon: place.lon,
+                                                            location: place.name,
+                                                            date: new Date(),
+                                                            weather: beginWeather
+                                                        },
+                                                        'geo_info': {
+                                                            'country': country,
+                                                            'city'   : city,
+                                                            'weather': weather
+                                                        },
+                                                        'isGeoServices': false
+                                                    })
+                                                    console.log(user)
+                                                    user.save(function (err){
+                                                        if (err){
+                                                            next({'code': 400, 'status': 'error', 'msg': '用戶名或電郵地址已存在'})
+                                                            return err
+                                                        }
+                                                        res.json({'status': 'ok', 'msg': '註冊成功'})
+                                                        console.log('地理位置信息已保存')
+                                                    })
                                                 })
                                             })
+
                                         })
                                     })
                                 }
@@ -113,13 +119,13 @@ var db_helper = {
                         var compare_password = found.password
                         if (bcrypt.compareSync(login_form.password, compare_password)){
                             var token = jwt.sign({
-                                username: found.username,
-                                numero: found.register_info.numero,
-                                date: found.register_info.date,
-                                weather: found.geo_info.weather,
-                                isGeoServices: found.isGeoServices
+                                'username': found.username,
+                                'numero': found.register_info.numero,
+                                'date': found.register_info.date,
+                                'weather': found.geo_info.weather,
+                                'isGeoServices': found.isGeoServices
                             }, key, {
-                                expiresInMinutes: 30
+                                expiresInMinutes: 1
                             })
                             res.json({'token': token})
                         } else {
@@ -144,13 +150,13 @@ var db_helper = {
                         var compare_password = found.password
                         if (bcrypt.compareSync(login_form.password, compare_password)){
                             var token = jwt.sign({
-                                username: found.username,
-                                numero: found.register_info.numero,
-                                date: found.register_info.date,
-                                weather: found.geo_info.weather,
-                                isGeoServices: found.isGeoServices
+                                'username': found.username,
+                                'numero': found.register_info.numero,
+                                'date': found.register_info.date,
+                                'weather': found.geo_info.weather,
+                                'isGeoServices': found.isGeoServices
                             }, key, {
-                                expiresInMinutes: 30
+                                expiresInMinutes: 1
                             })
                             res.json({'token': token})
                         } else {
@@ -169,20 +175,18 @@ var db_helper = {
         }, key, {
             expiresInMinutes: 60
         })
-        console.log(code)
         User.findOneAndUpdate({email: forgot_email_form.email}, {forgot_code: code}, function (err, found){
             if (err) return err
             // 檢查電郵地址是否存在
             if (!found){
-                console.log('email not found')
                 next({'code': 400, 'status': 'error', 'msg': '電郵地址不存在'}) 
             } else {
                 // 發送驗證碼到用戶郵箱
                 var transporter = nodemailer.createTransport({
                     service: 'Yahoo',
                     auth: {
-                        user: 'shenyepoxiao@yahoo.com',
-                        pass: '4sfaxiLHMMvNnT('
+                        'user': 'shenyepoxiao@yahoo.com',
+                        'pass': '4sfaxiLHMMvNnT('
                     }
                 });
                 var mailOptions = {
@@ -219,8 +223,8 @@ var db_helper = {
                 // 驗證碼最新鮮
                 if (found.forgot_code === update_form.code){
                     User.findOneAndUpdate({email: update_form.email}, {
-                        password: update_form.password,
-                        forgot_code: '',
+                        'password': update_form.password,
+                        'forgot_code': '',
                     }, function (err, found){
                         if (err) return err
                         if (!found) {

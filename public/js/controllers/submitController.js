@@ -2,10 +2,46 @@ angular.module('ShinyaApp.submitController', [])
 .controller('submitController', ['$scope', '$http', '$timeout', '$location', '$route', '$window', 'jwtHelper', 'store',
     function ($scope, $http, $timeout, $location, $route, $window, jwtHelper, store){
 
-    // init
-    $scope.login = {}
-    $scope.register = {}
-
+    /*
+     **********
+     * 消息提醒
+     **********
+     *
+     *  `$scope.isMsgNotify`：是否為消息提醒
+     *  `$scope.errMsg`：錯誤消息
+     *  `$scope.okMsg`：成功消息
+     *  `$scope.msgNotify`：觸發消息提醒
+     *
+     */
+    $scope.isMsgNotify = false
+    $scope.errMsg = ''
+    $scope.okMsg = ''
+    $scope.msgNotify = function (type, data){
+        if (type === 'error'){
+            $scope.input_shake_animate = true
+            $scope.errMsg = data.msg
+            $scope.isMsgNotify = true
+            $timeout(function (){
+                $scope.errMsg = ''
+                $scope.input_shake_animate = false
+                $scope.isMsgNotify = false
+            }, 1717)
+        } else if (type === 'ok'){
+            $scope.okMsg = data.msg
+            $scope.isMsgNotify = true
+            $timeout(function (){
+                $scope.okMsg = ''
+                $scope.isMsgNotify = false
+            }, 1717)
+        } else {
+            console.error('[TypeError]: Not `error` or `ok`')
+        }
+    }
+    /*
+     **********
+     * 驗證相關
+     **********
+     */
     // token 腐爛，觸發提醒
     if (!!store.get('id_token')){
         if (jwtHelper.isTokenExpired(store.get('id_token'))){
@@ -27,13 +63,28 @@ angular.module('ShinyaApp.submitController', [])
         }, 0)
     })
 
-    // ngSwitch
+    /*
+     **********
+     * 頁面切換
+     **********
+     */
     $scope.isLogin = true;
     $scope.toggleSubmit = function (){
         $scope.isLogin = !$scope.isLogin
     }
-
-    // handle login or register submit
+    /*
+     ************
+     * 登陸／註冊
+     ************
+     *
+     *  `$scope.login`：緩存登陸信息
+     *  `$scope.register`：緩存註冊信息
+     *  `$scope.loginSubmit`：處理登陸
+     *  `$scope.registerSubmit`：處理註冊
+     *
+     */
+    $scope.login = {}
+    $scope.register = {}
     $scope.loginSubmit = function (){
 
         $http.
@@ -43,7 +94,7 @@ angular.module('ShinyaApp.submitController', [])
         }).
         success(function (data, status, headers, config){
             store.set('id_token', data.token)
-            $location.path('/chat')
+            $location.path('/chat').replace()
         }).
         error(function (data, status, headers, config){
             $scope.msgNotify('error', data)
@@ -66,6 +117,5 @@ angular.module('ShinyaApp.submitController', [])
             $scope.msgNotify('error', data)
         })
         $scope.register = {}
-        $scope.msgNotify('ok', {'msg': '請稍候'})
     }
 }])

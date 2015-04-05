@@ -3,10 +3,20 @@ angular.module('ShinyaApp.autoscrollDirective' ,[])
     return {
         restrict: 'A',
         link: function (scope, elem, attrs){
+            var pos = syPosHelper.getNowPos()
             elem.bind('scroll', function (){
-                if (syPosHelper.isBottom()){
+                var now_pos = syPosHelper.getNowPos()
+                if (now_pos > pos){
+                    // Scroll Down
+                    scope.isScrollDown = true
+                } else {
+                    // Scroll Up
+                    scope.isScrollDown = false
+                }
+                pos = now_pos
+                if (syPosHelper.isBottom(scope.isScrollDown)){
                     scope.$apply(function (){
-                        scope.viewedMsg('dontScroll')
+                        scope.viewedMsg(2)
                     })
                 }
             })

@@ -12,12 +12,17 @@ io.use(sjwt.authorize({
     handshake: true
 }))
 
-var msgCache  = [],
-    userCount = 0;
+var msgCache   = [],
+    onlineUser = [],
+    userCount  = 0;
 io.on('connection', function (socket) {
 
     userCount ++
-    io.emit('userJoin', userCount)
+    onlineUser.push(socket.decoded_token.username)
+    io.emit('userJoin', {
+        'count' : userCount,
+        'onlineUser': onlineUser
+    })
 
     socket.on('latestMsg', function (msg){
         if (msg === true){
@@ -39,36 +44,33 @@ io.on('connection', function (socket) {
     //     console.log('add username: ' + msg)
     // })
     socket.on('textMsg', function (msg) {
-        
+
+        var newMsg = {
+                'id'      : socket.id,
+                'date'    : Date.now(),
+                'msg'     : msg.msg,
+                'username': socket.decoded_token.username,
+                'at'      : msg.at
+            }
         // 緩存十條消息
         if (msgCache.length < 10){
-            msgCache.push({
-                'id'      : socket.id,
-                'date'    : Date.now(),
-                'msg'     : msg.msg,
-                'username': socket.decoded_token.username
-            })
+            msgCache.push(newMsg)
         } else {
             msgCache.shift()
-            msgCache.push({
-                'id'      : socket.id,
-                'date'    : Date.now(),
-                'msg'     : msg.msg,
-                'username': socket.decoded_token.username
-            })
+            msgCache.push(newMsg)
         }
-        io.emit('textMsg', {
-            'id'      : socket.id,
-            'date'    : Date.now(),
-            'msg'     : msg.msg,
-            'username': socket.decoded_token.username
-        })
+        io.emit('textMsg', newMsg)
         console.log('textMsg: ' + msg.msg + ', id: ' + msg.id)
     })
     socket.on('disconnect', function (msg) {
         userCount --
-        io.emit('disconnect', userCount)
-        console.log(socket.decoded_token.username + 'quit')
+        onlineUser.splice(onlineUser.indexOf(socket.decoded_token.username), 1)
+        io.emit('disconnect', {
+            'count' : userCount,
+            'onlineUser': onlineUser
+        })
+        console.log(socket.decoded_token.username + ' quit')
+        console.log(onlineUser)
     })
 })
 

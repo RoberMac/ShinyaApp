@@ -15,33 +15,43 @@ angular.module('ShinyaApp.posHelperServices', [])
      *      否：根據是否在底部和是否本人發送新消息，判斷是否需要滾動到底部
      */
     this.nowPos = 0
-    var isScrolling = false
     this.storeNowPos = function (){
-        var chatBoxElem = document.querySelector('#chat_box')
+        var chatBoxElem = document.getElementById('chat_box')
         this.nowPos = chatBoxElem.scrollTop
     }
+    this.getNowPos = function (){
+        var chatBoxElem = document.getElementById('chat_box')
+        return chatBoxElem.scrollTop
+    }
+    this.getElementPos = function (id){
+        var contentItemElem = document.getElementById(id),
+            chatBoxElem = document.getElementById('chat_box');
+        return contentItemElem.offsetTop - chatBoxElem.clientHeight / 2
+    }
     this.setNowPos = function (nowPos){
-        var chatBoxElem = document.querySelector('#chat_box')
+        var chatBoxElem = document.getElementById('chat_box')
         chatBoxElem.scrollTop = nowPos
     }
     this.getBottomPos = function (){
-        var chatBoxElem = document.querySelector('#chat_box')
+        var chatBoxElem = document.getElementById('chat_box')
         return chatBoxElem.scrollHeight - chatBoxElem.clientHeight
     }
-    this.isBottom = function (){
-        var chatBoxElem = document.querySelector('#chat_box')
-        return !(chatBoxElem.scrollHeight - chatBoxElem.clientHeight - chatBoxElem.scrollTop) || isScrolling
+    this.isBottom = function (isScrollDown){
+        var chatBoxElem = document.getElementById('chat_box')
+        return !(chatBoxElem.scrollHeight - chatBoxElem.clientHeight - chatBoxElem.scrollTop) || isScrollDown
     }
-    this.scrollToBottom = function (){
+    this.scrollToPos = function (pos, isScrollDown){
+
+        // 默認滾動到底部
+        var target_pos = pos || this.getBottomPos()
         if (!$rootScope.isMobile){
-            isScrolling = true
-            angular.element(document.querySelector('#chat_box'))
-            .scrollTo(0, this.getBottomPos(), 717)
+            angular.element(document.getElementById('chat_box'))
+            .scrollTo(0, target_pos, 171)
             .then(function(){
-                isScrolling = false
+                isScrollDown = false
             })
         } else {
-            this.setNowPos(this.getBottomPos())
+            this.setNowPos(target_pos)
         }
     }
 }])

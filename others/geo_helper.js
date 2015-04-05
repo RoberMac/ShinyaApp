@@ -1,15 +1,15 @@
 var request   = require('request'),
-    distance  = require('google-distance'),
-    API_KEY   = 'AIzaSyAbDnuQxB6VIAjG7O6Te4p_a1NvQws6Hy0',
     geocoder  = require('node-geocoder');
-    
 
-var google_geocoder  = geocoder('google', 'https', {
-        apiKey: API_KEY,
+var API_KEY = {
+    'Google': 'AIzaSyAbDnuQxB6VIAjG7O6Te4p_a1NvQws6Hy0',
+    'OpenWeatherMap': 'aaa8cad9839995223b58ea36eaa93c2b'
+},
+    google_geocoder = geocoder('google', 'https', {
+        apiKey: API_KEY['Google'],
         language: 'zh-HK'
     }),
     freegeoip = geocoder('freegeoip', 'https');
-
 
 var geo_helper = {
     // 地理位置
@@ -40,37 +40,6 @@ var geo_helper = {
             callback(data[0].streetName)
         });
     },
-    // 距離
-    getDistance: function (origin, destination, callback){
-
-        distance.get({
-            origin: origin.lat + ', ' + origin.lon,
-            destination: destination.lat + ', ' + destination.lon
-        }, function (err, data){
-            if (err) {
-                callback({
-                    distance: null,
-                    location: null,
-                    destination: '逍遙谷'
-                })
-                return err
-            }
-            callback(data)
-        })
-    },
-    // initCoords: function (country){
-    //     var coords = {
-    //         'CN': '30.254258, 120.163803',
-    //         'HK': '22.231148, 114.251095',
-    //         'TW': '25.049465, 121.542131',
-    //         'US': '37.340193, -122.068768',
-    //         'BR': '-22.911926, -43.230145',
-    //         'JP': '35.693433, 139.699471',
-    //         'FR': '43.701732, 7.300161',
-    //         'KR': '',
-    //         'RU': ''
-    //     }
-    // },
     isSamePlace: function (last, now){
 
         return Math.abs(last.lat - now.lat) > 0.001
@@ -78,8 +47,8 @@ var geo_helper = {
         ? false
         : true
     },
-    getTodayMs: function (){
-        var date = new Date()
+    getTodayMs: function (date){
+
         return Date.parse(
                 new Date(
                     date.getUTCFullYear(),
@@ -93,17 +62,21 @@ var geo_helper = {
 
         var url = 'http://api.openweathermap.org/data/2.5/weather?q='
                     + city
-                    +'&lang=zh_tw&units=metric';
+                    +'&lang=zh_tw&units=metric&APPID='
+                    + API_KEY['OpenWeatherMap'];
         request({
             url: url,
             json: true
+            // timeout: 2500
         }, function (err, res, body){
+            console.log('now: getCityWeather')
             console.log(body)
             if (!err && res.statusCode == 200) {
                 callback({
                     description: body.weather[0].description,
+                    temp: body.main.temp,
                     code: body.weather[0].id,
-                    isNight: new Date() > body.sys.sunset
+                    isNight: new Date() > body.sys.sunset * 1000
                 })
             } else {
                 callback({
@@ -120,18 +93,21 @@ var geo_helper = {
                     + lat
                     + '&lon='
                     + lon
-                    + '&lang=zh_tw&units=metric';
+                    + '&lang=zh_tw&units=metric&APPID='
+                    + API_KEY['OpenWeatherMap'];
         request({
             url: url,
             json: true
+            // timeout: 2500
         }, function (err, res, body){
-            console.log('here is geoweather')
+            console.log('now: getGeoWeather')
             console.log(body)
             if (!err && res.statusCode == 200) {
                 callback({
                     description: body.weather[0].description,
+                    temp: Math.round(body.main.temp),
                     code: body.weather[0].id,
-                    isNight: new Date() > body.sys.sunset
+                    isNight: new Date() > body.sys.sunset * 1000
                 })
             } else {
                 callback({

@@ -8,10 +8,12 @@ angular.module('ShinyaApp.usercountDirective', [])
         controller: ['$scope', function ($scope){
             
             // 在線人數
-            $scope.userCount = 0
-            $scope.onUserIO = function(count){
+            $scope.userCount  = 0
+            $scope.onlineUser = []
+            $scope.onUserIO = function(msg){
                 $scope.$apply(function (){
-                    $scope.userCount = count
+                    $scope.userCount  = msg.count
+                    $scope.onlineUser = msg.onlineUser
                 })
             }
         }]

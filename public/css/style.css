@@ -69,9 +69,6 @@ ul {
     -moz-box-shadow: 0px 3px 15px 0px rgba(0,0,0,0.50);
     box-shadow:      0px 3px 15px 0px rgba(0,0,0,0.50);
     border-radius: 10px;
-    overflow-x: hidden;
-    overflow-y: auto;
-    -webkit-overflow-scrolling: touch;
 }
     .main_box .logo {
         display: none;
@@ -86,6 +83,55 @@ ul {
             font-size: 12px;
             color: #CECECF;
         }
+        #setting {
+            position: relative;
+            width: 12px;
+            height: 12px;
+            border: 1px solid #CECECF;
+            -webkit-transform: rotate(20deg);
+            transform: rotate(20deg);
+            cursor: pointer;
+        }
+            #setting:before {
+                content: "";
+                position: absolute;
+                top: -1px;
+                left: -1px;
+                width: 10px;
+                height: 10px;
+                border: 1px solid #CECECF;
+                -webkit-transform: rotate(135deg);
+                transform: rotate(135deg);
+            }
+            #setting:after {
+                content: '';
+                position: absolute;
+                top: 2px;
+                left: 2px;
+                width: 4px;
+                height: 4px;
+                border: 1px solid #CECECF;
+                -webkit-border-radius: 3px;
+                border-radius: 3px;
+            }
+        #setting.mobile {
+            width: 22px;
+            height: 22px;
+        }
+            #setting.mobile:before {
+                top: -1px;
+                left: -1px;
+                width: 20px;
+                height: 20px;
+            }
+            #setting.mobile:after {
+                top: 5px;
+                left: 5px;
+                width: 8px;
+                height: 8px;
+                -webkit-border-radius: 5px;
+                border-radius: 5px;
+            }
     .main_box .bottom_center_corner {
         position: absolute;
         width: 100%;
@@ -102,9 +148,9 @@ ul {
         color: #CECECF;
         z-index: 999;
     }
-        .main_box .bottom_left_corner #getGeoServices {
+        #getGeoServices {
             position: relative;
-            top: -2px;
+            top: 0px;
             width: 12px;
             height: 12px;
             border-radius: 7px;
@@ -115,7 +161,7 @@ ul {
             transform: rotate(-45deg);
             cursor: pointer;
         }
-            .main_box .bottom_left_corner #getGeoServices:before {
+            #getGeoServices:before {
                 content: '';
                 position: absolute;
                 top: 2px;
@@ -127,41 +173,32 @@ ul {
                 border: 1px solid #CECECF;
                 cursor: pointer;
             }
-    #returnToPreviousStep {
-        position: absolute;
-        top: 20px;
-        left: 20px;
-        width: 40px;
-        height: 40px;
-        color: #555;
-        font-size: 20px;
-        background-color: transparent;
-        border: 1px solid #CECECF;
-        border-radius: 20px;
-        -webkit-transform: rotate(135deg);
-        transform: rotate(135deg);
-        cursor: pointer;
-    }
-    #returnToPreviousStep:before {
-        content: '';
-        position: absolute;
-        width: 10px;
-        height: 10px;
-        background-color: #000;
-        border-radius: 5px;
-        top: 0px;
-        left: 0px;
-    }
+        #getGeoServices.mobile {
+            width: 24px;
+            height: 24px;
+            border-radius: 12px;
+            -webkit-border-radius: 12px;
+            border-bottom-left-radius: 0px;
+        }
+            #getGeoServices.mobile:before {
+                top: 6px;
+                left: 6px;
+                width: 8px;
+                height: 8px;
+                border-radius: 6px;
+                -webkit-border-radius: 6px;
+            }
 /* form_box */
 .form_box {
     position: absolute;
+    display: table;
     top: 25%;
     left: 20%;
     width: 60%;
     height: 50%;
 }
     .form_box h2 {
-        margin: 0px auto 33px;
+        margin: 0px auto 17px;
     }
     .form_box .form_title {
         margin-bottom: 20px;
@@ -169,6 +206,7 @@ ul {
         .form_box .form_title span {
             margin: 5px;
             padding: 4px;
+            -webkit-border-radius: 4px;
             border-radius: 4px;
             cursor: pointer;
         }
@@ -182,7 +220,7 @@ ul {
             background-color: #47B2E3;
             cursor: default;
         }
-    .form_box input, .notification {
+    .form_box input {
         display: block;
         width: 50%;
         margin: 3.5% auto;
@@ -190,17 +228,18 @@ ul {
         line-height: 20px;
         color: #555;
         background-color: transparent;
+        -webkit-border-radius: 5px;
         border-radius: 5px;
         border: 1px solid #CECECF;
         overflow: hidden;
         -webkit-appearance: none;
     }
-    .form_box .notification#error_msg {
+    .form_box input.error_msg {
         color: #fff;
         background-color: #CB1B45;
         border: 1px solid #CB1B45;
     }    
-    .form_box .notification#ok_msg {
+    .form_box input.ok_msg {
         color: #fff;
         background-color: #4EBD4A;
         border: 1px solid #4EBD4A;
@@ -210,7 +249,7 @@ ul {
     position: absolute;
     width: 100%;
     height: 100%;
-    padding: 5px;
+    padding: 10px;
     overflow-x: hidden;
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
@@ -253,9 +292,6 @@ ul {
         color: #666;
         margin-bottom: 5px;
     }
-        #chat_box .info_box span {
-            border-bottom: 1px solid #666;
-        }
     #chat_box .username_box {
         text-align: left;
         font-size: 11px;
@@ -264,6 +300,7 @@ ul {
         color: #000;
     }
         #chat_box .username_box span {
+            -webkit-border-radius: 4px;
             border-radius: 4px;
             padding: 0px 2px;
         }
@@ -275,18 +312,51 @@ ul {
             color: #000;
             background-color: #CECECF;
         }
-#notify_box {
+            #chat_box .others .content_box.atMsg {
+                color: #FFF;
+                background-color: #000;
+            }
+/* #notify_box & #at_box */
+.all_notify_box {
     position: absolute;
-    left: 48%;
-    top: 81%;
-    width: 4%;
-    padding: 1px;
-    font-size: 12px;
-    background-color: #FFF;
-    border-radius: 5px;
-    cursor: pointer;
+    bottom: 16%;
+    left: 21.875%;
+    width: 56.25%;
+    font-size: 10px;
+    overflow: auto;
+    -webkit-overflow-scrolling: touch;
+    white-space: nowrap;
+    z-index: 3;
 }
-/* infoBox */
+    .all_notify_box > span {
+        display: inline-block;
+        margin-right: 7px;
+        padding: 3px 7px;
+        line-height: 14px;
+        background-color: #FFF;
+        -webkit-border-radius: 5px;
+        border-radius: 5px;
+    }
+        .all_notify_box span.online {
+            color: #4EBD4A;
+            font-weight: bolder;
+        }
+        .all_notify_box span.offline {
+            color: #CB1B45;
+            font-weight: bolder;
+        }
+    #notify_box > span {
+        cursor: pointer;
+    }
+#at_box {
+    text-align: left;
+    z-index: 2;
+}
+/* user_info_box */
+.vertically_center {
+    display: table-cell;
+    vertical-align: middle;
+}
 #user_info_box {
     position: absolute;
     top: 15%;
@@ -294,137 +364,152 @@ ul {
     width: 60%;
     height: 70%;
 }
-    #user_info_box #info_username_box {
-           
+/* infoBox */
+#info_inner_box {
+    position: absolute;
+    display: table;
+    width: 100%;
+    height: 100%;
+}
+#info_inner_box #info_date_box > div {
+    margin: 3% auto;
+}
+#info_inner_box #info_date_box .register_date span:first-child {
+    cursor: pointer;
+    border-bottom: 1px solid #000;
+}
+#info_inner_box #info_date_box .all {
+    width: 34px;
+    height: 34px;
+    font-size: 12px;
+    line-height: 34px;
+    border: 1px solid #FFF;
+    border-radius: 17px;
+    -webkit-border-radius: 17px;    
+    cursor: pointer;
+}
+    #info_inner_box #info_date_box .all span {
+        cursor: pointer;
     }
-    #user_info_box #info_numero_box {
-        margin-bottom: 10%;
+    #info_inner_box #info_date_box .all.clouds {
+        width: 77px;
+        height: 77px;
+        -webkit-border-radius: 38.5px;
+        border-radius: 38.5px;
+        background-color: #CECECF;
+        border: 1px solid #CECECF;
+    }
+    #info_inner_box #info_date_box .daytime {
+        border: 1px solid #000;
+    }
+        #info_inner_box #info_date_box .daytime.rain {
+            width: 30px;
+            height: 30px;
+            border-top-left-radius: 0px;
+            margin-top: 20%;
+            -webkit-transform: rotate(45deg);
+            transform: rotate(45deg);
+        }
+        #info_inner_box #info_date_box .daytime.wind {
+            width: 50px;
+            height: 25px;
+            margin-top: 8%;
+            -webkit-border-radius: 0 25px 0 25px;
+            border-radius: 0 25px 0 25px;
+            -webkit-transform: rotate(1440deg);
+            transform: rotate(1440deg);
+        }
+        #info_inner_box #info_date_box .daytime.sun {
+            margin-top: 5%;
+            border: 1px solid #000;
+            border-top: 17px solid #000;
+            border-bottom: 17px solid #000;
+            -moz-box-shadow: 0px 0px 17px 7px rgba(0, 0, 0, .50);
+            box-shadow: 0px 0px 17px 7px rgba(0, 0, 0, .50);
+        }
+        #info_inner_box #info_date_box .daytime.fog {
+            margin-top: 7%;
+            border: 1px solid rgba(206, 206, 207, 0.7);
+            border-right: 1px solid rgba(206, 206, 207, 0);
+            background-color: rgba(206, 206, 207, 0.7);
+            -moz-box-shadow: 17px 17px 37px 37px rgba(206,206,207,0.7);
+            box-shadow: 17px 17px 37px 37px rgba(206,206,207,0.7);
+        }
+    #info_inner_box #info_date_box .night {
+        color: #fff;
+        background-color: #000;
+        border: 1px solid #000;
+    }
+        #info_inner_box #info_date_box .night.rain {
+            width: 30px;
+            height: 30px;
+            background-color: #fff;
+            border-top-left-radius: 0px;
+            margin-top: 20%;
+            -webkit-transform: rotate(45deg);
+            transform: rotate(45deg);
+        }
+        #info_inner_box #info_date_box .night.wind {
+            width: 50px;
+            height: 25px;
+            margin-top: 8%;
+            -webkit-border-radius: 0 25px 0 25px;
+            border-radius: 0 25px 0 25px;
+            -webkit-transform: rotate(1440deg);
+            transform: rotate(1440deg);
+        }
+        #info_inner_box #info_date_box .night.sun {
+            margin-top: 5%;
+            border: 1px solid #000;
+            border-top: 17px solid #000;
+            border-bottom: 17px solid #000;
+            -moz-box-shadow: 0px 0px 17px 7px rgba(0, 0, 0, .50);
+            box-shadow: 0px 0px 17px 7px rgba(0, 0, 0, .50);
+        }
+        #info_inner_box #info_date_box .night.fog {
+            margin-top: 7%;
+            border: 1px solid rgba(0, 0, 0, 0.7);
+            border-right: 1px solid rgba(0, 0, 0, 0.3);
+            background-color: rgba(0, 0, 0, 0.8);
+            -moz-box-shadow: 17px 17px 37px 37px rgba(0, 0, 0,0.7);
+            box-shadow: 17px 17px 37px 37px rgba(0, 0, 0,0.7);
+        }
+/* infoBox: outer */
+#info_outer_box {
+
+}
+    #info_username_box {
+        position: absolute;
+        top: 30px;
+        width: 100%;
+    }
+    #info_numero_box {
         font-size: 12px;
         color: #555;
     }
-        #user_info_box #info_numero_box span {
-            padding: 1px 5px;
-            border-radius: 5px;
-            border-left-style: solid;
-            border-left-width: 2px;
-            border-right-style: solid;
-            border-right-width: 2px;
-        }
-            #user_info_box #info_numero_box span.gold {
-                border-color: #D4AF37;
-            }
-            #user_info_box #info_numero_box span.aluminum {
-                border-color: #999;
-            }
-            #user_info_box #info_numero_box span.steel {
-                border-color: #666;
-            }
-    #user_info_box #info_date_box > div {
-        margin: 3% auto;
+    #info_numero_box span {
+        padding: 1px 5px;
+        -webkit-border-radius: 5px;
+        border-radius: 5px;
+        border-left: 2px solid;
+        border-right: 2px solid;
     }
-    #user_info_box #info_date_box .register_date span:first-child {
-        cursor: pointer;
-        border-bottom: 1px solid #000;
-    }
-    #user_info_box #info_date_box .all {
-        width: 34px;
-        height: 34px;
-        font-size: 12px;
-        line-height: 34px;
-        border: 1px solid #FFF;
-        border-radius: 17px;
-        -webkit-border-radius: 17px;    
-        cursor: pointer;
-    }
-        #user_info_box #info_date_box .all span {
-            cursor: pointer;
+        #info_numero_box span.gold {
+            border-color: #D4AF37;
         }
-        #user_info_box #info_date_box .all.clouds {
-            width: 77px;
-            height: 77px;
-            border-radius: 38.5px;
-            background-color: #CECECF;
-            border: 1px solid #CECECF;
+        #info_numero_box span.aluminum {
+            border-color: #999;
         }
-        #user_info_box #info_date_box .daytime {
-            border: 1px solid #000;
+        #info_numero_box span.steel {
+            border-color: #666;
         }
-            #user_info_box #info_date_box .daytime.rain {
-                width: 30px;
-                height: 30px;
-                border-top-left-radius: 0px;
-                margin-top: 20%;
-                -webkit-transform: rotate(45deg);
-                transform: rotate(45deg);
-            }
-            #user_info_box #info_date_box .daytime.wind {
-                width: 50px;
-                height: 25px;
-                margin-top: 8%;
-                border-radius: 0 25px 0 25px;
-                -webkit-transform: rotate(1440deg);
-                transform: rotate(1440deg);
-            }
-            #user_info_box #info_date_box .daytime.sun {
-                margin-top: 5%;
-                border: 1px solid #000;
-                border-top: 17px solid #000;
-                border-bottom: 17px solid #000;
-                -moz-box-shadow: 0px 0px 17px 7px rgba(0, 0, 0, .50);
-                box-shadow: 0px 0px 17px 7px rgba(0, 0, 0, .50);
-            }
-            #user_info_box #info_date_box .daytime.fog {
-                margin-top: 7%;
-                border: 1px solid rgba(206, 206, 207, 0.7);
-                border-right: 1px solid rgba(206, 206, 207, 0);
-                background-color: rgba(206, 206, 207, 0.7);
-                -moz-box-shadow: 17px 17px 37px 37px rgba(206,206,207,0.7);
-                box-shadow: 17px 17px 37px 37px rgba(206,206,207,0.7);
-            }
-        #user_info_box #info_date_box .night {
-            color: #fff;
-            background-color: #000;
-            border: 1px solid #000;
-        }
-            #user_info_box #info_date_box .night.rain {
-                width: 30px;
-                height: 30px;
-                background-color: #fff;
-                border-top-left-radius: 0px;
-                margin-top: 20%;
-                -webkit-transform: rotate(45deg);
-                transform: rotate(45deg);
-            }
-            #user_info_box #info_date_box .night.wind {
-                width: 50px;
-                height: 25px;
-                margin-top: 8%;
-                border-radius: 0 25px 0 25px;
-                -webkit-transform: rotate(1440deg);
-                transform: rotate(1440deg);
-            }
-            #user_info_box #info_date_box .night.sun {
-                margin-top: 5%;
-                border: 1px solid #000;
-                border-top: 17px solid #000;
-                border-bottom: 17px solid #000;
-                -moz-box-shadow: 0px 0px 17px 7px rgba(0, 0, 0, .50);
-                box-shadow: 0px 0px 17px 7px rgba(0, 0, 0, .50);
-            }
-            #user_info_box #info_date_box .night.fog {
-                margin-top: 7%;
-                border: 1px solid rgba(0, 0, 0, 0.7);
-                border-right: 1px solid rgba(0, 0, 0, 0.3);
-                background-color: rgba(0, 0, 0, 0.8);
-                -moz-box-shadow: 17px 17px 37px 37px rgba(0, 0, 0,0.7);
-                box-shadow: 17px 17px 37px 37px rgba(0, 0, 0,0.7);
-            }
 /* newsBox: inner */
 #news_inner_box {
     position: absolute;
     width: 100%;
     height: 100%;
     overflow: auto;
+    -webkit-overflow-scrolling: touch;
 }
     #news_inner_box #news_dont_exist {
         position: relative;
@@ -484,6 +569,7 @@ ul {
 /* geoBox: inner */
 #geo_inner_box {
     position: absolute;
+    display: table;
     width: 100%;
     height: 100%;
 }
@@ -519,16 +605,36 @@ ul {
         }
     #geo_inner_box .all_weather {
         position: absolute;
+        display: table;
         width: 100%;
-        font-size: 77px;
+        height: 50%;
     }
+        #geo_inner_box .all_weather .vertically_center {
+            width: 100%;
+        }
+    #geo_inner_box .all_weather_description {
+        position: absolute;
+        right: 0px;
+        font-size: 11px;
+    }
+        #geo_inner_box .all_weather_description .all_celcius {
+            font-size: 17px !important;
+        }
     #geo_inner_box #now_weather {
-        top: 17px;
+        top: 0px;
+        font-size: 77px;
         color: #000;
     }
+    #geo_inner_box #now_weather_description {
+        bottom: 0px;
+    }
     #geo_inner_box #last_weather {
-        bottom: 17px;
+        bottom: 0px;
+        font-size: 77px;
         color: #CECECF;
+    }
+    #geo_inner_box #last_weather_description {
+        top: 0px;
     }
     /* http://stackoverflow.com/a/2812830/3786947 */
     #geo_inner_box #distance {
@@ -539,7 +645,7 @@ ul {
         background-color: #000;
         font-size: 10px;
     }
-        #geo_inner_box #distance span {
+        #geo_inner_box #distance a {
             position: relative;
             top: -0.5em;
             padding: 5px;
@@ -574,29 +680,206 @@ ul {
         #geo_outer_box #last_geo a {
             color: #CECECF;
         }
-    #geo_outer_box .bottom_left_corner .geoStatus {
-        position: relative;
-        top: 2px;
-        display: inline-block;
-        width: 14px;
-        height: 14px;
-        border-radius: 7px;
-        -webkit-border-radius: 7px;
-        border: 1px solid #CECECF;
+/* setting_box: inner */
+#setting_inner_box {
+    position: absolute;
+    display: table;
+    width: 100%;
+    height: 100%;
+}
+    #setting_inner_box #horizontal {
+        position: absolute;
+        top: 50%;
+        width: 100%;
+        height: 1px;
+        background-color: #000;
+        font-size: 57px;
     }
-        #geo_outer_box .bottom_left_corner .geoStatus .geoOnAndOff {
-            position: relative;
-            top: 1px;
-            width: 10px;
-            height: 10px;
-            border-radius: 5px;
-            -webkit-border-radius: 5px;
-            border: 1px solid #CECECF;
+    #setting_inner_box #vertically {
+        position: absolute;
+        left: 50%;
+        height: 100%;
+        width: 1px;
+        background-color: #000;
+        font-size: 57px;
+    }
+    #setting_inner_box .setting_all_corner {
+        position: absolute;
+        display: table;
+        width: 50%;
+        height: 50%;
+    }
+    #setting_inner_box #setting_top_left {
+        top: 0px;
+        left: 0px;
+    }
+        #mute {
+          width: 80px;
+          height: 80px;
+          border-left: 7px solid #000;
+          border-right: 4px solid #000;
+          -webkit-border-radius: 40px;
+          border-radius: 40px;
+          -webkit-transform: rotate(-15deg);
+          transform: rotate(-15deg);
+          cursor: pointer;
+        }
+        #mute:before {
+            content: '';
+            position: absolute;
+            top: 10px;
+            right: 8px;
+            width: 60px;
+            height: 60px;
+            border-right: 3px solid #000;
+            -webkit-border-radius: 30px;
+            border-radius: 30px;
+
+        }
+        #mute:after {
+            content: '';
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            width: 40px;
+            height: 40px;
+            border-right: 2px solid #000;
+            -webkit-border-radius: 20px;
+            border-radius: 20px;
+        }
+        #mute.voiced {
+            border-left: 64px solid #000;
+        }
+    #setting_inner_box #setting_top_right {
+        top: 0px;
+        right: 0px;
+    }
+        #setting_inner_box #setting_top_right .geoStatus {
+            width: 80px;
+            height: 80px;
+            border-radius: 40px;
+            -webkit-border-radius: 40px;
+            border: 1px solid #000;
+        }
+            #setting_inner_box #setting_top_right .geoStatus .geoOnAndOff {
+                position: relative;
+                top: 6px;
+                width: 66px;
+                height: 66px;
+                border-radius: 33px;
+                -webkit-border-radius: 33px;
+                border: 1px solid #000;
+                cursor: pointer;
+            }
+            #setting_inner_box #setting_top_right .geoStatus .geoOnAndOff:hover {
+                background-color: #000;
+            }
+            #setting_inner_box #setting_top_right .geoStatus .geoOn {
+                background-color: #000;
+            }
+            #setting_inner_box #setting_top_right .geoStatus .geoOn:hover {
+                background-color: #fff;
+            }
+    #setting_inner_box #setting_bottom_left {
+        bottom: 0px;
+        left: 0px;
+    }
+    #setting_inner_box #setting_bottom_right {
+        bottom: 0px;
+        right: 0px;
+    }
+        #setting_inner_box #setting_bottom_right > div:first-child {
+            position: absolute;
+            width: 100%;
+            height: 100%;
             cursor: pointer;
         }
-        #geo_outer_box .bottom_left_corner .geoStatus .geoOn {
-            background-color: #CECECF;
+            #setting_inner_box #setting_bottom_right #quit {
+                position: relative;
+                top: 61.8%;
+                width: 80px;
+                height: 1px;
+                background-color: #000;
+            }
+                #setting_inner_box #setting_bottom_right #quit.sun:before {
+                    content: '';
+                    position: absolute;
+                    bottom: -7px;
+                    left: 47%;
+                    width: 0px;
+                    height: 14px;
+                    -webkit-border-radius: 50%;
+                    border-radius: 50%;
+                    border-right: 14px solid #000;
+                }
+                #setting_inner_box #setting_bottom_right > div:first-child:hover #quit.sun:before {
+                    width: 14px;
+                    left: 80%;
+                    border-right: 3px solid #000;
+                }
+                #setting_inner_box #setting_bottom_right #quit.moon:before {
+                    content: '';
+                    position: absolute;
+                    bottom: -7px;
+                    left: 47%;
+                    width: 14px;
+                    height: 14px;
+                    -webkit-border-radius: 50%;
+                    border-radius: 50%;
+                    border-right: 3px solid #000;
+                }
+                #setting_inner_box #setting_bottom_right > div:first-child:hover #quit.moon:before {
+                    width: 0px;
+                    left: 90%;
+                    border-right: 14px solid #000;
+                }
+    /* setting title */
+    #setting_inner_box .setting_all_title {
+        position: absolute;
+        padding: 3px 7px;
+        font-size: 11px;
+        color: #CECECF;
+    }
+        #setting_inner_box .setting_all_title.setting_on {
+            color: #000;
         }
+        #setting_inner_box .setting_all_title#mute_title {
+            right: 0px;
+            bottom: 0px;
+        }
+        #setting_inner_box .setting_all_title#geoStatus_title{
+            left: 0px;
+            bottom: 0px;
+        }
+        #setting_inner_box .setting_all_title#quit_title{
+            left: 0px;
+            top: 0px;
+        }
+/* loadBox: inner */
+#load_inner_box {
+    position: absolute;
+    display: table;
+    width: 100%;
+    height: 100%;
+}
+    #load_inner_box #load_animate {
+        width: 40px;
+        height: 40px;
+        border: 1px solid #CECECF;
+        -webkit-border-radius: 20px;
+        border-radius: 20px;
+    }
+    #load_inner_box #load_animate:before {
+        content: '';
+        position: absolute;
+        width: 10px;
+        height: 10px;
+        background-color: #000;
+        -webkit-border-radius: 5px;
+        border-radius: 5px;
+        top: 0px;
+        left: 0px;
+    }
 /* chat_submit_box */
 #chat_submit_box {
     position: absolute;
@@ -605,6 +888,7 @@ ul {
     width: 56.25%;
     height: 6%;
     background: #fff;
+    -webkit-border-radius: 4px;
     border-radius: 4px;
 
 }
@@ -618,11 +902,26 @@ ul {
     width: 100%;
     height: 100%;
     background-color: transparent;
-    box-sizing: border-box;
+    -webkit-border-radius: 5px;
     border-radius: 5px;
-    -webkit-box-sizing: border-box;
     overflow: hidden;
     -webkit-appearance: none;
+}
+.show_back_button {
+    -webkit-border-radius: 70px 10px 10px 10px;
+    border-radius: 70px 10px 10px 10px;
+}
+.back_button {
+    position: absolute;
+    top: 20%;
+    left: 21.875%;
+    width: 70px;
+    height: 70px;
+    background: #fff;
+    -webkit-border-radius: 10px;
+    border-radius: 10px;
+    z-index: -1;
+    cursor: pointer;
 }
 .sunAndMoon {
     position: absolute;
@@ -632,11 +931,14 @@ ul {
     height: 17px;
     color: #fff;
     background-color: transparent;
+    -webkit-border-radius: 50%;
     border-radius: 50%;
     cursor: pointer;    
 }
 .sunAndMoon.sun {
     border-right: 17px solid #fff;
+    -moz-box-shadow: 0px 3px 15px 0px rgba(0,0,0,0.50);
+    box-shadow: 0px 3px 15px 0px rgba(0,0,0,0.50);
 }
 .sunAndMoon.moon {
     border-right: 3px solid #fff;
@@ -652,15 +954,21 @@ ul {
 input,
 .sunAndMoon,
 .geoOnAndOff,
+.setting_all_title,
+.syShow,
+#mute,
+#quit:before,
 #info_date_box .register_date,
 #info_date_box .all,
 .general_animate.ng-animate {
     -webkit-transition: all .7s ease-in-out;
     transition: all .7s ease-in-out;
 }
-#returnToPreviousStep {
-    -webkit-transition: all .7s cubic-bezier(0.6, -0.28, 0.735, 0.045);
-    transition:         all .7s cubic-bezier(0.6, -0.28, 0.735, 0.045);
+
+.main_box,
+.back_button {
+    -webkit-transition: all 1s linear;
+    transition: all 1s linear;
 }
 #info_date_box .all.rain {
     -webkit-transition: all .7s cubic-bezier(0.55, 0.055, 0.675, 0.19) .7s;
@@ -676,23 +984,18 @@ input,
     -webkit-transition: all .7s ease-in-out .7s;
     transition:         all .7s ease-in-out .7s;
 }
+    /* 觸法動畫 */
     input.submit_animate:hover {
         border-color: #000;
         color: #000;
     }
-    #returnToPreviousStep:hover {
-        border-color: #000;
-        color: #000;
-        -webkit-transform: rotate(-45deg);
-        transform: rotate(-45deg);
+    input.ng-invalid-email,
+    input.ng-invalid-maxlength {
+        border: 1px solid #CB1B45;
     }
-        input.ng-invalid-email,
-        input.ng-invalid-maxlength {
-            border: 1px solid #CB1B45;
-        }
-        input.ng-touched.ng-invalid-required {
-            border: 1px solid #FCD20A;
-        }
+    input.ng-touched.ng-invalid-required {
+        border: 1px solid #FCD20A;
+    }
     .general_animate.ng-enter,
     .general_animate.ng-leave.ng-leave-active,
     .general_animate.ng-hide {
@@ -702,6 +1005,10 @@ input,
     .general_animate.ng-enter.ng-enter-active {
       opacity:1;
     }
+#load_animate {
+    animation: load_animate 1.7s infinite linear;
+    -webkit-animation: load_animate 1.7s infinite linear;
+}
 .input_shake_animate {
     animation: input_shake_animate .5s ease-in-out;
     -webkit-animation: input_shake_animate .5s ease-in-out;
@@ -758,6 +1065,36 @@ input,
         transform: translateX(0);
     }
 }
+@keyframes load_animate {
+    0% {
+        border-color: #000;
+        -webkit-transform: rotate(0deg);
+        transform: rotate(0deg);
+    }
+    50% {
+        border-color: #CECECF;
+    }
+    100% {
+        border-color: #000;
+        -webkit-transform: rotate(360deg);
+        transform: rotate(360deg);
+    }
+}
+@-webkit-keyframes load_animate {
+    0% {
+        border-color: #000;
+        -webkit-transform: rotate(0deg);
+        transform: rotate(0deg);
+    }
+    50% {
+        border-color: #CECECF;
+    }
+    100% {
+        border-color: #000;
+        -webkit-transform: rotate(360deg);
+        transform: rotate(360deg);
+    }
+}
 @keyframes notify_box_animate {
     from {
         opacity: 0;
@@ -787,6 +1124,7 @@ input,
     top: 11.5%;
     -webkit-touch-callout: default;
 }
+
 /* Mobile Phone in portrait and landscape */
 @media (max-device-width : 767px), (max-width: 767px) {
     .main_box {
@@ -795,10 +1133,10 @@ input,
         top: 3.5%;
         left: 3%;
     }
-    /* .main_box.chat_box {
-        height: 95.5%;
-        border-radius: 10px 10px 0 0;
-    }*/
+    .back_button {
+        top: 3.5%;
+        left: 3%;
+    }
         .main_box .logo {
             display: block;
             max-width: 30%;
@@ -828,25 +1166,25 @@ input,
     #chat_box {
         height: 93.13%;
     }
-    #notify_box {
-        left: 41%;
-        top: 88%;
-        width: 17%;
-        padding: 3px;
-        background-color: #000;
+    .all_notify_box {
+        bottom: 8.5%;
+        left: 3%;
+        width: 94%;
+        -webkit-border-radius: 4px;
         border-radius: 4px;
         color: #fff;
     }
+        .all_notify_box > span {
+            padding: 4px 7px;
+            background-color: #000;
+        }
     #user_info_box {
         top: 15%;
         left: 10%;
         width: 80%;
         height: 70%;
     }
-        #user_info_box #info_numero_box {
-            margin-bottom: 40%;
-        }
-        #user_info_box #info_date_box > div {
+        #info_inner_box #info_date_box > div {
             margin: 7% auto;
         }
     #news_inner_box #news_source_box {
@@ -856,17 +1194,32 @@ input,
         position: relative;
         top: 35%;
     }
+    #geo_inner_box #now_weather span {
+        top: 17%;
+    }
+    #geo_inner_box #last_weather span {
+        top: 44%;
+    }
+    #load_inner_box #load_animate {
+        top: 44.74%;
+    }
     #chat_submit_box {
         top: 92.5%;
         left: 3%;
         width: 94%;
         height: 6.5%;
         border-top: 1px solid #CECECF;
+        -webkit-border-radius: 0px 0px 10px 10px;
         border-radius: 0px 0px 10px 10px;
     }
     #img_404 img {
         height: 50%;
         top: 25%;
+    }
+    /* Animate */
+    .general_animate.ng-animate {
+        -webkit-transition: all .3s ease-in-out;
+        transition: all .3s ease-in-out;
     }
 }
 /* Mobile Phone in landscape */
@@ -875,6 +1228,10 @@ input,
     .main_box {
         width: 97%;
         height: 97%;
+        top: 1.5%;
+        left: 1.5%;
+    }
+    .back_button {
         top: 1.5%;
         left: 1.5%;
     }
@@ -894,21 +1251,26 @@ input,
     #chat_box {
         height: 91.96%;
     }
-    #user_info_box #info_numero_box {
-        margin-bottom: 7%;
-    }
-    #user_info_box #info_date_box > div {
+    #info_inner_box #info_date_box > div {
         margin: 4% auto;
     }
-    #notify_box {
-        top: 80%;
-    }  
+    #geo_inner_box #last_weather span {
+        top: 19%;
+    }
+    #load_inner_box #load_animate {
+        top: 40.78%;
+    }
+
+    .all_notify_box {
+        bottom: 11%;
+    }
     #chat_submit_box {
         top: 90.5%;
         left: 1.5%;
         width: 97%;
         height: 8%;
         border-top: 1px solid #CECECF;
+        -webkit-border-radius: 0px 0px 10px 10px;
         border-radius: 0px 0px 10px 10px;
     }
     #img_404 img {
@@ -928,6 +1290,10 @@ input,
         top: 2%;
         left: 2%;
     }
+    .back_button {
+        top: 2%;
+        left: 2%;
+    }
         .main_box .logo {
             display: block;
             max-width: 30%;
@@ -944,6 +1310,7 @@ input,
         .form_box .form_title span {
             margin: 7px;
             padding: 7px;
+            -webkit-border-radius: 5px;
             border-radius: 5px;
         }
         .form_box input, .notification {
@@ -955,25 +1322,34 @@ input,
     #chat_box {
         height: 93.13%;
     }
-    #notify_box {
-        left: 46%;
-        top: 88%;
-        width: 8%;
-        padding: 3px;
+    .all_notify_box {
+        bottom: 9.5%;
+        left: 2%;
+        width: 96%;
         font-size: 14px;
-        background-color: #000;
+        -webkit-border-radius: 4px;
         border-radius: 4px;
         color: #fff;
     }
-    #user_info_box #info_numero_box {
-        margin-bottom: 40%;
-    }
-    #user_info_box #info_date_box > div {
+        .all_notify_box > span {
+            padding: 4px 7px;
+            background-color: #000;
+        }
+    #info_inner_box #info_date_box > div {
         margin: 7% auto;
     }
     #geo_inner_box #turnOnGeoServices {
         position: relative;
         top: 37%;
+    }
+    #geo_inner_box #now_weather span {
+        top: 20%;
+    }
+    #geo_inner_box #last_weather span {
+        top: 53%;
+    }
+    #load_inner_box #load_animate {
+        top: 47.09%;
     }
     #chat_submit_box {
         top: 91.5%;
@@ -981,6 +1357,7 @@ input,
         width: 96%;
         height: 6.5%;
         border-top: 1px solid #CECECF;
+        -webkit-border-radius: 0px 0px 10px 10px;
         border-radius: 0px 0px 10px 10px;
     }
     #img_404 img {
@@ -994,13 +1371,13 @@ input,
     .main_box .logo {
         max-width: 15%;
     }
-    #user_info_box #info_numero_box {
-        margin-bottom: 22%;
-    }
-    #user_info_box #info_date_box > div {
+    #info_inner_box #info_date_box > div {
         margin: 5% auto;
     }
-    #notify_box {
-        top: 87%;
+    #geo_inner_box #last_weather span {
+        top: 47%;
+    }
+    #load_inner_box #load_animate {
+        top: 46.61%;
     }
 }
