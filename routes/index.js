@@ -6,7 +6,7 @@ var jwt       = require('jsonwebtoken'),
     db_helper = require('../others/db_helper');
 
 
-router.get('/', function (req, res, next){
+router.get(['/', '/chat', '/forgot'], function (req, res, next){
 
     if (platform.parse(req.get('user-agent')).name === 'IE'){
         res.redirect('//browsehappy.com')

@@ -7,7 +7,7 @@
                     <div ng-switch on="step">
                         <div ng-switch-when="1">
                             <input sy-autofocus type="email" ng-model="forgot.email" name="email" placeholder="電郵地址" required>
-                            <input class="submit_animate forgot_submit" type="submit" ng-click="forgotEmailSubmit()" value="提交">
+                            <input class="submit_animate forgot_submit" type="submit" ng-click="forgotEmailSubmit()" value="提交" sy-notify>
                         </div>
                         <div ng-switch-when="2">
                             <input sy-autofocus type="text" ng-model="forgot.code" name="code" placeholder="驗證碼" required>
@@ -15,9 +15,8 @@
                         </div>
                         <div ng-switch-when="3">
                             <input sy-autofocus type="password" ng-model="forgot.password" name="password" placeholder="新密碼" required>
-                            <input class="submit_animate forgot_submit" type="submit" ng-click="forgotCodeSubmit()" value="提交">
+                            <input class="submit_animate forgot_submit" type="submit" ng-click="forgotCodeSubmit()" value="提交" sy-notify>
                         </div>
-                        <sy-notify></sy-notify>
                     </div>
                 </form>
             </div>

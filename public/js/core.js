@@ -21,8 +21,8 @@ angular.module('ShinyaApp', [
     ])
 .config(['$routeProvider', '$locationProvider', '$httpProvider', 'jwtInterceptorProvider', 
     function ($routeProvider, $locationProvider, $httpProvider, jwtInterceptorProvider) {
-    
-    $locationProvider.html5Mode(false).hashPrefix('!')
+    // $locationProvider.html5Mode(false).hashPrefix('!')
+    $locationProvider.html5Mode(true)
     $routeProvider.
         when('/', {
             templateUrl: '/public/js/templates/submit.html',
@@ -83,15 +83,15 @@ angular.module('ShinyaApp', [
         if ($location.path() === '/'){
             if (store.get('id_token')){
                 if (!jwtHelper.isTokenExpired(store.get('id_token'))){
-                    $location.path('/chat')
+                    $location.path('/chat').replace()
                 }
             }
         } else if ($location.path() === '/chat'){
             if(!store.get('id_token')){
-                $location.path('/')
+                $location.path('/').replace()
             } else {
                 if (jwtHelper.isTokenExpired(store.get('id_token'))){
-                    $location.path('/')
+                    $location.path('/').replace()
                 }
             }
         }

@@ -11,7 +11,7 @@
                     </div>
                     <input sy-autofocus type="text" ng-model="login.user" name="user" placeholder="用戶名／電郵地址" required>
                     <input type="password" ng-model="login.password" name="password" placeholder="密碼" required>
-                    <input class="submit_animate" type="submit" value="提交">
+                    <input class="submit_animate general_animate" type="submit" value="提交" sy-notify>
                 </form>
             </div>
             <!-- register -->
@@ -24,11 +24,10 @@
                     <input sy-autofocus type="text" ng-model="register.username" name="username" placeholder="用戶名" ng-maxlength="16" required>
                     <input type="email" ng-model="register.email" name="email" placeholder="電郵地址" required>
                     <input type="password" ng-model="register.password" name="password" placeholder="密碼" required>
-                    <input class="submit_animate general_animate" ng-if="form.$valid" type="submit" value="提交">
+                    <input ng-if="form.$valid || isMsgNotify" class="submit_animate general_animate"  type="submit" value="提交" sy-notify>
                 </form>
             </div>
-        <sy-notify></sy-notify>
         </div>
     </div>
-    <p class="bottom_right_corner" ng-show="isLogin"><a href="#!forgot">忘記密碼</a></p>
+    <p class="bottom_right_corner" ng-show="isLogin"><a href="forgot">忘記密碼</a></p>
 </div>

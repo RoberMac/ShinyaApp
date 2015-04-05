@@ -220,7 +220,7 @@ ul {
             background-color: #47B2E3;
             cursor: default;
         }
-    .form_box input, .notification {
+    .form_box input {
         display: block;
         width: 50%;
         margin: 3.5% auto;
@@ -234,12 +234,12 @@ ul {
         overflow: hidden;
         -webkit-appearance: none;
     }
-    .form_box .notification#error_msg {
+    .form_box input.error_msg {
         color: #fff;
         background-color: #CB1B45;
         border: 1px solid #CB1B45;
     }    
-    .form_box .notification#ok_msg {
+    .form_box input.ok_msg {
         color: #fff;
         background-color: #4EBD4A;
         border: 1px solid #4EBD4A;

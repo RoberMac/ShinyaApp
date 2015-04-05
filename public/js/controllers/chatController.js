@@ -133,7 +133,7 @@ angular.module('ShinyaApp.chatController', [])
         }).
         error(function (data, status, headers, config){
             if (status === 401){
-                $location.path('/')
+                $location.path('/').replace()
             } else {
                 callback('error', data.msg)
             }
@@ -405,23 +405,18 @@ angular.module('ShinyaApp.chatController', [])
     }
     $scope.emitTextMsg = function (){
 
-        if(jwtHelper.isTokenExpired(token)){
-            $window.location.reload()
-        } else {
-
-            var at_list = $scope.msgOutbox.textMsg.match(/\@([^\s\@]){1,16}/g)
-            // 屏蔽純空白輸入，由於 ngInput 默認 trim，故只需判斷是否為空，無需判斷空白字符
-            if ($scope.msgOutbox.textMsg !== ''){
-                $rootScope.socket.emit('textMsg', {
-                    'id'      : $rootScope.socket.id,
-                    'msg'     : $scope.msgOutbox.textMsg,
-                    'username': $scope.infoBox.username,
-                    'at'      : at_list
-                })
-                // 重置 `$scope.atUser` & `$scope.msgOutbox.textMsg`
-                $scope.atUser = ''
-                $scope.msgOutbox.textMsg = ''
-            }
+        var at_list = $scope.msgOutbox.textMsg.match(/\@([^\s\@]){1,16}/g)
+        // 屏蔽純空白輸入，由於 ngInput 默認 trim，故只需判斷是否為空，無需判斷空白字符
+        if ($scope.msgOutbox.textMsg !== ''){
+            $rootScope.socket.emit('textMsg', {
+                'id'      : $rootScope.socket.id,
+                'msg'     : $scope.msgOutbox.textMsg,
+                'username': $scope.infoBox.username,
+                'at'      : at_list
+            })
+            // 重置 `$scope.atUser` & `$scope.msgOutbox.textMsg`
+            $scope.atUser = ''
+            $scope.msgOutbox.textMsg = ''
         }
     }
 
@@ -477,7 +472,6 @@ angular.module('ShinyaApp.chatController', [])
          * 會從 '/' 跳轉回 '/chat'，重新加載 template，斷開重新鏈接
          *
          */
-         // $window.location.reload()
          reconnectSIO()
     }
 

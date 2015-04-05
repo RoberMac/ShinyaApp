@@ -125,7 +125,7 @@ var db_helper = {
                                 'weather': found.geo_info.weather,
                                 'isGeoServices': found.isGeoServices
                             }, key, {
-                                expiresInMinutes: 30
+                                expiresInMinutes: 1
                             })
                             res.json({'token': token})
                         } else {
@@ -156,7 +156,7 @@ var db_helper = {
                                 'weather': found.geo_info.weather,
                                 'isGeoServices': found.isGeoServices
                             }, key, {
-                                expiresInMinutes: 30
+                                expiresInMinutes: 1
                             })
                             res.json({'token': token})
                         } else {
