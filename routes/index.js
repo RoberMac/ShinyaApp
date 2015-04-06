@@ -8,6 +8,7 @@ var jwt       = require('jsonwebtoken'),
 
 router.get(['/', '/chat', '/forgot'], function (req, res, next){
 
+    log.info('[GET: /]', req.ip)
     if (platform.parse(req.get('user-agent')).name === 'IE'){
         res.redirect('//browsehappy.com')
     } else {
@@ -17,6 +18,7 @@ router.get(['/', '/chat', '/forgot'], function (req, res, next){
 
 router.post('/register', function (req, res, next){
 
+    log.info('[POST: /register]', req.ip, req.body.username)
     // 用戶註冊信息
     var register_form = {
         username      : validator.trim(req.body.username),
@@ -33,6 +35,7 @@ router.post('/register', function (req, res, next){
 
 router.post('/login', function (req, res, next){
 
+    log.info('[POST: /login]', req.ip, req.body.user)
     // 用戶登陸信息
     var login_form = {
         user     : validator.trim(req.body.user),
@@ -43,6 +46,7 @@ router.post('/login', function (req, res, next){
 
 router.post('/forgot_email', function (req, res, next){
 
+    log.info('[POST: /forgot_email]', req.ip)
     // 電郵地址信息
     var forgot_email_form = {
         email: req.body.email,
@@ -53,10 +57,13 @@ router.post('/forgot_email', function (req, res, next){
 
 router.post('/forgot_code', function (req, res, next){
 
+    log.info('[POST: /forgot_code]', req.ip)
     if (!req.body.password){
+        log.error('[Forgot: Required Password]')
         next({'code': 400, 'status': 'error', 'msg': '請填寫新密碼'})
         return null
     } else if (!req.body.code) {
+        log.error('[Forgot: Required Code]')
         next({'code': 400, 'status': 'error', 'msg': '請填寫驗證碼'})
         return null
     }
@@ -69,10 +76,13 @@ router.post('/forgot_code', function (req, res, next){
         
         if (err) {
             if (err.name === 'TokenExpiredError'){
+                log.error('[Forgot: Code Expires]', err)
                 res.status(400).json({'status': 'error', 'msg': '驗證碼已經過期了'})
             } else if (err.name === 'JsonWebTokenError'){
+                log.error('[Forgot: Wrong Code]', err)
                 res.status(400).json({'status': 'error', 'msg': '這個碼不是我發的'})
             } else {
+                log.error('[Forgot: WTF]', err)
                 res.status(400).json({'status': 'error', 'msg': '我不知道你說什麼'})
             }
         } else {
@@ -81,10 +91,8 @@ router.post('/forgot_code', function (req, res, next){
                 code    : forgot_code_form.code,
                 password: forgot_code_form.password
             }
-            console.log(update_form)
-            db_helper.forgot_code(update_form, User, res, next)            
+            db_helper.forgot_code(update_form, User, res, next)
         }
-
     })
 })
 

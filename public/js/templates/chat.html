@@ -57,7 +57,7 @@
                 </div>
                 <!-- 地理位置服務 -->
                 <div ng-switch-when="geoBox" id="geo_inner_box" class="general_animate">
-                    <div ng-if="!isGeoServices" id="turnOnGeoServices">
+                    <div ng-if="!isGeoServices" id="turnOnGeoServices" class="vertically_center">
                         <div class="geoStatus">
                             <div class="geoOnAndOff" ng-click="toggleGeoServices()">
                             </div>
@@ -99,9 +99,9 @@
                     <div id="setting_top_left" class="setting_all_corner">
                         <!-- 靜音 -->
                         <div class="vertically_center">
-                            <div ng-class="{'voiced': isMuted, 'setting_on': isMuted}" id="mute" class="general_animate" ng-click="toggleMuted()"></div>
+                            <div ng-class="{'voiced': !isMuted}" id="mute" class="general_animate" ng-click="toggleMuted()"></div>
                         </div>
-                        <div id="mute_title" class="setting_all_title" ng-class="{'setting_on': isMuted}">聲音</div>    
+                        <div id="mute_title" class="setting_all_title" ng-class="{'setting_on': !isMuted}">聲音</div>    
                     </div>
                     <div id="setting_top_right" class="setting_all_corner">
                         <!-- 位置服務 -->
@@ -116,7 +116,7 @@
                     <div id="setting_bottom_left" class="setting_all_corner">
                     </div>
                     <div id="setting_bottom_right" class="setting_all_corner">
-                        <!-- 位置服務 -->
+                        <!-- 註銷 -->
                         <div class="vertically_center" ng-click="quit()">
                             <div id="quit" ng-class="{'sun': !isSun, 'moon': isSun}">
                             </div>

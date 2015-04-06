@@ -1,5 +1,6 @@
 //local variables
 var express    = require('express'),
+    fs         = require('fs'),
     app        = express(),
     logger     = require('morgan'),
     res_time   = require('response-time'),
@@ -7,32 +8,28 @@ var express    = require('express'),
     bodyParser = require('body-parser'),
     http       = require('http').Server(app),
     mongoose   = require('mongoose'),
-    helmet     = require('helmet');
+    helmet     = require('helmet'),
+    Log        = require('log');
 
 // global variables
-global.io    = require('socket.io')(http),
-global.User  = require('./models/db').User,
-global.News  = require('./models/db').News
-global.key   = require('fs').readFileSync(__dirname + '/public/others/public_key.pem')
-
-// init
-app.set('DB', {
-    username: 'RoberMac',
-    password: '86916610'
-})
+global.io   = require('socket.io')(http)
+global.User = require('./models/db').User
+global.News = require('./models/db').News
+global.key  = fs.readFileSync(__dirname + '/others/jwt.key')
+global.log  = new Log('info', fs.createWriteStream(__dirname + '/logs/' + new Date().toUTCString() + '.log'))
 
 // Connect to DB
 mongoose.connect('mongodb://localhost/test', {
-    user: app.get('DB').username,
-    pass: app.get('DB').password
+    user: 'test',
+    pass: 'test'
 });
 
 var db = mongoose.connection
 .on('err', function (err){
-    console.log(err)
+    log.error('[DB]', err)
 })
 .once('open', function (){
-    console.log('[Connected to MongoDB: RoberMac]')
+    log.info('[DB]', 'Connected to MongoDB')
 })
 
 // Socket.IO Server Side
@@ -77,14 +74,14 @@ app.use('/api', api)
 
 // Handing 404   
 app.use(function (req, res){
-    console.log('[404 Error]')
+    log.error('[404: ' + req.originalUrl + ']')
     res.status('404').sendFile(__dirname + '/views/404.html')
 })
 
 // Handing 400
 app.use(function (err, req, res, next){
     if (err.code === 400){
-        console.log('[400 Error]:' + err)
+        log.error('[400]', err)
         res.status(400).json({'status': 'error', 'msg': err.msg})
     } else {
         next(err)        
@@ -94,7 +91,7 @@ app.use(function (err, req, res, next){
 // Handing 500
 app.use(function (err, req, res, next){
     if (err.code === 500){
-        console.log('[500 Error]:' + err)
+        log.error('[500]', err)
         res.status(500).json({'status': 'error', 'msg': err.msg})
     } else {
         next(err)
@@ -104,7 +101,7 @@ app.use(function (err, req, res, next){
 // Handing 401
 app.use(function (err, req, res, next){
     for (var i in err){
-        console.log('[401 Error]:' + err)        
+        log.error('[401]', err)        
     }
     if (err.status === 401){
         res.status(401).json({'status': 'error','msg': err.message})  
@@ -119,5 +116,5 @@ getNews(1000 * 60 * 60 * 1)
 
 
 http.listen('3000', function (){
-    console.log('listening 3000 port')
+    log.info('[Listen]', '3000 port')
 })

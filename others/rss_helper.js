@@ -98,38 +98,41 @@ function updateCountryNews(country, now, news, callback){
         'US': {'US': news}
     }
     if (country in list){
+        log.info('[News: Country]', country)
         News.findOneAndUpdate({date: now}, list[country], function (err){
-            if (err) return err
+            if (err) {
+                log.error('[DB: Not Found]', err)
+                return err
+            }
+            log.info('[News: Saved]', country)
             callback()
-            console.log(country + ' OK')
         })
     } else {
-        console.log(country + ' not found')
+        log.error('[News: Not Found]', country)
     }
 }
 function getNews(frequency){
 
     var now = new Date(),
-        now = Date.parse(
-            new Date(
-                now.getUTCFullYear(),
-                now.getUTCMonth(),
-                now.getUTCDate(),
-                now.getUTCHours()
-            )
+        now = Date.UTC(
+            now.getUTCFullYear(),
+            now.getUTCMonth(),
+            now.getUTCDate(),
+            now.getUTCHours()
         ),
-        restrict        = now - frequency;
-    console.log(new Date(), now, frequency)
+        restrict = now - frequency;
     News.findOne({date: now}, function (err, found){
         if (!found){
+            log.info('[News: Start Fetch]', now)
             var news = new News({
                 date: now
             })
             news.save(function (err){
                 if (err){
-                    console.log(err)
+                    log.error('[DB: Save Error]', err)
                     return err
                 }
+                log.info('[DB: Start Fetch]', now)
                 var country_list    = Object.keys(feed_list),
                     country_len     = country_list.length,
                     country_pointer = 0;
@@ -145,19 +148,19 @@ function getNews(frequency){
                         var feedparser = new Feedparser(),
                             req  = request(feed_item[feed_pointer]['url']),
                             cache        = [];
-                        req.on('error', function (error){
-                            console.log(error)
+                        req.on('error', function (err){
+                            log.error('[News: Request Error]', err)
                         })
                         req.on('response', function (res){
                             var stream = this;
                             if (res.statusCode != 200){
                                 return this.emit('error', new Error('Bad status code'));
                             }
-                            console.log(country + ' response')
+                            log.info('[News: Response]', feed_item[feed_pointer]['source_name'])
                             stream.pipe(feedparser);
                         })
-                        feedparser.on('error', function(error){
-                            console.log(error)
+                        feedparser.on('error', function(err){
+                            log.error('[News: Parse Error]', err)
                         })
                         feedparser.on('readable', function(){
 
@@ -179,38 +182,38 @@ function getNews(frequency){
                             // 若不是「新聞列表」最後的新聞源，獲取下一個新聞源新聞
                             if (feed_pointer < feed_len - 1){
                                 if (cache.length > 0){
+                                    log.info('[News: Cache]', feed_item[feed_pointer]['source_name'])
                                     all_news.push({
                                         'source_name': feed_item[feed_pointer]['source_name'],
                                         'news': cache
-                                    })                                    
+                                    })
                                 }
                                 feed_pointer ++
-                                console.log(country + ' getNextNews')
                                 getNextNews()
                             } else {
                                 if (cache.length > 0){
+                                    log.info('[News: Cache]', feed_item[feed_pointer]['source_name'])
                                     all_news.push({
                                         'source_name': feed_item[feed_pointer]['source_name'],
                                         'news': cache
-                                    })                                    
+                                    })
                                 }
-                                console.log(all_news)
+                                log.info('[News: Fetch & Parse Finished]', country)
                                 updateCountryNews(country, now, all_news, function (){
                                     if (country_pointer < country_len - 1){
                                         country_pointer ++
-                                        console.log(country_list[country_pointer] + ' getCountryNews')
                                         getCountryNews(country_list[country_pointer])
                                     } else {
-                                        console.log('DONE')
+                                        log.info('[News: Done]', now)
                                     }
                                 })
                             }
                         })
                     })() 
-                })(country_list[country_pointer])     
+                })(country_list[country_pointer])
             })
         } else {
-            console.log('這個時段的新聞已抓取')
+            log.info('[News: Existed]', now)
         }
     })
 }
@@ -219,7 +222,6 @@ module.exports = function (frequency){
     // 每隔一小時抓取一次，每隔一分鐘檢測是否需要抓取
     getNews(frequency)
     setInterval(function (){
-        console.log(frequency)
         getNews(frequency)
-    }, 1000 * 60 * 1)
+    }, 1000 * 60 * 5)
 }
