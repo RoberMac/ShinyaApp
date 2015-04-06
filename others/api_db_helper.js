@@ -9,25 +9,23 @@ var api_db_helper = {
         User.findOne({username: user.username}, 'register_info geo_info', function (err, userInfo){
 
             if (err){
+                log.error('[DB: Query Error]', err)
                 next({'code': 500, 'status': 'error', 'msg': '服務器出錯'})
                 return err
             }
             if (!userInfo){
+                log.error('[DB: Not Found]')
                 res.status(400).json({'status': 'error', 'msg': '用戶不存在'})
             } else {
                 var country    = userInfo.geo_info.country,
                     userDate   = userInfo.register_info.date,
                     selectDate = body.selectDate + body.timezoneOffset,
-                    selectDate = Date.parse(
-                        new Date(
-                            userDate.getUTCFullYear(),
-                            userDate.getUTCMonth(),
-                            userDate.getUTCDate(),
-                            selectDate
-                        )
+                    selectDate = Date.UTC(
+                        userDate.getUTCFullYear(),
+                        userDate.getUTCMonth(),
+                        userDate.getUTCDate(),
+                        selectDate
                     );
-                console.log(body.selectDate, body.timezoneOffset, body.selectDate + body.timezoneOffset)
-                console.log(selectDate, country, userDate)
                 /**
                  *
                  * 新聞來源指向：
@@ -47,13 +45,15 @@ var api_db_helper = {
                 News.findOne({date: selectDate}, country, function (err, found){
 
                     if (err){
-                        console.log(err)
+                        log.error('[DB: Query Error]', err)
                         next({'code': 500, 'status': 'error', 'msg': '服務器出錯'})
                         return err
                     }
                     if (!found){
+                        log.error('[DB: Not Found]', selectDate, country)
                         res.status(400).json({'status': 'error', 'msg': '此時段新聞不存在'})
                     } else {
+                        log.info('[DB: Found]', selectDate)
                         res.send({'status': 'ok', 'msg': found[country]})
                     }
                 })
@@ -68,9 +68,11 @@ var api_db_helper = {
         }, function (err){
 
             if (err){
+                log.error('[DB: Query Error]', err)
                 next({'code': 500, 'status': 'error', 'msg': '服務器出錯'})
                 return err
             }
+            log.info('[DB: Found]')
             res.send({'status': 'ok', 'msg': body.isGeoServices ? 'on' : 'off'})
         })
     },
@@ -80,10 +82,12 @@ var api_db_helper = {
         User.findOne({username: user.username}, 'last_geo', function (err, found){
 
             if (err){
+                log.error('[DB: Query Error]', err)
                 next({'code': 500, 'status': 'error', 'msg': '服務器出錯'})
                 return err
             }
             if (!found){
+                log.error('[DB: Not Found]')
                 res.status(400).json({'status': 'error', 'msg': '用戶不存在'})
             } else {
                 if (geo_helper.isSamePlace(found.last_geo, coords) && (new Date() - geo_helper.getTodayMs(found.last_geo.date)) < 86400000){
@@ -103,15 +107,16 @@ var api_db_helper = {
                         last_geo: msg.now_geo
                     }, function (err, found){
                         if (err){
+                            log.error('[DB: Query Error]', err)
                             next({'code': 500, 'status': 'error', 'msg': '服務器出錯'})
                             return err
                         }
+                        log.info('[DB: Found]')
                         res.send({'status': 'ok', 'msg': msg})
                     })
                 } else {
                     geo_helper.getGeoWeather(coords.lat, coords.lon, function (weather){
                         geo_helper.getStreetName(coords, function (streetName){
-                            console.log(streetName)
                             // 距離服務
                             var msg = {
                                 last_geo: found.last_geo,
@@ -123,15 +128,16 @@ var api_db_helper = {
                                     weather: weather
                                 }
                             }
-                            console.log(msg)
                             // 更新座標、街道名、日期、天氣
                             User.findOneAndUpdate({username: user.username}, {
                                 last_geo: msg.now_geo
                             }, function (err, found){
                                 if (err){
+                                    log.error('[DB: Query Error]', err)
                                     next({'code': 500, 'status': 'error', 'msg': '服務器出錯'})
                                     return err
                                 }
+                                log.info('[DB: Found]')
                                 res.send({'status': 'ok', 'msg': msg})
                             })
                         })

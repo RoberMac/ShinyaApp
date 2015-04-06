@@ -62,6 +62,7 @@
 - 備忘
     - 發布到 GitHub 前將
         - 郵箱帳號密碼隱藏
+        - API KEY
     - db_helper.js
         - getCityWeather 的 「IP 地址」
         - getNews 的 「國家代碼」

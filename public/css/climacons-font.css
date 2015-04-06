@@ -15,7 +15,6 @@
 	font-weight: normal;
 	line-height: 1;
 	-webkit-font-smoothing: antialiased;
-	vertical-align: middle;
 }
 .climacon.cloud:before {
 	content: "\e000";

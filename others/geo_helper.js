@@ -15,28 +15,28 @@ var geo_helper = {
     // 地理位置
     getCountryAndCity: function (ip, callback){
 
+        log.info('[Geo: getCountryAndCity]')
         freegeoip.geocode(ip, function (err, data){
             if (err){
-                console.log(err)
+                log.error('[Geo: getCountryAndCity]', err)
                 callback('CN', 'beijing')
                 return err
             }
-            console.log(data[0])
             callback(data[0].countryCode, data[0].city)
         })
     },
     getStreetName: function (origin, callback){
 
+        log.info('[Geo: getStreetName]')
         google_geocoder.reverse({
             lat: origin.lat, 
             lon: origin.lon
         }, function (err, data){
             if (err){
-                console.log(err)
+                log.error('[Geo: getStreetName]', err)
                 callback('洛陽城四零四號山洞')
                 return err
             }
-            console.log(data[0])
             callback(data[0].streetName)
         });
     },
@@ -49,17 +49,16 @@ var geo_helper = {
     },
     getTodayMs: function (date){
 
-        return Date.parse(
-                new Date(
-                    date.getUTCFullYear(),
-                    date.getUTCMonth(),
-                    date.getUTCDate()
-                    )
-                )
+        return Date.UTC(
+                date.getUTCFullYear(),
+                date.getUTCMonth(),
+                date.getUTCDate()
+            )
     },
     // 天氣
     getCityWeather: function (city, callback){
 
+        log.info('[Geo: getCityWeather]')
         var url = 'http://api.openweathermap.org/data/2.5/weather?q='
                     + city
                     +'&lang=zh_tw&units=metric&APPID='
@@ -69,8 +68,6 @@ var geo_helper = {
             json: true
             // timeout: 2500
         }, function (err, res, body){
-            console.log('now: getCityWeather')
-            console.log(body)
             if (!err && res.statusCode == 200) {
                 callback({
                     description: body.weather[0].description,
@@ -79,6 +76,7 @@ var geo_helper = {
                     isNight: new Date() > body.sys.sunset * 1000
                 })
             } else {
+                log.error('[Geo: getCityWeather]', err, res.statusCode)
                 callback({
                     description: '獲取天氣失敗',
                     code: 802,
@@ -89,6 +87,7 @@ var geo_helper = {
     },
     getGeoWeather: function (lat, lon, callback){
 
+        log.info('[Geo: getGeoWeather]')
         var url = 'http://api.openweathermap.org/data/2.5/weather?lat='
                     + lat
                     + '&lon='
@@ -100,8 +99,6 @@ var geo_helper = {
             json: true
             // timeout: 2500
         }, function (err, res, body){
-            console.log('now: getGeoWeather')
-            console.log(body)
             if (!err && res.statusCode == 200) {
                 callback({
                     description: body.weather[0].description,
@@ -110,6 +107,7 @@ var geo_helper = {
                     isNight: new Date() > body.sys.sunset * 1000
                 })
             } else {
+                log.error('[Geo: getGeoWeather]', err, res.statusCode)
                 callback({
                     description: '獲取天氣失敗',
                     code: 802,

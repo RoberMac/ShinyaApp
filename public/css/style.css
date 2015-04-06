@@ -574,8 +574,7 @@ ul {
     height: 100%;
 }
     #geo_inner_box #turnOnGeoServices {
-        position: relative;
-        top: 30%;
+        
     }
         #geo_inner_box #turnOnGeoServices .geoStatus{
             position: relative;
@@ -714,15 +713,15 @@ ul {
         left: 0px;
     }
         #mute {
-          width: 80px;
-          height: 80px;
-          border-left: 7px solid #000;
-          border-right: 4px solid #000;
-          -webkit-border-radius: 40px;
-          border-radius: 40px;
-          -webkit-transform: rotate(-15deg);
-          transform: rotate(-15deg);
-          cursor: pointer;
+            width: 80px;
+            height: 80px;
+            border-left: 64px solid #000;
+            border-right: 4px solid #000;
+            -webkit-border-radius: 40px;
+            border-radius: 40px;
+            -webkit-transform: rotate(-15deg);
+            transform: rotate(-15deg);
+            cursor: pointer;
         }
         #mute:before {
             content: '';
@@ -748,7 +747,7 @@ ul {
             border-radius: 20px;
         }
         #mute.voiced {
-            border-left: 64px solid #000;
+            border-left: 7px solid #000;
         }
     #setting_inner_box #setting_top_right {
         top: 0px;
@@ -1190,10 +1189,6 @@ input,
     #news_inner_box #news_source_box {
         margin-bottom: 17%;
     }
-    #geo_inner_box #turnOnGeoServices {
-        position: relative;
-        top: 35%;
-    }
     #geo_inner_box #now_weather span {
         top: 17%;
     }
@@ -1337,10 +1332,6 @@ input,
         }
     #info_inner_box #info_date_box > div {
         margin: 7% auto;
-    }
-    #geo_inner_box #turnOnGeoServices {
-        position: relative;
-        top: 37%;
     }
     #geo_inner_box #now_weather span {
         top: 20%;

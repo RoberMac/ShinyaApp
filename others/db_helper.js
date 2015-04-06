@@ -23,24 +23,29 @@ var db_helper = {
                     // 檢查用戶名是否存在
                     User.findOne({username: username}, function (err, found){
                         if (err){
+                            log.error('[DB: Query Error]', err)
                             next({'code': 500, 'status': 'error', 'msg': '服務器出錯'})
                             return err
                         }
                         if (found){
+                            log.error('[Register: Username Existed]', username)
                             next({'code': 400, 'status': 'error', 'msg': '用戶名已存在'})
                         } else {
                             // 檢查電郵地址是否存在
                             User.findOne({email: email}, function (err, found){
                                 if (err){
+                                    log.error('[DB: Query Error]', err)
                                     next({'code': 500, 'status': 'error', 'msg': '服務器出錯'})
                                     return err
                                 }
                                 if (found){
+                                    log.err('[Register: Email Address Existed]', email)
                                     next({'code': 400, 'status': 'error', 'msg': '電郵地址已存在'})
                                 } else {
                                     // 獲取當前註冊用戶數
                                     User.count({}, function (err, count){
                                         if (err){
+                                            log.error('[DB: Query Error]', err)
                                             next({'code': 500, 'status': 'error', 'msg': '服務器出錯'})
                                             return err
                                         }
@@ -74,18 +79,18 @@ var db_helper = {
                                                         },
                                                         'isGeoServices': false
                                                     })
-                                                    console.log(user)
                                                     user.save(function (err){
+                                                        log.info('[Register: Saving]', username)
                                                         if (err){
+                                                            log.error('[DB: Save Error]', err)
                                                             next({'code': 400, 'status': 'error', 'msg': '用戶名或電郵地址已存在'})
                                                             return err
                                                         }
+                                                        log.info('[Register: Success]', username)
                                                         res.json({'status': 'ok', 'msg': '註冊成功'})
-                                                        console.log('地理位置信息已保存')
                                                     })
                                                 })
                                             })
-
                                         })
                                     })
                                 }
@@ -93,27 +98,35 @@ var db_helper = {
                         }
                     })
                 } else {
-                        res.json({'status': 'error', 'msg': '用戶名不能超過十六個字符'})
+                    log.error('[Register: Wrong Username]', 'maximum 16 characters')
+                    res.json({'status': 'error', 'msg': '用戶名不能超過十六個字符'})
                 }
             } else {
+                log.error('[Register: Wrong Username]', 'cannot contain spaces')
                 next({'code': 400, 'status': 'error', 'msg': '用戶名不能包含空格'})
             }
         } else {
+            log.error('[Register: Wrong Email Address]')
             next({'code': 400, 'status': 'error', 'msg': '電郵地址有誤'})
-        }    
+        }
     },
     login: function (login_form, validator, bcrypt, jwt, User, key, res, next){
 
         if (validator.isEmail(login_form.user)){
-            console.log(validator.normalizeEmail(login_form.user))
+
             User.findOne({email: validator.normalizeEmail(login_form.user)}, 'username password email register_info geo_info isGeoServices', function (err, found){
-                if (err) return err
+                if (err) {
+                    log.error('[DB: Query Error]', err)
+                    return err
+                }
                 // 檢查用戶是否存在
                 if (!found){
+                    log.error('[Login: User Does Not Existed]', login_form.user)
                     res.status(400).json({'status': 'error', 'msg': '用戶不存在'})
                 } else {
                     if (!login_form.password){
-                            next({'code': 400, 'status': 'error', 'msg': '請輸入密碼'})
+                        log.error('[Login: Required Password]', login_form.user)
+                        next({'code': 400, 'status': 'error', 'msg': '請輸入密碼'})
                     } else {
                         // 檢查密碼是否正確
                         var compare_password = found.password
@@ -125,26 +138,32 @@ var db_helper = {
                                 'weather': found.geo_info.weather,
                                 'isGeoServices': found.isGeoServices
                             }, key, {
-                                expiresInMinutes: 1
+                                expiresInMinutes: 10
                             })
+                            log.info('[Login: Success]', login_form.user)
                             res.json({'token': token})
                         } else {
+                            log.error('[Login: Wrong Password]', login_form.user)
                             next({'code': 400, 'status': 'error', 'msg': '密碼有誤'})
                         }
                     }
                 }
             }) 
         } else {
+
             User.findOne({username: login_form.user}, 'username password email register_info geo_info isGeoServices', function (err, found){
-                if (err) return err
+                if (err) {
+                    log.error('[DB: Query Error]', err)
+                    return err
+                }
                 // 檢查用戶是否存在
                 if (!found){
-                    console.log('Not Found')
+                    log.error('[Login: User Does Not Existed]', login_form.user)
                     res.status(400).json({'status': 'error', 'msg': '用戶不存在'})
                 } else {
-
                     if (!login_form.password){
-                            next({'code': 400, 'status': 'error', 'msg': '請輸入密碼'})
+                        log.error('[Login: Required Password]', login_form.user)
+                        next({'code': 400, 'status': 'error', 'msg': '請輸入密碼'})
                     } else {
                         // 檢查密碼是否正確
                         var compare_password = found.password
@@ -156,10 +175,12 @@ var db_helper = {
                                 'weather': found.geo_info.weather,
                                 'isGeoServices': found.isGeoServices
                             }, key, {
-                                expiresInMinutes: 1
+                                expiresInMinutes: 10
                             })
+                            log.info('[Login: Success]', login_form.user)
                             res.json({'token': token})
                         } else {
+                            log.error('[Login: Wrong Password]', login_form.user)
                             next({'code': 400, 'status': 'error', 'msg': '密碼有誤'})
                         }
                     }
@@ -176,11 +197,16 @@ var db_helper = {
             expiresInMinutes: 60
         })
         User.findOneAndUpdate({email: forgot_email_form.email}, {forgot_code: code}, function (err, found){
-            if (err) return err
+            if (err) {
+                log.error('[DB: Query Error]', err)
+                return err
+            }
             // 檢查電郵地址是否存在
             if (!found){
+                log.error('[Forgot: Email Address Does Not Existed]', forgot_email_form.email)
                 next({'code': 400, 'status': 'error', 'msg': '電郵地址不存在'}) 
             } else {
+
                 // 發送驗證碼到用戶郵箱
                 var transporter = nodemailer.createTransport({
                     service: 'Yahoo',
@@ -188,7 +214,7 @@ var db_helper = {
                         'user': 'shenyepoxiao@yahoo.com',
                         'pass': '4sfaxiLHMMvNnT('
                     }
-                });
+                })
                 var mailOptions = {
                     from: '深夜，破曉 <shenyepoxiao@yahoo.com>',
                     to: forgot_email_form.email,
@@ -199,14 +225,16 @@ var db_helper = {
                             + '<p style=\'font-size:11px; text-align: center; color: #555;\'>'
                             + code + 
                             '</p><p style=\'font-size: 12px; text-align: center; color:#CECECF;\'>請在 60 分鐘內驗證</p><div>'
-                };
-                transporter.sendMail(mailOptions, function(error, info){
-                    if (error){
-                        console.log(error);
+                }
+                transporter.sendMail(mailOptions, function(err, info){
+                    if (err){
+                        log.error('[Forgot: SendMail Wrong]', err)
+                        return err;
                     } else {
-                        console.log('Message sent: ' + info.response);
+                        log.info('[Forgot: SendMail Success]', info.response)
                     }
-                });
+                })
+                log.info('[Forgot: Step One Success]')
                 res.json({'status': 'ok', 'msg': '請輸入收到的驗證碼'})
             }
         })
@@ -215,9 +243,12 @@ var db_helper = {
 
         // 檢查驗證碼是否最新鮮，因為有可能同時存在多個新鮮的驗證碼
         User.findOne({email: update_form.email}, function (err, found){
-            if (err) return err
-            console.log('update_form.email' + update_form.email)
+            if (err) {
+                log.error('[DB: Query Error]', err)
+                return err
+            }
             if (!found) {
+                log.error('[Forgot: Email Address Does Not Existed]', forgot_email_form.email)
                 next({'code': 400, 'status': 'error', 'msg': '電郵地址不存在'})
             } else {
                 // 驗證碼最新鮮
@@ -226,14 +257,20 @@ var db_helper = {
                         'password': update_form.password,
                         'forgot_code': '',
                     }, function (err, found){
-                        if (err) return err
+                        if (err) {
+                            log.error('[DB: Query Error]', err)
+                            return err
+                        }
                         if (!found) {
+                            log.error('[Forgot: Email Address Does Not Existed]', forgot_email_form.email)
                             next({'code': 400, 'status': 'error', 'msg': '電郵地址不存在'})
                         } else {
+                            log.info('[Forgot: Change Password Success]')
                             res.json({'status': 'ok', 'msg': '修改密碼成功'})
                         }
                     })
                 } else {
+                    log.error('[Forgot: Not Fresh Code]')
                     next({'code': 400, 'status': 'error', 'msg': '請輸入最新的驗證碼'})
                 }
             }
