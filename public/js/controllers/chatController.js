@@ -149,7 +149,6 @@ angular.module('ShinyaApp.chatController', [])
             if (!$scope.isNewsExist){
                 $scope.toggleNewsExist()
             }
-            console.log($scope.selectDateNewsBox)
         } else {
             // 過場動畫
             $scope.toggleCurrentPage('loadBox')
@@ -206,13 +205,14 @@ angular.module('ShinyaApp.chatController', [])
             $scope.toggleCurrentPage('settingBox')
         }
      }
-    $scope.isMuted = store.get('isMuted')
+    $scope.isMuted = !!store.get('isMuted')
     $scope.toggleMuted = function (){
         $scope.isMuted = !$scope.isMuted
         store.set('isMuted', $scope.isMuted)
     }
     $scope.quit = function (){
         store.remove('id_token')
+        store.remove('isGeoServices')
         $rootScope.socket.disconnect()
         $location.path('/')
     }
@@ -254,64 +254,57 @@ angular.module('ShinyaApp.chatController', [])
     $scope.weatherBox = {}
     $scope.isSameDay = false
     $scope.getGeoServices = function (){
-        if (!decodeToken.isGeoServices){
+        if (!$scope.isGeoServices){
             // 未開啟「位置服務」
             if ($scope.currentPage === 'infoBox'){
                 $scope.toggleCurrentPage('geoBox')
             }
-        } else {
+        } else if ($scope.geoBox.distance) {
             // 已開啟「位置服務」
-            if ($scope.geoBox.distance){
-                // 已獲取「位置服務」所需信息，跳轉到 `geo_box`
-                if ($scope.currentPage === 'infoBox'){
-                    $scope.toggleCurrentPage('geoBox')
-                }
-            } else {
-                // 未獲取「位置服務」所需信息，跳轉到「過場動畫」
-                if ($scope.currentPage === 'infoBox'){
-                    $scope.toggleCurrentPage('loadBox')
-                }
-                if (decodeToken.isGeoServices){
-                    $scope.isGeoServices = true
-                    $window.navigator.geolocation.getCurrentPosition(function (pos){
-                        console.log(pos.coords.latitude, pos.coords.longitude)
-                        $http.
-                        post('/api/getGeoServices', {
-                            coords: {
-                                lat: pos.coords.latitude,
-                                lon: pos.coords.longitude
-                            }
-                        }).
-                        success(function (data, status, headers, config){
-
-                            var last_code    = data.msg.last_geo.weather.code,
-                                last_isNight = data.msg.last_geo.weather.isNight,
-                                now_code     = data.msg.now_geo.weather.code,
-                                now_isNight  = data.msg.now_geo.weather.isNight
-                                last_weather = syGeoHelper.getGeoWeatherType(last_code, last_isNight),
-                                now_weather  = syGeoHelper.getGeoWeatherType(now_code, now_isNight);
-
-                            $scope.geoBox = data.msg
-                            $scope.geoBox.distance = syGeoHelper.getDistance(data.msg.last_geo, data.msg.now_geo)
-                            $scope.weatherBox = {
-                                'last_weather': last_weather,
-                                'now_weather': now_weather
-                            }
-                            $scope.isSameDay = syTimeHelper.isSameDay($scope.geoBox.now_geo.date, $scope.geoBox.last_geo.date)
-                            if ($scope.currentPage === 'loadBox'){
-                                $scope.toggleCurrentPage('geoBox')
-                            }
-                        }).
-                        error(function (data, status, headers, config){
-                            if (status === 401){
-                                $location.path('/')
-                            }
-                        })
-                    })
-                } else {
-                    console.log('geo services off')
-                }
+            // 已獲取「位置服務」所需信息，跳轉到 `geo_box`
+            if ($scope.currentPage === 'infoBox'){
+                $scope.toggleCurrentPage('geoBox')
             }
+        } else {
+            // 未獲取「位置服務」所需信息，跳轉到「過場動畫」
+            if ($scope.currentPage === 'infoBox'){
+                $scope.toggleCurrentPage('loadBox')
+            }
+            $window.navigator.geolocation.getCurrentPosition(function (pos){
+                console.log(pos.coords.latitude, pos.coords.longitude)
+                $http.
+                post('/api/getGeoServices', {
+                    coords: {
+                        lat: pos.coords.latitude,
+                        lon: pos.coords.longitude
+                    }
+                }).
+                success(function (data, status, headers, config){
+
+                    var last_code    = data.msg.last_geo.weather.code,
+                        last_isNight = data.msg.last_geo.weather.isNight,
+                        now_code     = data.msg.now_geo.weather.code,
+                        now_isNight  = data.msg.now_geo.weather.isNight
+                        last_weather = syGeoHelper.getGeoWeatherType(last_code, last_isNight),
+                        now_weather  = syGeoHelper.getGeoWeatherType(now_code, now_isNight);
+
+                    $scope.geoBox = data.msg
+                    $scope.geoBox.distance = syGeoHelper.getDistance(data.msg.last_geo, data.msg.now_geo)
+                    $scope.weatherBox = {
+                        'last_weather': last_weather,
+                        'now_weather': now_weather
+                    }
+                    $scope.isSameDay = syTimeHelper.isSameDay($scope.geoBox.now_geo.date, $scope.geoBox.last_geo.date)
+                    if ($scope.currentPage === 'loadBox'){
+                        $scope.toggleCurrentPage('geoBox')
+                    }
+                }).
+                error(function (data, status, headers, config){
+                    if (status === 401){
+                        $location.path('/')
+                    }
+                })
+            })
         }
     }
     /********
@@ -375,8 +368,8 @@ angular.module('ShinyaApp.chatController', [])
         }
     }
     function onTextMsg(data) {
-        var isMe       = $rootScope.socket.id === data.id,
-            isBottom   = syPosHelper.isBottom($scope.isScrollDown);
+        var isMe     = $rootScope.socket.id === data.id,
+            isBottom = syPosHelper.isBottom($scope.isScrollDown);
         $scope.$apply(function (){
             $scope.msgInbox.push({
                 'isMe'      : isMe,
@@ -395,12 +388,10 @@ angular.module('ShinyaApp.chatController', [])
          */
         if ((isBottom || isMe) && $scope.isChatBox){
             syPosHelper.scrollToPos()
-        } else {
-            if (data.at && data.at.indexOf('@' + decodeToken.username) >= 0){
-                $scope.msgNotify('atMsg', data.username, data.date)
-            } else if (!isMe && !$scope.contentItem){
-                $scope.msgNotify('newMsg', '新消息')
-            }
+        } else if (data.at && data.at.indexOf('@' + decodeToken.username) >= 0){
+            $scope.msgNotify('atMsg', data.username, data.date)
+        } else if (!isMe && !$scope.contentItem){
+            $scope.msgNotify('newMsg', '新消息')
         }
     }
     $scope.emitTextMsg = function (){

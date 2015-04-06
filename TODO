@@ -49,7 +49,7 @@
 - #!forgot
     - back 按鈕更換 √
 - DB
-    - token expires: 14d
+    - token expires: 3d
     - 定時備份
     - api.js 和 index.js 的 DB 用戶分權
 
@@ -58,6 +58,10 @@
 
 - Perf
     - 圖片 expires
+
+- 遷移到 VPS 運行需修改
+    - app.js: MongoDB
+    - /public/js/controllers/chatController.js: SocketIO Port
 
 - 備忘
     - 發布到 GitHub 前將
@@ -68,5 +72,3 @@
         - getNews 的 「國家代碼」
     - 定義服務器 500 錯誤：app.js[60]
     - 屏蔽非瀏覽器發出的請求
-
-@RoberMac @RoberQi @Ro @RobeMac @Roberi @ro @Roberac @RobeQi @RoberMc @RberQi @berMac @berQi @RssoberMac @RobQi
