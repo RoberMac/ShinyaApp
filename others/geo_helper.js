@@ -2,8 +2,8 @@ var request   = require('request'),
     geocoder  = require('node-geocoder');
 
 var API_KEY = {
-    'Google': 'AIzaSyAbDnuQxB6VIAjG7O6Te4p_a1NvQws6Hy0',
-    'OpenWeatherMap': 'aaa8cad9839995223b58ea36eaa93c2b'
+    'Google': process.env.GKEY || '',
+    'OpenWeatherMap': process.env.OKEY || ''
 },
     google_geocoder = geocoder('google', 'https', {
         apiKey: API_KEY['Google'],
@@ -110,6 +110,7 @@ var geo_helper = {
                 log.error('[Geo: getGeoWeather]', err, res.statusCode)
                 callback({
                     description: '獲取天氣失敗',
+                    temp: 17,
                     code: 802,
                     isNight: false
                 })

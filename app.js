@@ -12,6 +12,7 @@ var express    = require('express'),
     Log        = require('log'),
     touch      = require('touch');
 
+
 // Log
 var log_file     = __dirname + '/logs/' + new Date().toUTCString() + '.log',
     email_helper = require('./others/email_helper');
@@ -19,12 +20,20 @@ touch(log_file, function (){
     log_reader = new Log('info',  fs.createReadStream(log_file))
     log_reader.on('line', function (data){
         if (data.level <= 4){
+            // 發送郵件提醒
             email_helper.app_error('shenyepoxiao@gmail.com', data.msg)
         } else {
             console.log(data.date, data.msg)
         }
     })
 })
+process.on('uncaughtException', function (err) {
+    log.alert(err.toString('utf8'));
+    // 發送郵件提醒
+    email_helper.app_error('shenyepoxiao@gmail.com', err.stack, function (){
+        process.exit(1)
+    })
+});
 
 // global variables
 global.io   = require('socket.io')(http)
@@ -33,15 +42,17 @@ global.News = require('./models/db').News
 global.key  = fs.readFileSync(__dirname + '/others/jwt.key')
 global.log  = new Log('info', fs.createWriteStream(log_file))
 
+// read database config form VCAP_SERVICES env
+var db_uri = process.env.VCAP_SERVICES 
+    ? JSON.parse(process.env.VCAP_SERVICES).mongodb[0].credentials.uri
+    : 'mongodb://test:test@localhost:27017/test'
+
 // Connect to DB
-mongoose.connect('mongodb://localhost/test', {
-    user: 'test',
-    pass: 'test'
-});
+mongoose.connect(db_uri);
 
 var db = mongoose.connection
 .on('err', function (err){
-    log.error('[DB]', err)
+    console.log(err)
 })
 .once('open', function (){
     log.info('[DB]', 'Connected to MongoDB')
@@ -83,6 +94,7 @@ app.use(helmet.contentSecurityPolicy({
 // Routing
 var index = require('./routes/index')
 app.use('/', index)
+app.use('/public', express.static('public'))
 var api   = require('./routes/api')
 app.use('/api', api)
 
@@ -130,6 +142,6 @@ var getNews = require('./others/rss_helper');
 getNews(1000 * 60 * 60 * 1)
 
 
-http.listen('3000', function (){
+http.listen(process.env.PORT || 3000, function (){
     log.info('[Listen]', '3000 port')
 })

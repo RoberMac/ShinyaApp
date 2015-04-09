@@ -213,7 +213,6 @@ angular.module('ShinyaApp.chatController', [])
     $scope.quit = function (){
         store.remove('id_token')
         store.remove('isGeoServices')
-        $window.location.reload()
         $rootScope.socket.disconnect()
         $location.path('/')
     }

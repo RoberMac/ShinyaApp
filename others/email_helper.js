@@ -3,8 +3,8 @@ var nodemailer        = require('nodemailer')
 var transporter = nodemailer.createTransport({
     service: 'Yahoo',
     auth: {
-        'user': 'shenyepoxiao@yahoo.com',
-        'pass': '4sfaxiLHMMvNnT('
+        'user': process.env.YAHOO_USER || '',
+        'pass': process.env.YAHOO_PWD || ''
     }
 })
 
@@ -28,11 +28,11 @@ var email_helper = {
                 log.error('[Forgot: SendMail Wrong]', err)
                 return err;
             } else {
-                log.info('[Forgot: SendMail Success]', info.response)
+                log.info('[Forgot: Send Forgot Mail Success]', info.response)
             }
         })
     },
-    app_error: function (email, text){
+    app_error: function (email, text, callback){
 
         var mailOptions = {
             from: '深夜，破曉 <shenyepoxiao@yahoo.com>',
@@ -42,10 +42,12 @@ var email_helper = {
         }
         transporter.sendMail(mailOptions, function(err, info){
             if (err){
-                log.error('[Forgot: SendMail Wrong]', err)
                 return err;
             } else {
-                log.info('[Forgot: SendMail Success]', info.response)
+                log.info('[Forgot: Send Error Mail Success]', info.response)
+            }
+            if (callback){
+                callback()
             }
         })
     }
