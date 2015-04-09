@@ -484,7 +484,7 @@ ul {
         width: 100%;
     }
     #info_numero_box {
-        font-size: 12px;
+        font-size: 11px;
         color: #555;
     }
     #info_numero_box span {
@@ -783,6 +783,11 @@ ul {
         bottom: 0px;
         left: 0px;
     }
+        #setting_inner_box #setting_bottom_left #demo_icon {
+            display: block;
+            width: 80px;
+            height: 80px;
+        }
     #setting_inner_box #setting_bottom_right {
         bottom: 0px;
         right: 0px;
@@ -849,6 +854,10 @@ ul {
         #setting_inner_box .setting_all_title#geoStatus_title{
             left: 0px;
             bottom: 0px;
+        }
+        #setting_inner_box .setting_all_title#demo_title {
+            top: 0px;
+            right: 0px;
         }
         #setting_inner_box .setting_all_title#quit_title{
             left: 0px;

@@ -16,6 +16,7 @@ router.get(['/', '/chat', '/forgot'], function (req, res, next){
     }
 })
 
+
 router.post('/register', function (req, res, next){
 
     log.info('[POST: /register]', req.ip, req.body.username)
@@ -59,11 +60,11 @@ router.post('/forgot_code', function (req, res, next){
 
     log.info('[POST: /forgot_code]', req.ip)
     if (!req.body.password){
-        log.error('[Forgot: Required Password]')
+        log.warning('[Forgot: Required Password]')
         next({'code': 400, 'status': 'error', 'msg': '請填寫新密碼'})
         return null
     } else if (!req.body.code) {
-        log.error('[Forgot: Required Code]')
+        log.warning('[Forgot: Required Code]')
         next({'code': 400, 'status': 'error', 'msg': '請填寫驗證碼'})
         return null
     }
@@ -76,13 +77,13 @@ router.post('/forgot_code', function (req, res, next){
         
         if (err) {
             if (err.name === 'TokenExpiredError'){
-                log.error('[Forgot: Code Expires]', err)
+                log.warning('[Forgot: Code Expires]', err)
                 res.status(400).json({'status': 'error', 'msg': '驗證碼已經過期了'})
             } else if (err.name === 'JsonWebTokenError'){
-                log.error('[Forgot: Wrong Code]', err)
+                log.warning('[Forgot: Wrong Code]', err)
                 res.status(400).json({'status': 'error', 'msg': '這個碼不是我發的'})
             } else {
-                log.error('[Forgot: WTF]', err)
+                log.warning('[Forgot: WTF]', err)
                 res.status(400).json({'status': 'error', 'msg': '我不知道你說什麼'})
             }
         } else {

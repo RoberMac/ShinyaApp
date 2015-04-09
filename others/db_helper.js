@@ -1,5 +1,5 @@
-var nodemailer        = require('nodemailer'),
-    geo_helper        = require('./geo_helper'),
+var geo_helper        = require('./geo_helper'),
+    email_helper      = require('./email_helper'),
     getBeginPlace     = require('./begin_place_helper'),
     getCountryAndCity = geo_helper.getCountryAndCity,
     getCityWeather    = geo_helper.getCityWeather,
@@ -28,7 +28,7 @@ var db_helper = {
                             return err
                         }
                         if (found){
-                            log.error('[Register: Username Existed]', username)
+                            log.warning('[Register: Username Existed]', username)
                             next({'code': 400, 'status': 'error', 'msg': '用戶名已存在'})
                         } else {
                             // 檢查電郵地址是否存在
@@ -39,7 +39,7 @@ var db_helper = {
                                     return err
                                 }
                                 if (found){
-                                    log.err('[Register: Email Address Existed]', email)
+                                    log.warning('[Register: Email Address Existed]', email)
                                     next({'code': 400, 'status': 'error', 'msg': '電郵地址已存在'})
                                 } else {
                                     // 獲取當前註冊用戶數
@@ -98,15 +98,15 @@ var db_helper = {
                         }
                     })
                 } else {
-                    log.error('[Register: Wrong Username]', 'maximum 16 characters')
+                    log.warning('[Register: Wrong Username]', 'maximum 16 characters')
                     res.json({'status': 'error', 'msg': '用戶名不能超過十六個字符'})
                 }
             } else {
-                log.error('[Register: Wrong Username]', 'cannot contain spaces')
+                log.warning('[Register: Wrong Username]', 'cannot contain spaces')
                 next({'code': 400, 'status': 'error', 'msg': '用戶名不能包含空格'})
             }
         } else {
-            log.error('[Register: Wrong Email Address]')
+            log.warning('[Register: Wrong Email Address]')
             next({'code': 400, 'status': 'error', 'msg': '電郵地址有誤'})
         }
     },
@@ -121,11 +121,11 @@ var db_helper = {
                 }
                 // 檢查用戶是否存在
                 if (!found){
-                    log.error('[Login: User Does Not Existed]', login_form.user)
+                    log.warning('[Login: User Does Not Existed]', login_form.user)
                     res.status(400).json({'status': 'error', 'msg': '用戶不存在'})
                 } else {
                     if (!login_form.password){
-                        log.error('[Login: Required Password]', login_form.user)
+                        log.warning('[Login: Required Password]', login_form.user)
                         next({'code': 400, 'status': 'error', 'msg': '請輸入密碼'})
                     } else {
                         // 檢查密碼是否正確
@@ -143,7 +143,7 @@ var db_helper = {
                             log.info('[Login: Success]', login_form.user)
                             res.json({'token': token})
                         } else {
-                            log.error('[Login: Wrong Password]', login_form.user)
+                            log.warning('[Login: Wrong Password]', login_form.user)
                             next({'code': 400, 'status': 'error', 'msg': '密碼有誤'})
                         }
                     }
@@ -158,11 +158,11 @@ var db_helper = {
                 }
                 // 檢查用戶是否存在
                 if (!found){
-                    log.error('[Login: User Does Not Existed]', login_form.user)
+                    log.warning('[Login: User Does Not Existed]', login_form.user)
                     res.status(400).json({'status': 'error', 'msg': '用戶不存在'})
                 } else {
                     if (!login_form.password){
-                        log.error('[Login: Required Password]', login_form.user)
+                        log.warning('[Login: Required Password]', login_form.user)
                         next({'code': 400, 'status': 'error', 'msg': '請輸入密碼'})
                     } else {
                         // 檢查密碼是否正確
@@ -180,7 +180,7 @@ var db_helper = {
                             log.info('[Login: Success]', login_form.user)
                             res.json({'token': token})
                         } else {
-                            log.error('[Login: Wrong Password]', login_form.user)
+                            log.warning('[Login: Wrong Password]', login_form.user)
                             next({'code': 400, 'status': 'error', 'msg': '密碼有誤'})
                         }
                     }
@@ -203,37 +203,12 @@ var db_helper = {
             }
             // 檢查電郵地址是否存在
             if (!found){
-                log.error('[Forgot: Email Address Does Not Existed]', forgot_email_form.email)
+                log.warning('[Forgot: Email Address Does Not Existed]', forgot_email_form.email)
                 next({'code': 400, 'status': 'error', 'msg': '電郵地址不存在'}) 
             } else {
 
                 // 發送驗證碼到用戶郵箱
-                var transporter = nodemailer.createTransport({
-                    service: 'Yahoo',
-                    auth: {
-                        'user': 'shenyepoxiao@yahoo.com',
-                        'pass': '4sfaxiLHMMvNnT('
-                    }
-                })
-                var mailOptions = {
-                    from: '深夜，破曉 <shenyepoxiao@yahoo.com>',
-                    to: forgot_email_form.email,
-                    subject: '尋找你的帳戶',
-                    html: '<div style=\'white-space: pre-wrap; word-break: break-all; margin: 0 auto; width: 300px;'
-                            + 'font-family: "Helvetica Neue","Palatino","Hiragino Sans GB","Microsoft YaHei","WenQuanYi Micro Hei",sans-serif;\'>'
-                            + '<h3 style=\'letter-spacing: 3px; font-size: 16px; text-align: center;\'>驗證碼</h3>'
-                            + '<p style=\'font-size:11px; text-align: center; color: #555;\'>'
-                            + code + 
-                            '</p><p style=\'font-size: 12px; text-align: center; color:#CECECF;\'>請在 60 分鐘內驗證</p><div>'
-                }
-                transporter.sendMail(mailOptions, function(err, info){
-                    if (err){
-                        log.error('[Forgot: SendMail Wrong]', err)
-                        return err;
-                    } else {
-                        log.info('[Forgot: SendMail Success]', info.response)
-                    }
-                })
+                email_helper.forgot_email(forgot_email_form.email, code)
                 log.info('[Forgot: Step One Success]')
                 res.json({'status': 'ok', 'msg': '請輸入收到的驗證碼'})
             }
@@ -248,7 +223,7 @@ var db_helper = {
                 return err
             }
             if (!found) {
-                log.error('[Forgot: Email Address Does Not Existed]', forgot_email_form.email)
+                log.warning('[Forgot: Email Address Does Not Existed]', forgot_email_form.email)
                 next({'code': 400, 'status': 'error', 'msg': '電郵地址不存在'})
             } else {
                 // 驗證碼最新鮮
@@ -262,7 +237,7 @@ var db_helper = {
                             return err
                         }
                         if (!found) {
-                            log.error('[Forgot: Email Address Does Not Existed]', forgot_email_form.email)
+                            log.warning('[Forgot: Email Address Does Not Existed]', forgot_email_form.email)
                             next({'code': 400, 'status': 'error', 'msg': '電郵地址不存在'})
                         } else {
                             log.info('[Forgot: Change Password Success]')
@@ -270,7 +245,7 @@ var db_helper = {
                         }
                     })
                 } else {
-                    log.error('[Forgot: Not Fresh Code]')
+                    log.warning('[Forgot: Not Fresh Code]')
                     next({'code': 400, 'status': 'error', 'msg': '請輸入最新的驗證碼'})
                 }
             }

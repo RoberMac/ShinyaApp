@@ -213,6 +213,7 @@ angular.module('ShinyaApp.chatController', [])
     $scope.quit = function (){
         store.remove('id_token')
         store.remove('isGeoServices')
+        $window.location.reload()
         $rootScope.socket.disconnect()
         $location.path('/')
     }
@@ -458,12 +459,7 @@ angular.module('ShinyaApp.chatController', [])
     if (!$rootScope.socket){
         connectSIO()
     } else {
-        /*
-         * 當從 '/chat' 按瀏覽器 back 後
-         * 會從 '/' 跳轉回 '/chat'，重新加載 template，斷開重新鏈接
-         *
-         */
-         reconnectSIO()
+        reconnectSIO()
     }
 
 }])

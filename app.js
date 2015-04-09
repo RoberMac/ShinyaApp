@@ -9,14 +9,29 @@ var express    = require('express'),
     http       = require('http').Server(app),
     mongoose   = require('mongoose'),
     helmet     = require('helmet'),
-    Log        = require('log');
+    Log        = require('log'),
+    touch      = require('touch');
+
+// Log
+var log_file     = __dirname + '/logs/' + new Date().toUTCString() + '.log',
+    email_helper = require('./others/email_helper');
+touch(log_file, function (){
+    log_reader = new Log('info',  fs.createReadStream(log_file))
+    log_reader.on('line', function (data){
+        if (data.level <= 4){
+            email_helper.app_error('shenyepoxiao@gmail.com', data.msg)
+        } else {
+            console.log(data.date, data.msg)
+        }
+    })
+})
 
 // global variables
 global.io   = require('socket.io')(http)
 global.User = require('./models/db').User
 global.News = require('./models/db').News
 global.key  = fs.readFileSync(__dirname + '/others/jwt.key')
-global.log  = new Log('info', fs.createWriteStream(__dirname + '/logs/' + new Date().toUTCString() + '.log'))
+global.log  = new Log('info', fs.createWriteStream(log_file))
 
 // Connect to DB
 mongoose.connect('mongodb://localhost/test', {
@@ -74,14 +89,14 @@ app.use('/api', api)
 
 // Handing 404   
 app.use(function (req, res){
-    log.error('[404: ' + req.originalUrl + ']')
+    log.warning('[404: ' + req.originalUrl + ']')
     res.status('404').sendFile(__dirname + '/views/404.html')
 })
 
 // Handing 400
 app.use(function (err, req, res, next){
     if (err.code === 400){
-        log.error('[400]', err)
+        log.warning('[400]', err)
         res.status(400).json({'status': 'error', 'msg': err.msg})
     } else {
         next(err)        
@@ -101,7 +116,7 @@ app.use(function (err, req, res, next){
 // Handing 401
 app.use(function (err, req, res, next){
     for (var i in err){
-        log.error('[401]', err)        
+        log.warning('[401]', err)        
     }
     if (err.status === 401){
         res.status(401).json({'status': 'error','msg': err.message})  

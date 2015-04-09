@@ -6,11 +6,17 @@ var minifyCSS = require('gulp-minify-css');
 // var del = require('del');
  
 var paths = {
-  scripts: ['client/js/**/*.coffee', '!client/external/**/*.coffee'],
-  images: 'client/img/**/*',
+  scripts: ['logs/*.js'],
   css: 'public/css/*.css'
 };
+
+var uglify = require('gulp-uglify');
  
+gulp.task('compress', function() {
+  gulp.src(paths.scripts)
+    .pipe(uglify())
+    .pipe(gulp.dest('logs/'))
+});
 // Not all tasks need to use streams 
 // A gulpfile is just another node program and you can use all packages available on npm 
 // gulp.task('clean', function(cb) {
@@ -38,13 +44,13 @@ var paths = {
 //     .pipe(gulp.dest('build/img'));
 // });
 
-gulp.task('css', function () {
-  return gulp.src(paths.css)
-    .pipe(sourcemaps.init())
-    .pipe(minifyCSS())
-    .pipe(sourcemaps.write())
-    .pipe(gulp.dest('public/dist/'))
-})
+// gulp.task('css', function () {
+//   return gulp.src(paths.css)
+//     .pipe(sourcemaps.init())
+//     .pipe(minifyCSS())
+//     .pipe(sourcemaps.write())
+//     .pipe(gulp.dest('public/dist/'))
+// })
  
 // // Rerun the task when a file changes 
 // gulp.task('watch', function() {
@@ -54,4 +60,4 @@ gulp.task('css', function () {
  
 // The default task (called when you run `gulp` from cli) 
 // gulp.task('default', ['watch', 'scripts', 'images']);
-gulp.task('default', ['css'])
+gulp.task('default', ['compress'])
