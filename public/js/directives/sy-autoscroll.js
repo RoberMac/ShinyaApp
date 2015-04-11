@@ -13,32 +13,27 @@ angular.module('ShinyaApp.autoscrollDirective' ,[])
                     // Scroll Down
                     scope.isScrollDown = true
                     // 以 `chat_box` 底部為基準，獲取當前閱覽消息
-                    for (var i = 0; i < pos_info_len; i++){
-                        var posInfo = scope.msgPosInfo[i]
-                        if (bottom_pos > posInfo.topPos && bottom_pos < posInfo.bottomPos){
-                            // 改變消息樣式
-                            scope.nowMsg(posInfo.id)
-                            // 若該消息包含圖片信息，提取並存儲到 `$scope.now_img_list`
-                            scope.$apply(function (){
-                                scope.now_img_list = scope.img_list[posInfo.id] || []
-                            })
-                        }
-                    }
+                    // for (var i = 0; i < pos_info_len; i++){
+                    //     var posInfo = scope.msgPosInfo[i]
+                    //     if (bottom_pos > posInfo.topPos && bottom_pos < posInfo.bottomPos){
+                    //         if (scope.img_list[posInfo.id]){
+                    //             scope.$apply(function (){
+                    //             })
+                    //         }
+                    //     }
+                    // }
                 } else {
                     // Scroll Up
                     scope.isScrollDown = false
                     // 以 `chat_box` 頂部為基準，獲取當前閱覽消息
-                    for (var i = 0; i < pos_info_len; i++){
-                        var posInfo = scope.msgPosInfo[i]
-                        if (top_pos > posInfo.topPos && top_pos < posInfo.bottomPos){
-                            // 改變消息樣式
-                            scope.nowMsg(posInfo.id)
-                            // 若該消息包含圖片信息，提取並存儲到 `$scope.now_img_list`
-                            scope.$apply(function (){
-                                scope.now_img_list = scope.img_list[posInfo.id] || []
-                            })
-                        }
-                    }
+                    // for (var i = 0; i < pos_info_len; i++){
+                    //     var posInfo = scope.msgPosInfo[i]
+                    //     if (top_pos > posInfo.topPos && top_pos < posInfo.bottomPos){
+                    //         // 若該消息包含圖片信息，提取並存儲到 `$scope.now_img_list`
+                    //         scope.$apply(function (){
+                    //         })
+                    //     }
+                    // }
                 }
                 pos = now_pos
                 if (syPosHelper.isBottom(scope.isScrollDown)){

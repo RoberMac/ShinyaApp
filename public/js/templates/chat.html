@@ -10,17 +10,22 @@
                 <div ng-if="!contentItem.isMe" class="username_box">
                     <span>{{contentItem.username}}</span>
                 </div>
-                <div id="{{contentItem.date}}" class="syShow content_box">
-                    <pre>{{contentItem.msg}}<span ng-if="!isImageLoaded">+</span></pre>
+                <div id="{{contentItem.date}}" class="content_box" ng-class="{'syShow': isAtMsgShow}">
+                    <pre>{{contentItem.msg}}</pre>
+                    <div class="img_pointer" ng-if="contentItem.isImg" ng-click="toggleImgBox(contentItem.isMe, contentItem.date)"></div>
                 </div>
             </div>
         </div>
     </div>
     <div ng-if="isZoomIn" id="img_fullscreen_box" class="general_animate">
         <div>
+            <div class="vertically_center" ng-click="toggleImageSize()">
+                <img ng-click="toggleImageSize()" ng-src="{{imgURL}}" alt="" sy-imageonload>
+            </div>
+        </div>
+        <div ng-show="!isImageLoaded">
             <div class="vertically_center">
-                <div ng-show="!isImageLoaded" class="load_animate"></div>
-                <img ng-show="isImageLoaded" ng-click="toggleImageSize()" ng-src="{{imgURL}}" alt="" sy-imageonload>
+                <div class="load_animate"></div>
             </div>
         </div>
     </div>

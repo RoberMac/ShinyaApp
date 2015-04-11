@@ -4,7 +4,9 @@ angular.module('ShinyaApp.imageonloadDirective', [])
     return {
         restrict: 'A',
         link: function(scope, elem, attr) {
+            elem.toggleClass('loding')
             elem.bind('load', function() {
+                elem.toggleClass('loding')
                 scope.$apply(function (){
                     scope.isImageLoaded = true
                 })

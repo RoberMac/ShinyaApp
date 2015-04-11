@@ -363,6 +363,7 @@ angular.module('ShinyaApp.chatController', [])
         $scope.$apply(function (){
             $scope.msgInbox.push({
                 'isMe'      : isMe,
+                'isImg'     : data.img_list.length > 0,
                 'isShowDate': syMsgHelper.isShowDate(data.date),
                 'date'      : data.date,
                 'msg'       : syMsgHelper.msgSanitization(data.msg, data.img_list),
@@ -370,7 +371,6 @@ angular.module('ShinyaApp.chatController', [])
             })
             if (data.img_list.length > 0){
                 $scope.img_list[data.date] = syMsgHelper.imgSanitization(data.img_list)
-                console.log($scope.img_list)
             }
         })
         /* 新消息抵達時：
@@ -429,6 +429,7 @@ angular.module('ShinyaApp.chatController', [])
                     $scope.$apply(function (){
                         $scope.msgInbox.push({
                             'isMe'      : decodeToken.username === data[i].username,
+                            'isImg'     : data[i].img_list.length > 0,
                             'isShowDate': (i === 0) ? true : false,
                             'date'      : data[i].date,
                             'msg'       : syMsgHelper.msgSanitization(data[i].msg, data[i].img_list),
@@ -436,7 +437,6 @@ angular.module('ShinyaApp.chatController', [])
                         })
                         if (data[i].img_list.length > 0){
                             $scope.img_list[data[i].date] = syMsgHelper.imgSanitization(data[i].img_list)
-                            console.log($scope.img_list)
                         }
                     })
                     // 存儲消息頂部與底部位置
