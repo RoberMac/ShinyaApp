@@ -10,9 +10,17 @@
                 <div ng-if="!contentItem.isMe" class="username_box">
                     <span>{{contentItem.username}}</span>
                 </div>
-                <div id="{{contentItem.date}}" class="content_box" ng-class="{'syShow': isAtMsgShow}">
-                    <pre>{{contentItem.msg}}</pre>
+                <div id="{{contentItem.date}}" class="syShow content_box">
+                    <pre>{{contentItem.msg}}<span ng-if="!isImageLoaded">+</span></pre>
                 </div>
+            </div>
+        </div>
+    </div>
+    <div ng-if="isZoomIn" id="img_fullscreen_box" class="general_animate">
+        <div>
+            <div class="vertically_center">
+                <div ng-show="!isImageLoaded" class="load_animate"></div>
+                <img ng-show="isImageLoaded" ng-click="toggleImageSize()" ng-src="{{imgURL}}" alt="" sy-imageonload>
             </div>
         </div>
     </div>
@@ -131,7 +139,7 @@
                 <!-- 過場動畫 -->
                 <div ng-show="currentPage === 'loadBox'" id="load_inner_box" class="general_animate">
                     <div class="vertically_center">
-                        <div id="load_animate"></div>
+                        <div class="load_animate"></div>
                     </div>
                 </div>
             </div>
@@ -200,6 +208,7 @@
 <!-- 頁面切換提示標誌 -->
 <div ng-if="!isMobile" class="sunAndMoon" ng-class="{'sun': isSun, 'moon': !isSun}" ng-click="toggleChatBox()">
 </div>
+<sy-img></sy-img>
 <sy-usercount></sy-usercount>
 <sy-beep></sy-beep>
 <div id="at_box" class="all_notify_box general_animate" ng-show="isChatBox" >

@@ -55,6 +55,7 @@
 
 - TIME
     - 夜晚變成全黑白配色
+    - 根據當前時間動態調整 border-shadow
 
 - Perf
     - 圖片 expires
@@ -64,6 +65,8 @@
     - /public/js/controllers/chatController.js: SocketIO Port
 
 - 備忘
+    - 修改 CSP
+    - chatController.js 的端口
     - 發布到 GitHub 前將
         - 郵箱帳號密碼隱藏
         - API KEY
@@ -72,3 +75,15 @@
         - getNews 的 「國家代碼」
     - 定義服務器 500 錯誤：app.js[60]
     - 屏蔽非瀏覽器發出的請求
+
+
+
+新浪圖床：
+thumb150: width = height = 150px
+mw600: width = 600px
+large: origin
+square: width = height = 80px
+thumbnail: width = 120px
+bmiddle: width > height ? width = 400px : height = 400px
+
+用 .jpg 後綴的 JS 文件測試 CSP 安全性

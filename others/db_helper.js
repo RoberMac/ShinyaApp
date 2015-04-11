@@ -138,7 +138,7 @@ var db_helper = {
                                 'weather': found.geo_info.weather,
                                 'isGeoServices': found.isGeoServices
                             }, key, {
-                                expiresInMinutes: 10
+                                expiresInMinutes: 60
                             })
                             log.info('[Login: Success]', login_form.user)
                             res.json({'token': token})
@@ -175,7 +175,7 @@ var db_helper = {
                                 'weather': found.geo_info.weather,
                                 'isGeoServices': found.isGeoServices
                             }, key, {
-                                expiresInMinutes: 10
+                                expiresInMinutes: 60
                             })
                             log.info('[Login: Success]', login_form.user)
                             res.json({'token': token})

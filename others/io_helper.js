@@ -1,5 +1,5 @@
-var fs   = require('fs'),
-    sjwt = require('socketio-jwt');
+var validator = require('validator'),
+    sjwt      = require('socketio-jwt');
 
 // io.use(function (a, b){
 //     a.my_token = key;
@@ -41,12 +41,27 @@ io.on('connection', function (socket) {
     // })
     socket.on('textMsg', function (msg) {
 
+        // 提取文本中的 URL
+        var url_list = msg.msg.match(/(https?:\/\/[^\s]+)/g),
+            img_list  = [];
+        // 提取 URL 中的 Image URL
+        if (url_list){
+            for (var i = 0; i < url_list.length; i++){
+                var url = url_list[i]
+                if (validator.isURL(url) && /\.(jpe?g|png|gif)$/i.test(url)){
+                    img_list.push(url)
+                }
+            }
+            console.log(img_list)
+        }
+        // 初始化消息對象
         var newMsg = {
                 'id'      : socket.id,
                 'date'    : Date.now(),
                 'msg'     : msg.msg,
                 'username': socket.decoded_token.username,
-                'at'      : msg.at
+                'at'      : msg.at,
+                'img_list': img_list
             }
         // 緩存十條消息
         if (msgCache.length < 10){
@@ -55,6 +70,7 @@ io.on('connection', function (socket) {
             msgCache.shift()
             msgCache.push(newMsg)
         }
+        console.log(msgCache)
         io.emit('textMsg', newMsg)
     })
     socket.on('disconnect', function (msg) {

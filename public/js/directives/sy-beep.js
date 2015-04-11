@@ -26,25 +26,22 @@ angular.module('ShinyaApp.beepDirective', [])
             $scope.msgNotifyBox = {}
             $scope.contentItem = 0
             /* 滾動到消息位置後改變消息樣式 */
-            $scope.isAtMsgShow = false
-            function atMsg(id){
-                $scope.isAtMsgShow = true
+            $scope.nowMsg = function(id){
                 var elem = document.getElementById(id)
-                elem.classList.add('atMsg')
+                if (!elem.classList.contains('atMsg')){
+                    elem.classList.add('atMsg')
+                }
                 $timeout(function (){
                     elem.classList.remove('atMsg')
-                    $timeout(function (){
-                        $scope.isAtMsgShow = false
-                    }, 717)
                 }, 717)
             }
             function scrollToSpecPos(){
                 $scope.isViewMsg = true
                 if ($scope.contentItem){
                     // 有用戶提到（@）你，滾動到相應位置
-                    var pos = syPosHelper.getElementPos($scope.contentItem)
+                    var pos = syPosHelper.getElementPos($scope.contentItem) - syPosHelper.chatBoxHeight / 2
                     syPosHelper.scrollToPos(pos || null, $scope.isScrollDown)
-                    atMsg($scope.contentItem)
+                    $scope.nowMsg($scope.contentItem)
                     $scope.contentItem = 0
                 } else {
                     // 新消息，滾動到底部

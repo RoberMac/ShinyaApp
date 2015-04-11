@@ -21,7 +21,7 @@ touch(log_file, function (){
     log_reader.on('line', function (data){
         if (data.level <= 4){
             // 發送郵件提醒
-            email_helper.app_error('shenyepoxiao@gmail.com', data.msg)
+            // email_helper.app_error('shenyepoxiao@gmail.com', data.msg)
         } else {
             console.log(data.date, data.msg)
         }
@@ -30,9 +30,9 @@ touch(log_file, function (){
 process.on('uncaughtException', function (err) {
     log.alert(err.toString('utf8'));
     // 發送郵件提醒
-    email_helper.app_error('shenyepoxiao@gmail.com', err.stack, function (){
-        process.exit(1)
-    })
+    // email_helper.app_error('shenyepoxiao@gmail.com', err.stack, function (){
+    //     process.exit(1)
+    // })
 });
 
 // global variables
@@ -83,7 +83,8 @@ app.use(helmet.hidePoweredBy({ setTo: 'PHP 4.2.0' }))
 app.use(helmet.contentSecurityPolicy({
     defaultSrc: ["'self'"],
     // scriptSrc: ["'self'", "'unsafe-inline'", "'unsafe-eval'"],
-    // styleSrc: ["'self'", "'unsafe-inline'", "'unsafe-eval'"],
+    styleSrc: ["'self'", "http://*.clouddn.com"],
+    imgSrc: ["*"],
     connectSrc: ['*'],
     reportOnly: false, // set to true if you only want to report errors
     setAllHeaders: false, // set to true if you want to set all headers

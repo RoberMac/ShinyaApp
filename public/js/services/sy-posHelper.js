@@ -15,22 +15,21 @@ angular.module('ShinyaApp.posHelperServices', [])
      *      否：根據是否在底部和是否本人發送新消息，判斷是否需要滾動到底部
      */
     this.nowPos = 0
+    this.chatBoxHeight = document.getElementById('chat_box').clientHeight
     this.storeNowPos = function (){
-        var chatBoxElem = document.getElementById('chat_box')
-        this.nowPos = chatBoxElem.scrollTop
+        this.nowPos = document.getElementById('chat_box').scrollTop
     }
     this.getNowPos = function (){
-        var chatBoxElem = document.getElementById('chat_box')
-        return chatBoxElem.scrollTop
+        return document.getElementById('chat_box').scrollTop
     }
-    this.getElementPos = function (id){
-        var contentItemElem = document.getElementById(id),
-            chatBoxElem = document.getElementById('chat_box');
-        return contentItemElem.offsetTop - chatBoxElem.clientHeight / 2
+    this.getElemTopPos = function (id){
+        return document.getElementById(id).offsetTop
+    }
+    this.getElemBottomPos = function (id){
+        return document.getElementById(id).offsetTop + document.getElementById(id).clientHeight
     }
     this.setNowPos = function (nowPos){
-        var chatBoxElem = document.getElementById('chat_box')
-        chatBoxElem.scrollTop = nowPos
+        document.getElementById('chat_box').scrollTop = nowPos
     }
     this.getBottomPos = function (){
         var chatBoxElem = document.getElementById('chat_box')
