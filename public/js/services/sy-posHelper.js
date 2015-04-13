@@ -35,9 +35,9 @@ angular.module('ShinyaApp.posHelperServices', [])
         var chatBoxElem = document.getElementById('chat_box')
         return chatBoxElem.scrollHeight - chatBoxElem.clientHeight
     }
-    this.isBottom = function (isScrollDown){
+    this.isBottom = function (){
         var chatBoxElem = document.getElementById('chat_box')
-        return (chatBoxElem.scrollHeight - chatBoxElem.clientHeight - chatBoxElem.scrollTop <= 0) || isScrollDown
+        return (chatBoxElem.scrollHeight - chatBoxElem.clientHeight - chatBoxElem.scrollTop <= 0)
     }
     this.scrollToPos = function (pos, isScrollDown){
 

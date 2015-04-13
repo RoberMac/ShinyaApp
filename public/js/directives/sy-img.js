@@ -3,7 +3,7 @@ angular.module('ShinyaApp.imgDirective', [])
     return {
         restrict: 'E',
         replace : true,
-        template: '<div id="img_box" ng-class="{\'me\': isImgBoxRight}">'
+        template: '<div ng-if="now_img_list" id="img_box" ng-class="{\'me\': isImgBoxRight}">'
                 +   '<ul>'
                 +       '<li ng-repeat="url in now_img_list" class="general_animate">'
                 +           '<img ng-src="{{url.thumbnail}}" ng-class="{\'zoom_out\': isZoomIn && $index === now_zoom_id}" ng-click="toggleImageSize(url.bmiddle, $index)" sy-imageonload>'
@@ -34,9 +34,24 @@ angular.module('ShinyaApp.imgDirective', [])
             $scope.now_img_list = []
             $scope.now_zoom_id = -1
             $scope.imgURL = ''
-            $scope.toggleImgBox = function (isMe, id){
-                $scope.isImgBoxRight = isMe
-                $scope.now_img_list = $scope.img_list[id] || []
+            $scope.toggleImgBox = function (obj){
+                var isMe = obj.isMe,
+                    id   = obj.date;
+                if ($scope.now_img_list !== $scope.img_list[id] && angular.equals($scope.now_img_list,[])){
+                    // 現在不存在已打開的圖片預覽，直接打開
+                    $scope.isImgBoxRight = isMe
+                    $scope.now_img_list = $scope.img_list[id]
+                } else if ($scope.now_img_list !== $scope.img_list[id] && !angular.equals($scope.now_img_list,[])){
+                    // 現在存在已打開的圖片預覽，先關閉，再打開
+                    $scope.now_img_list = []
+                    $timeout(function (){
+                        $scope.isImgBoxRight = isMe
+                        $scope.now_img_list = $scope.img_list[id]
+                    }, 717)
+                } else {
+                    // 關閉圖片預覽
+                    $scope.now_img_list = []
+                }
             }
             $scope.toggleImageSize = function (url, id){
                 if (url && id !== $scope.now_zoom_id){

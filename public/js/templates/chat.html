@@ -10,10 +10,10 @@
                 <div ng-if="!contentItem.isMe" class="username_box">
                     <span>{{contentItem.username}}</span>
                 </div>
-                <div id="{{contentItem.date}}" class="content_box" ng-class="{'syShow': isAtMsgShow}">
+                <div id="{{contentItem.date}}" class="content_box" ng-class="{'syShow': isAtMsgShow, 'img_msg': contentItem.isImg}" ng-click="toggleImgBox(contentItem)">
                     <pre>{{contentItem.msg}}</pre>
-                    <div class="img_pointer" ng-if="contentItem.isImg" ng-click="toggleImgBox(contentItem.isMe, contentItem.date)"></div>
                 </div>
+                <div class="img_pointer" ng-if="contentItem.isImg" ng-class="{'img_click_pointer': now_img_list === img_list[contentItem.date]}" ng-click="toggleImgBox(contentItem)"></div>
             </div>
         </div>
     </div>

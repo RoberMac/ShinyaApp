@@ -83,6 +83,7 @@ ul {
             font-size: 12px;
             color: #CECECF;
         }
+        /* 「用戶信息界面」右下角，進入「設置界面」按鈕 */
         #setting {
             position: relative;
             width: 12px;
@@ -148,6 +149,7 @@ ul {
         color: #CECECF;
         z-index: 999;
     }
+        /* 「用戶信息界面」左下角，進入「位置服務」按鈕 */
         #getGeoServices {
             position: relative;
             top: 0px;
@@ -253,25 +255,34 @@ ul {
     overflow-x: hidden;
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
+    z-index: 0;
 }
     #chat_box .all {
+        position: relative;
         width: 100%;
         margin: 5px auto;
+    }
+    #chat_box .all .img_pointer {
+        position: absolute;
+        bottom: 0;
+        width: 17px;
+        height: 17px;
+        cursor: pointer;
+        z-index: 0;
     }
     #chat_box .all .content_box {
         position: relative;
         padding: 4px 10px;
         max-width: 66.7%;
         border-radius: 7px;
+        z-index: 1;
     }
-        #chat_box .all .content_box .img_pointer {
-            position: absolute;
-            width: 7px;
-            height: 7px;
-            bottom: 0;
-            background-color: #535353;
+        #chat_box .all .content_box.img_msg {
             cursor: pointer;
         }
+            #chat_box .all .content_box.img_msg pre {
+                cursor: pointer;
+            }
         #chat_box .all .content_box.atMsg {
             color: #FFF;
             background-color: #000;
@@ -295,14 +306,40 @@ ul {
     #chat_box .me {
         float: right;
     }
+        #chat_box .me .img_pointer {
+            right: 0;
+            background-color: #CECECF;
+            border-bottom-right-radius: 7px;
+        }
+            #chat_box .me .img_pointer.img_click_pointer {
+                background-color: #535353;
+            }
         #chat_box .me .content_box {
             float: right;
             color: #FFF;
             background-color: #4EBD4A;
         }
-        #chat_box .me .content_box .img_pointer {
-            right: 0;
-            border-bottom-right-radius: 7px;
+        #chat_box .me .content_box.img_msg {
+            border-bottom-right-radius: 17px;
+        }
+    #chat_box .others {
+        float: left;
+    }
+        #chat_box .others .img_pointer {
+            left: 0;
+            background-color: #4EBD4A;
+            border-bottom-left-radius: 7px;
+        }
+            #chat_box .others .img_pointer.img_click_pointer {
+                background-color: #CB1B45;
+            }
+        #chat_box .others .content_box {
+            float: left;
+            color: #000;
+            background-color: #CECECF;
+        }
+        #chat_box .others .content_box.img_msg {
+            border-bottom-left-radius: 17px;
         }
     #chat_box .info_box {
         font-size: 10px;
@@ -320,18 +357,6 @@ ul {
             -webkit-border-radius: 4px;
             border-radius: 4px;
             padding: 0px 2px;
-        }
-    #chat_box .others {
-        float: left;
-    }
-        #chat_box .others .content_box {
-            float: left;
-            color: #000;
-            background-color: #CECECF;
-        }
-        #chat_box .others .content_box .img_pointer {
-            left: 0;
-            border-bottom-left-radius: 7px;
         }
 /* img_box */
 #img_box {
@@ -387,6 +412,7 @@ ul {
     overflow-x: hidden;
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
+    z-index: 1;
 }
     #img_fullscreen_box > div {
         position: absolute;
@@ -395,11 +421,15 @@ ul {
         display: table;
     }
         #img_fullscreen_box img {
-            max-width: 100%;
+            max-width: 90%;
             cursor: pointer;
             cursor: -webkit-zoom-out;
             -moz-box-shadow: 0px 3px 15px 0px rgba(0,0,0,0.50);
             box-shadow: 0px 3px 15px 0px rgba(0,0,0,0.50);
+        }
+        #img_fullscreen_box svg {
+            cursor: pointer;
+            cursor: -webkit-zoom-out;
         }
         #img_fullscreen_box > div .load_animate:before {
             background-color: #FFF;
@@ -1052,6 +1082,7 @@ input,
 .geoOnAndOff,
 .setting_all_title,
 .syShow,
+#chat_box .all .img_pointer,
 #img_box img,
 #mute,
 #quit:before,
@@ -1287,12 +1318,6 @@ input,
     #news_inner_box #news_source_box {
         margin-bottom: 17%;
     }
-    #geo_inner_box #now_weather span {
-        top: 17%;
-    }
-    #geo_inner_box #last_weather span {
-        top: 44%;
-    }
     #chat_submit_box {
         top: 92.5%;
         left: 3%;
@@ -1343,9 +1368,6 @@ input,
     }
     #info_inner_box #info_date_box > div {
         margin: 4% auto;
-    }
-    #geo_inner_box #last_weather span {
-        top: 19%;
     }
     .all_notify_box {
         bottom: 11%;
@@ -1424,12 +1446,6 @@ input,
     #info_inner_box #info_date_box > div {
         margin: 7% auto;
     }
-    #geo_inner_box #now_weather span {
-        top: 20%;
-    }
-    #geo_inner_box #last_weather span {
-        top: 53%;
-    }
     #chat_submit_box {
         top: 91.5%;
         left: 2%;
@@ -1452,8 +1468,5 @@ input,
     }
     #info_inner_box #info_date_box > div {
         margin: 5% auto;
-    }
-    #geo_inner_box #last_weather span {
-        top: 47%;
     }
 }

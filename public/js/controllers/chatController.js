@@ -49,6 +49,8 @@ angular.module('ShinyaApp.chatController', [])
             $scope.isChatBox = !$scope.isChatBox
             $scope.isSun     = !$scope.isSun
         }
+        $scope.now_img_list = []
+        $scope.isZoomIn = false
     }
     $scope.currentPage = 'infoBox'
     $scope.toggleCurrentPage = function (name){
@@ -359,7 +361,7 @@ angular.module('ShinyaApp.chatController', [])
     $scope.msgPosInfo = []
     function onTextMsg(data) {
         var isMe     = $rootScope.socket.id === data.id,
-            isBottom = syPosHelper.isBottom($scope.isScrollDown);
+            isBottom = syPosHelper.isBottom($scope.isScrollDown) || $scope.isScrollDown;
         $scope.$apply(function (){
             $scope.msgInbox.push({
                 'isMe'      : isMe,
