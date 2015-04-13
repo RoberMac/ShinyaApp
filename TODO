@@ -87,3 +87,21 @@ thumbnail: width = 120px
 bmiddle: width > height ? width = 400px : height = 400px
 
 用 .jpg 後綴的 JS 文件測試 CSP 安全性
+
+// GIF 動畫
+http://ww4.sinaimg.cn/large/6aa09e8fgw1eqxyubpq0kg20b4069qv8.gif
+http://ww3.sinaimg.cn/large/6aa09e8fgw1eqxywbo1vdg20b40694qr.gif
+http://ww1.sinaimg.cn/large/6aa09e8fgw1eqxzcgetkog20b4069e85.gif
+http://ww2.sinaimg.cn/large/6aa09e8fgw1eqxynzqokhg20b4069b29.gif
+http://ww1.sinaimg.cn/large/6aa09e8fgw1eqxyzhzohmg20b4069npd.gif
+http://ww2.sinaimg.cn/large/6aa09e8fgw1eqxyzz93gyg20b40694qr.gif
+
+// 連圖
+http://ww4.sinaimg.cn/large/61d74717jw1er41rgj7eyj218g0x7ndp.jpg
+http://ww4.sinaimg.cn/large/61d74717jw1er41rnudifj218g0x7dy3.jpg
+http://ww2.sinaimg.cn/large/61d74717jw1er41rwy3y5j218g0x71fc.jpg
+http://ww3.sinaimg.cn/large/61d74717jw1er41ra1zaaj218g0x7keo.jpg
+http://ww3.sinaimg.cn/large/61d74717jw1er41s2va0oj218g0x7k5y.jpg
+
+// 長微博
+http://ww4.sinaimg.cn/large/70be0b0cgw1er41erhk9yj20hs1pytc8.jpg

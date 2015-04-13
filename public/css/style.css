@@ -33,9 +33,6 @@ body {
     color:    #D0D0D0;
 }
 */
-::-webkit-scrollbar { 
-    display: none; 
-}
 a, a:active, a:hover, a:visited {
     color: black;
     cursor: pointer;
@@ -275,6 +272,9 @@ ul {
         padding: 4px 10px;
         max-width: 66.7%;
         border-radius: 7px;
+        -webkit-user-select: text;
+        -moz-user-select: text;
+        user-select: text;
         z-index: 1;
     }
         #chat_box .all .content_box.img_msg {
@@ -288,7 +288,6 @@ ul {
             background-color: #000;
         }
         #chat_box .all .content_box pre {
-            -webkit-user-select: text;
             text-align: left;
             word-wrap: break-word;
             white-space: pre-wrap;
@@ -369,6 +368,9 @@ ul {
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
 }
+    #img_box::-webkit-scrollbar { 
+        display: none; 
+    }
     #img_box img {
         width: 57px;
         height: 57px;
@@ -402,6 +404,18 @@ ul {
     #img_box.me img.zoom_out {
         -webkit-filter: grayscale(1);
         filter: grayscale(1);
+    }
+#img_box.mobile {
+    height: 77px;
+    white-space: nowrap;
+    overflow-y: hidden;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    z-index: 3;
+}
+    #img_box.mobile li {
+        margin: 0 5px;
+        display: inline-block;
     }
 /* img_fullscreen_box */
 #img_fullscreen_box {
@@ -446,6 +460,9 @@ ul {
     white-space: nowrap;
     z-index: 3;
 }
+    .all_notify_box::-webkit-scrollbar {
+        display: none;
+    }
     .all_notify_box > span {
         display: inline-block;
         margin-right: 7px;
@@ -1255,11 +1272,13 @@ input,
 
 /* Mobile Phone in portrait and landscape */
 @media (max-device-width : 767px), (max-width: 767px) {
-    .main_box {
+    .main_box, #img_box.mobile {
         width: 94%;
-        height: 95.5%;
         top: 3.5%;
         left: 3%;
+    }
+    .main_box {
+        height: 95.5%;
     }
     .back_button {
         top: 3.5%;
@@ -1340,11 +1359,13 @@ input,
 /* Mobile Phone in landscape */
 @media (max-device-width : 767px) and (orientation : landscape), 
 (max-width: 767px) and (orientation : landscape) {
-    .main_box {
+    .main_box, #img_box.mobile {
         width: 97%;
-        height: 97%;
         top: 1.5%;
         left: 1.5%;
+    }
+    .main_box {
+        height: 97%;
     }
     .back_button {
         top: 1.5%;
@@ -1392,11 +1413,13 @@ input,
     body {
         font-size: 17px;
     }
-    .main_box {
+    .main_box, #img_box.mobile {
         width: 96%;
-        height: 96%;
         top: 2%;
         left: 2%;
+    }
+    .main_box {
+        height: 96%;
     }
     .back_button {
         top: 2%;

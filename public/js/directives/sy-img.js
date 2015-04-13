@@ -3,7 +3,7 @@ angular.module('ShinyaApp.imgDirective', [])
     return {
         restrict: 'E',
         replace : true,
-        template: '<div ng-if="now_img_list" id="img_box" ng-class="{\'me\': isImgBoxRight}">'
+        template: '<div ng-if="now_img_list" id="img_box" ng-class="{\'me\': isImgBoxRight, \'mobile\': isMobile}">'
                 +   '<ul>'
                 +       '<li ng-repeat="url in now_img_list" class="general_animate">'
                 +           '<img ng-src="{{url.thumbnail}}" ng-class="{\'zoom_out\': isZoomIn && $index === now_zoom_id}" ng-click="toggleImageSize(url.bmiddle, $index)" sy-imageonload>'
