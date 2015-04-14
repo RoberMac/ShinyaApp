@@ -1,13 +1,6 @@
 var mongoose = require('mongoose'),
     Schema   = mongoose.Schema
 
-// mongoose.connect('mongodb://localhost/test')
-// var db = mongoose.connection.
-// on('error', console.error.bind(console, 'connection error')).
-// once('open', function (callback) {
-//   console.log('[Connected to MongoDB]')
-// });
-
 var userSchema = new Schema({
     username     : {
         type     : String,

@@ -6,7 +6,7 @@ angular.module('ShinyaApp.autoscrollDirective' ,[])
             var pos = syPosHelper.getNowPos()
             elem.bind('scroll', function (){
                 var now_pos = syPosHelper.getNowPos()
-                if (now_pos > pos){
+                if (now_pos >= pos && syPosHelper.getNowPos() > 0){
                     // Scroll Down
                     scope.isScrollDown = true
                 } else {

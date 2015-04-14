@@ -90,7 +90,6 @@ angular.module('ShinyaApp.forgotController', [])
         error(function (data, status, headers, config){
             $scope.msgNotify('error', data)
         })
-        console.log($scope.forgot)
         $scope.forgot = {}
     }
 }])

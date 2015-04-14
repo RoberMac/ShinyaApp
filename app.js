@@ -9,24 +9,50 @@ var express    = require('express'),
     http       = require('http').Server(app),
     mongoose   = require('mongoose'),
     helmet     = require('helmet'),
-    Log        = require('log');
+    Log        = require('log'),
+    touch      = require('touch');
+
+
+// Log
+var log_file     = __dirname + '/logs/' + new Date().toUTCString() + '.log',
+    email_helper = require('./others/email_helper');
+touch(log_file, function (){
+    log_reader = new Log('info',  fs.createReadStream(log_file))
+    log_reader.on('line', function (data){
+        if (data.level <= 4){
+            // 發送郵件提醒
+            email_helper.app_error('shenyepoxiao@gmail.com', data.msg)
+        } else {
+            console.log(data.date, data.msg)
+        }
+    })
+})
+process.on('uncaughtException', function (err) {
+    log.alert(err.toString('utf8'));
+    // 發送郵件提醒
+    email_helper.app_error('shenyepoxiao@gmail.com', err.stack, function (){
+        process.exit(1)
+    })
+});
 
 // global variables
 global.io   = require('socket.io')(http)
 global.User = require('./models/db').User
 global.News = require('./models/db').News
 global.key  = fs.readFileSync(__dirname + '/others/jwt.key')
-global.log  = new Log('info', fs.createWriteStream(__dirname + '/logs/' + new Date().toUTCString() + '.log'))
+global.log  = new Log('info', fs.createWriteStream(log_file))
+
+// read database config form VCAP_SERVICES env
+var db_uri = process.env.VCAP_SERVICES 
+    ? JSON.parse(process.env.VCAP_SERVICES).mongodb[0].credentials.uri
+    : 'mongodb://test:test@localhost:27017/test'
 
 // Connect to DB
-mongoose.connect('mongodb://localhost/test', {
-    user: 'test',
-    pass: 'test'
-});
+mongoose.connect(db_uri);
 
 var db = mongoose.connection
 .on('err', function (err){
-    log.error('[DB]', err)
+    console.log(err)
 })
 .once('open', function (){
     log.info('[DB]', 'Connected to MongoDB')
@@ -57,7 +83,8 @@ app.use(helmet.hidePoweredBy({ setTo: 'PHP 4.2.0' }))
 app.use(helmet.contentSecurityPolicy({
     defaultSrc: ["'self'"],
     // scriptSrc: ["'self'", "'unsafe-inline'", "'unsafe-eval'"],
-    // styleSrc: ["'self'", "'unsafe-inline'", "'unsafe-eval'"],
+    styleSrc: ["'self'", "http://*.clouddn.com"],
+    imgSrc: ["*"],
     connectSrc: ['*'],
     reportOnly: false, // set to true if you only want to report errors
     setAllHeaders: false, // set to true if you want to set all headers
@@ -68,20 +95,21 @@ app.use(helmet.contentSecurityPolicy({
 // Routing
 var index = require('./routes/index')
 app.use('/', index)
+app.use('/public', express.static('public'))
 var api   = require('./routes/api')
 app.use('/api', api)
 
 
 // Handing 404   
 app.use(function (req, res){
-    log.error('[404: ' + req.originalUrl + ']')
+    log.warning('[404: ' + req.originalUrl + ']')
     res.status('404').sendFile(__dirname + '/views/404.html')
 })
 
 // Handing 400
 app.use(function (err, req, res, next){
     if (err.code === 400){
-        log.error('[400]', err)
+        log.warning('[400]', err)
         res.status(400).json({'status': 'error', 'msg': err.msg})
     } else {
         next(err)        
@@ -101,7 +129,7 @@ app.use(function (err, req, res, next){
 // Handing 401
 app.use(function (err, req, res, next){
     for (var i in err){
-        log.error('[401]', err)        
+        log.warning('[401]', err)        
     }
     if (err.status === 401){
         res.status(401).json({'status': 'error','msg': err.message})  
@@ -115,6 +143,6 @@ var getNews = require('./others/rss_helper');
 getNews(1000 * 60 * 60 * 1)
 
 
-http.listen('3000', function (){
+http.listen(process.env.PORT || 3000, function (){
     log.info('[Listen]', '3000 port')
 })

@@ -1,6 +1,6 @@
 angular.module('ShinyaApp.chatController', [])
-.controller('chatController', ['$rootScope', '$scope', '$http', '$timeout', '$window', '$location', '$filter', 'jwtHelper','store', 'syPosHelper', 'syTimeHelper', 'syGeoHelper', 
-    function ($rootScope, $scope, $http, $timeout, $window, $location, $filter, jwtHelper, store, syPosHelper, syTimeHelper, syGeoHelper){
+.controller('chatController', ['$rootScope', '$scope', '$http', '$timeout', '$window', '$location', '$filter', 'jwtHelper','store', 'syPosHelper', 'syTimeHelper', 'syGeoHelper', 'syMsgHelper', 
+    function ($rootScope, $scope, $http, $timeout, $window, $location, $filter, jwtHelper, store, syPosHelper, syTimeHelper, syGeoHelper, syMsgHelper){
 
     /*
      **********
@@ -49,6 +49,8 @@ angular.module('ShinyaApp.chatController', [])
             $scope.isChatBox = !$scope.isChatBox
             $scope.isSun     = !$scope.isSun
         }
+        $scope.now_img_list = []
+        $scope.isZoomIn = false
     }
     $scope.currentPage = 'infoBox'
     $scope.toggleCurrentPage = function (name){
@@ -149,7 +151,6 @@ angular.module('ShinyaApp.chatController', [])
             if (!$scope.isNewsExist){
                 $scope.toggleNewsExist()
             }
-            console.log($scope.selectDateNewsBox)
         } else {
             // 過場動畫
             $scope.toggleCurrentPage('loadBox')
@@ -206,13 +207,14 @@ angular.module('ShinyaApp.chatController', [])
             $scope.toggleCurrentPage('settingBox')
         }
      }
-    $scope.isMuted = store.get('isMuted')
+    $scope.isMuted = !!store.get('isMuted')
     $scope.toggleMuted = function (){
         $scope.isMuted = !$scope.isMuted
         store.set('isMuted', $scope.isMuted)
     }
     $scope.quit = function (){
         store.remove('id_token')
+        store.remove('isGeoServices')
         $rootScope.socket.disconnect()
         $location.path('/')
     }
@@ -254,64 +256,57 @@ angular.module('ShinyaApp.chatController', [])
     $scope.weatherBox = {}
     $scope.isSameDay = false
     $scope.getGeoServices = function (){
-        if (!decodeToken.isGeoServices){
+        if (!$scope.isGeoServices){
             // 未開啟「位置服務」
             if ($scope.currentPage === 'infoBox'){
                 $scope.toggleCurrentPage('geoBox')
             }
-        } else {
+        } else if ($scope.geoBox.distance) {
             // 已開啟「位置服務」
-            if ($scope.geoBox.distance){
-                // 已獲取「位置服務」所需信息，跳轉到 `geo_box`
-                if ($scope.currentPage === 'infoBox'){
-                    $scope.toggleCurrentPage('geoBox')
-                }
-            } else {
-                // 未獲取「位置服務」所需信息，跳轉到「過場動畫」
-                if ($scope.currentPage === 'infoBox'){
-                    $scope.toggleCurrentPage('loadBox')
-                }
-                if (decodeToken.isGeoServices){
-                    $scope.isGeoServices = true
-                    $window.navigator.geolocation.getCurrentPosition(function (pos){
-                        console.log(pos.coords.latitude, pos.coords.longitude)
-                        $http.
-                        post('/api/getGeoServices', {
-                            coords: {
-                                lat: pos.coords.latitude,
-                                lon: pos.coords.longitude
-                            }
-                        }).
-                        success(function (data, status, headers, config){
-
-                            var last_code    = data.msg.last_geo.weather.code,
-                                last_isNight = data.msg.last_geo.weather.isNight,
-                                now_code     = data.msg.now_geo.weather.code,
-                                now_isNight  = data.msg.now_geo.weather.isNight
-                                last_weather = syGeoHelper.getGeoWeatherType(last_code, last_isNight),
-                                now_weather  = syGeoHelper.getGeoWeatherType(now_code, now_isNight);
-
-                            $scope.geoBox = data.msg
-                            $scope.geoBox.distance = syGeoHelper.getDistance(data.msg.last_geo, data.msg.now_geo)
-                            $scope.weatherBox = {
-                                'last_weather': last_weather,
-                                'now_weather': now_weather
-                            }
-                            $scope.isSameDay = syTimeHelper.isSameDay($scope.geoBox.now_geo.date, $scope.geoBox.last_geo.date)
-                            if ($scope.currentPage === 'loadBox'){
-                                $scope.toggleCurrentPage('geoBox')
-                            }
-                        }).
-                        error(function (data, status, headers, config){
-                            if (status === 401){
-                                $location.path('/')
-                            }
-                        })
-                    })
-                } else {
-                    console.log('geo services off')
-                }
+            // 已獲取「位置服務」所需信息，跳轉到 `geo_box`
+            if ($scope.currentPage === 'infoBox'){
+                $scope.toggleCurrentPage('geoBox')
             }
+        } else {
+            // 未獲取「位置服務」所需信息，跳轉到「過場動畫」
+            if ($scope.currentPage === 'infoBox'){
+                $scope.toggleCurrentPage('loadBox')
+            }
+            $window.navigator.geolocation.getCurrentPosition(function (pos){
+                console.log(pos.coords.latitude, pos.coords.longitude)
+                $http.
+                post('/api/getGeoServices', {
+                    coords: {
+                        lat: pos.coords.latitude,
+                        lon: pos.coords.longitude
+                    }
+                }).
+                success(function (data, status, headers, config){
+
+                    var last_code    = data.msg.last_geo.weather.code,
+                        last_isNight = data.msg.last_geo.weather.isNight,
+                        now_code     = data.msg.now_geo.weather.code,
+                        now_isNight  = data.msg.now_geo.weather.isNight
+                        last_weather = syGeoHelper.getGeoWeatherType(last_code, last_isNight),
+                        now_weather  = syGeoHelper.getGeoWeatherType(now_code, now_isNight);
+
+                    $scope.geoBox = data.msg
+                    $scope.geoBox.distance = syGeoHelper.getDistance(data.msg.last_geo, data.msg.now_geo)
+                    $scope.weatherBox = {
+                        'last_weather': last_weather,
+                        'now_weather': now_weather
+                    }
+                    $scope.isSameDay = syTimeHelper.isSameDay($scope.geoBox.now_geo.date, $scope.geoBox.last_geo.date)
+                    if ($scope.currentPage === 'loadBox'){
+                        $scope.toggleCurrentPage('geoBox')
+                    }
+                }).
+                error(function (data, status, headers, config){
+                    if (status === 401){
+                        $location.path('/')
+                    }
+                })
+            })
         }
     }
     /********
@@ -331,13 +326,15 @@ angular.module('ShinyaApp.chatController', [])
         var at_list = newVal.match(/\@([^\s\@]){1,16}/g)
         if (at_list && at_list !== $scope.atUser){
             // 是否需要「新增」
-            for (var i = 0; i < at_list.length; i ++){
+            var at_list_len = at_list.length
+            for (var i = 0; i < at_list_len; i ++){
                 if ($scope.atUser.indexOf(at_list[i]) < 0){
                     $scope.atUser.push(at_list[i])
                 }
             }
             // 是否需要「刪減」
-            for(var i = 0; i < $scope.atUser.length; i ++){
+            var at_user_len = $scope.atUser.length
+            for(var i = 0; i < at_user_len; i ++){
                 if (at_list.indexOf($scope.atUser[i]) < 0){
                     $scope.atUser.splice(i, 1)
                 }
@@ -353,38 +350,30 @@ angular.module('ShinyaApp.chatController', [])
      *  
      *  `$scope.msgInbox`：存儲消息
      *  `$scope.msgOutbox`：待發送消息
-     *  `isShowDate`：判斷是否顯示當前時間
      *  `onTextMsg`：文本消息抵達
      *  `$scope.emitTextMsg`：文本消息發送
-     *  `connectSIO`：連接到服務器
-     *  `reconnectSIO`：重新連接服務器
      *
      */
     $scope.msgInbox = []
     $scope.msgOutbox = {
         'textMsg': ''
     }
-    // 間隔 60 秒顯示時間
-    var now = Date.now()
-    function isShowDate(date){
-        if (date - now > 1000 * 60){
-            now = Date.now()
-            return true
-        } else {
-            return false
-        }
-    }
+    $scope.msgPosInfo = []
     function onTextMsg(data) {
-        var isMe       = $rootScope.socket.id === data.id,
-            isBottom   = syPosHelper.isBottom($scope.isScrollDown);
+        var isMe     = $rootScope.socket.id === data.id,
+            isBottom = syPosHelper.isBottom($scope.isScrollDown) || $scope.isScrollDown;
         $scope.$apply(function (){
             $scope.msgInbox.push({
                 'isMe'      : isMe,
-                'isShowDate': isShowDate(data.date),
+                'isImg'     : data.img_list.length > 0,
+                'isShowDate': syMsgHelper.isShowDate(data.date),
                 'date'      : data.date,
-                'msg'       : data.msg,
-                'username'  : data.username
+                'msg'       : syMsgHelper.msgSanitization(data.msg, data.img_list),
+                'username'  : data.username,
             })
+            if (data.img_list.length > 0){
+                $scope.img_list[data.date] = syMsgHelper.imgSanitization(data.img_list)
+            }
         })
         /* 新消息抵達時：
          *      當用戶處於 chat_box 底部，滾動到底部
@@ -395,13 +384,17 @@ angular.module('ShinyaApp.chatController', [])
          */
         if ((isBottom || isMe) && $scope.isChatBox){
             syPosHelper.scrollToPos()
-        } else {
-            if (data.at && data.at.indexOf('@' + decodeToken.username) >= 0){
-                $scope.msgNotify('atMsg', data.username, data.date)
-            } else if (!isMe && !$scope.contentItem){
-                $scope.msgNotify('newMsg', '新消息')
-            }
+        } else if (data.at && data.at.indexOf('@' + decodeToken.username) >= 0){
+            $scope.msgNotify('atMsg', data.username, data.date)
+        } else if (!isMe && !$scope.contentItem){
+            $scope.msgNotify('newMsg', '新消息')
         }
+        // 存儲消息頂部與底部位置
+        $scope.msgPosInfo.push({
+            'id': data.date,
+            'topPos': syPosHelper.getElemTopPos(data.date),
+            'bottomPos': syPosHelper.getElemBottomPos(data.date)
+        })
     }
     $scope.emitTextMsg = function (){
 
@@ -418,29 +411,44 @@ angular.module('ShinyaApp.chatController', [])
             $scope.atUser = ''
             $scope.msgOutbox.textMsg = ''
         }
+        $scope.isZoomIn = false
     }
-
-    /* Socket.IO */
+    /*
+     **************
+     * Socket.IO
+     **************
+     */
     function connectSIO(){
         $rootScope.socket = io(':8080', {
             'query': 'token=' + token
             // 'secure': true
         })
         $rootScope.socket.on('connect', function (){
-
+            // 獲取最近的十條消息
             $rootScope.socket.emit('latestMsg', $scope.msgInbox.length >= 0)
-            $rootScope.socket.on('latestMsg', function (msg){
-                $scope.$apply(function (){
-                    for (var i = 0; i < msg.length; i++){
+            $rootScope.socket.on('latestMsg', function (data){
+                var data_len = data.length
+                for (var i = 0; i < data_len; i++){
+                    $scope.$apply(function (){
                         $scope.msgInbox.push({
-                            'isMe'      : decodeToken.username === msg[i].username,
+                            'isMe'      : decodeToken.username === data[i].username,
+                            'isImg'     : data[i].img_list.length > 0,
                             'isShowDate': (i === 0) ? true : false,
-                            'date'      : msg[i].date,
-                            'msg'       : msg[i].msg,
-                            'username'  : msg[i].username
+                            'date'      : data[i].date,
+                            'msg'       : syMsgHelper.msgSanitization(data[i].msg, data[i].img_list),
+                            'username'  : data[i].username
                         })
-                    }
-                })
+                        if (data[i].img_list.length > 0){
+                            $scope.img_list[data[i].date] = syMsgHelper.imgSanitization(data[i].img_list)
+                        }
+                    })
+                    // 存儲消息頂部與底部位置
+                    $scope.msgPosInfo.push({
+                        'id': data[i].date,
+                        'topPos': syPosHelper.getElemTopPos(data[i].date),
+                        'bottomPos': syPosHelper.getElemBottomPos(data[i].date)
+                    })
+                }
             })
         })
         /* 新文本消息抵達 */
@@ -467,12 +475,7 @@ angular.module('ShinyaApp.chatController', [])
     if (!$rootScope.socket){
         connectSIO()
     } else {
-        /*
-         * 當從 '/chat' 按瀏覽器 back 後
-         * 會從 '/' 跳轉回 '/chat'，重新加載 template，斷開重新鏈接
-         *
-         */
-         reconnectSIO()
+        reconnectSIO()
     }
 
 }])

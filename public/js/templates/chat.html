@@ -10,9 +10,27 @@
                 <div ng-if="!contentItem.isMe" class="username_box">
                     <span>{{contentItem.username}}</span>
                 </div>
-                <div id="{{contentItem.date}}" class="content_box" ng-class="{'syShow': isAtMsgShow}">
+                <div id="{{contentItem.date}}" class="content_box" ng-class="{'syShow': isAtMsgShow, 'img_msg': contentItem.isImg}" ng-click="toggleImgBox(contentItem)">
                     <pre>{{contentItem.msg}}</pre>
                 </div>
+                <div class="img_pointer" ng-if="contentItem.isImg" ng-class="{'img_click_pointer': now_img_list === img_list[contentItem.date]}" ng-click="toggleImgBox(contentItem)"></div>
+            </div>
+        </div>
+    </div>
+    <div ng-if="isZoomIn" id="img_fullscreen_box" class="general_animate">
+        <div>
+            <div class="vertically_center" ng-click="toggleImageSize()">
+                <img ng-click="toggleImageSize()" ng-src="{{imgURL.medium}}" alt="" sy-imageonload>
+                <div id="check_origin_img">
+                    <span ng-click="openLink(imgURL.large)">
+                        <a ng-href="{{imgURL.large}}" target="_blank">查看原圖</a>
+                    </span>
+                </div>
+            </div>
+        </div>
+        <div ng-show="!isImageLoaded">
+            <div class="vertically_center">
+                <div class="load_animate"></div>
             </div>
         </div>
     </div>
@@ -114,6 +132,10 @@
                         <div id="geoStatus_title" class="setting_all_title" ng-class="{'setting_on': isGeoServices}">位置</div>
                     </div>
                     <div id="setting_bottom_left" class="setting_all_corner">
+                        <div class="vertically_center">
+                            <img id="demo_icon" src="/public/img/demo_icon.svg" alt="demo icon">
+                        </div>
+                        <div id="demo_title" class="setting_all_title">版本</div>
                     </div>
                     <div id="setting_bottom_right" class="setting_all_corner">
                         <!-- 註銷 -->
@@ -127,7 +149,7 @@
                 <!-- 過場動畫 -->
                 <div ng-show="currentPage === 'loadBox'" id="load_inner_box" class="general_animate">
                     <div class="vertically_center">
-                        <div id="load_animate"></div>
+                        <div class="load_animate"></div>
                     </div>
                 </div>
             </div>
@@ -145,7 +167,7 @@
             <!-- 進入：地理位置服務 -->
             <div class="bottom_left_corner">
                 <!-- BUG: Chrome 下抖動 -->
-                <div id="getGeoServices" ng-click="getGeoServices()" ng-class="{'mobile': isMobile}">
+                <div id="getGeoServices" ng-click="getGeoServices()">
                 </div>
             </div>
             <div ng-if="isMobile" class="bottom_center_corner">
@@ -154,7 +176,7 @@
             <!-- 註銷用戶 -->
             <div class="bottom_right_corner">
                 <!-- BUG: Chrome 下抖動 -->
-                <div id="setting" ng-click="gotoSettingBox()" ng-class="{'mobile': isMobile}">
+                <div id="setting" ng-click="gotoSettingBox()">
                 </div>
                 <!-- <a ng-click="quit()">註銷用戶</a> -->
             </div>
@@ -196,6 +218,7 @@
 <!-- 頁面切換提示標誌 -->
 <div ng-if="!isMobile" class="sunAndMoon" ng-class="{'sun': isSun, 'moon': !isSun}" ng-click="toggleChatBox()">
 </div>
+<sy-img></sy-img>
 <sy-usercount></sy-usercount>
 <sy-beep></sy-beep>
 <div id="at_box" class="all_notify_box general_animate" ng-show="isChatBox" >

@@ -14,7 +14,7 @@ var api_db_helper = {
                 return err
             }
             if (!userInfo){
-                log.error('[DB: Not Found]')
+                log.warning('[DB: Not Found]')
                 res.status(400).json({'status': 'error', 'msg': '用戶不存在'})
             } else {
                 var country    = userInfo.geo_info.country,
@@ -50,7 +50,7 @@ var api_db_helper = {
                         return err
                     }
                     if (!found){
-                        log.error('[DB: Not Found]', selectDate, country)
+                        log.warning('[DB: Not Found]', selectDate, country)
                         res.status(400).json({'status': 'error', 'msg': '此時段新聞不存在'})
                     } else {
                         log.info('[DB: Found]', selectDate)
@@ -87,7 +87,7 @@ var api_db_helper = {
                 return err
             }
             if (!found){
-                log.error('[DB: Not Found]')
+                log.warning('[DB: Not Found]')
                 res.status(400).json({'status': 'error', 'msg': '用戶不存在'})
             } else {
                 if (geo_helper.isSamePlace(found.last_geo, coords) && (new Date() - geo_helper.getTodayMs(found.last_geo.date)) < 86400000){

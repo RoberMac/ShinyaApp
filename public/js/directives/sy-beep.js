@@ -42,7 +42,7 @@ angular.module('ShinyaApp.beepDirective', [])
                 $scope.isViewMsg = true
                 if ($scope.contentItem){
                     // 有用戶提到（@）你，滾動到相應位置
-                    var pos = syPosHelper.getElementPos($scope.contentItem)
+                    var pos = syPosHelper.getElemTopPos($scope.contentItem) - syPosHelper.chatBoxHeight / 2
                     syPosHelper.scrollToPos(pos || null, $scope.isScrollDown)
                     atMsg($scope.contentItem)
                     $scope.contentItem = 0
@@ -64,6 +64,7 @@ angular.module('ShinyaApp.beepDirective', [])
                     })
                 } else {
                     if (type === 1){
+                        $scope.isZoomIn = false
                         // 滾動並抹除提醒
                         scrollToSpecPos()
                     } else if (type === 2){
