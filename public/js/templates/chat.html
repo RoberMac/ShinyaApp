@@ -20,7 +20,12 @@
     <div ng-if="isZoomIn" id="img_fullscreen_box" class="general_animate">
         <div>
             <div class="vertically_center" ng-click="toggleImageSize()">
-                <img ng-click="toggleImageSize()" ng-src="{{imgURL}}" alt="" sy-imageonload>
+                <img ng-click="toggleImageSize()" ng-src="{{imgURL.medium}}" alt="" sy-imageonload>
+                <div id="check_origin_img">
+                    <span ng-click="openLink(imgURL.large)">
+                        <a ng-href="{{imgURL.large}}" target="_blank">查看原圖</a>
+                    </span>
+                </div>
             </div>
         </div>
         <div ng-show="!isImageLoaded">
@@ -162,7 +167,7 @@
             <!-- 進入：地理位置服務 -->
             <div class="bottom_left_corner">
                 <!-- BUG: Chrome 下抖動 -->
-                <div id="getGeoServices" ng-click="getGeoServices()" ng-class="{'mobile': isMobile}">
+                <div id="getGeoServices" ng-click="getGeoServices()">
                 </div>
             </div>
             <div ng-if="isMobile" class="bottom_center_corner">
@@ -171,7 +176,7 @@
             <!-- 註銷用戶 -->
             <div class="bottom_right_corner">
                 <!-- BUG: Chrome 下抖動 -->
-                <div id="setting" ng-click="gotoSettingBox()" ng-class="{'mobile': isMobile}">
+                <div id="setting" ng-click="gotoSettingBox()">
                 </div>
                 <!-- <a ng-click="quit()">註銷用戶</a> -->
             </div>

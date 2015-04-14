@@ -3,14 +3,14 @@ angular.module('ShinyaApp.imgDirective', [])
     return {
         restrict: 'E',
         replace : true,
-        template: '<div ng-if="now_img_list" id="img_box" ng-class="{\'me\': isImgBoxRight, \'mobile\': isMobile}">'
+        template: '<div ng-if="now_img_list.length > 0" id="img_box" ng-class="{\'me\': isImgBoxRight, \'mobile\': isMobile}">'
                 +   '<ul>'
                 +       '<li ng-repeat="url in now_img_list" class="general_animate">'
-                +           '<img ng-src="{{url.thumbnail}}" ng-class="{\'zoom_out\': isZoomIn && $index === now_zoom_id}" ng-click="toggleImageSize(url.bmiddle, $index)" sy-imageonload>'
+                +           '<img ng-src="{{url.small}}" ng-class="{\'zoom_out\': isZoomIn && $index === now_zoom_id}" ng-click="toggleImageSize(url, $index)" sy-imageonload>'
                 +       '</li>'
                 +   '</ul>'
                 + '</div>',
-        controller: ['$scope', '$timeout', function ($scope, $timeout){
+        controller: ['$scope', '$window', '$timeout', function ($scope, $window, $timeout){
             /*
              **************
              * 圖片消息相關
@@ -37,11 +37,11 @@ angular.module('ShinyaApp.imgDirective', [])
             $scope.toggleImgBox = function (obj){
                 var isMe = obj.isMe,
                     id   = obj.date;
-                if ($scope.now_img_list !== $scope.img_list[id] && angular.equals($scope.now_img_list,[])){
+                if ($scope.now_img_list !== $scope.img_list[id] && angular.equals($scope.now_img_list, [])){
                     // 現在不存在已打開的圖片預覽，直接打開
                     $scope.isImgBoxRight = isMe
                     $scope.now_img_list = $scope.img_list[id]
-                } else if ($scope.now_img_list !== $scope.img_list[id] && !angular.equals($scope.now_img_list,[])){
+                } else if ($scope.now_img_list !== $scope.img_list[id] && !angular.equals($scope.now_img_list, [])){
                     // 現在存在已打開的圖片預覽，先關閉，再打開
                     $scope.now_img_list = []
                     $timeout(function (){
@@ -68,6 +68,9 @@ angular.module('ShinyaApp.imgDirective', [])
                     $scope.isZoomIn = false
                     $scope.now_zoom_id = -1
                 }
+            }
+            $scope.openLink = function (link){
+                $window.open(link)
             }
         }]
     }

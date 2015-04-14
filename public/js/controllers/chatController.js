@@ -411,6 +411,7 @@ angular.module('ShinyaApp.chatController', [])
             $scope.atUser = ''
             $scope.msgOutbox.textMsg = ''
         }
+        $scope.isZoomIn = false
     }
     /*
      **************

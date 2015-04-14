@@ -31,15 +31,15 @@ angular.module('ShinyaApp.msgHelperServices', [])
             if (img_list.indexOf('sinaimg.cn' > 0)){
                 // 新浪圖床
                 cache.push({
-                    'thumbnail': sinaImgHelper(img_list[i], 'square'),
-                    'bmiddle'  : sinaImgHelper(img_list[i], 'bmiddle'),
-                    'large'    : sinaImgHelper(img_list[i], 'large')
+                    'small' : sinaImgHelper(img_list[i], 'square'),
+                    'medium': sinaImgHelper(img_list[i], 'bmiddle'),
+                    'large' : sinaImgHelper(img_list[i], 'large')
                 })
             } else {
                 cache.push({
-                    'thumbnail': img_list[i],
-                    'bmiddle'  : img_list[i],
-                    'large'    : img_list[i]
+                    'small' : img_list[i],
+                    'medium': img_list[i],
+                    'large' : img_list[i]
                 })
             }
         }

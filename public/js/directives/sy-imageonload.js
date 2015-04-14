@@ -1,6 +1,6 @@
 // via http://stackoverflow.com/a/17884754/3786947
 angular.module('ShinyaApp.imageonloadDirective', [])
-.directive('syImageonload', function ($rootScope, $timeout){
+.directive('syImageonload', ['$rootScope', '$timeout', function ($rootScope, $timeout){
     return {
         restrict: 'A',
         link: function(scope, elem, attr) {
@@ -19,7 +19,8 @@ angular.module('ShinyaApp.imageonloadDirective', [])
                     // #img_fullscreen_box
                     // via http://stackoverflow.com/a/7719185/3786947
                     function loadScript(e,t){var a,n,r;n=!1,a=document.createElement("script"),a.type="text/javascript",a.src=e,a.onload=a.onreadystatechange=function(){n||this.readyState&&"complete"!=this.readyState||(n=!0,t())},r=document.getElementsByTagName("script")[0],r.parentNode.insertBefore(a,r)}
-                    loadScript('/public/js/libs/vivus.min.js', function (){
+                    loadScript('/public/dist/vivus.min.js', function (){
+                        elem.next().remove()
                         elem.replaceWith('<svg id="vivus_img_load_err" width="200" height="200" viewBox="0 0 530 531" xmlns="http://www.w3.org/2000/svg"><g fill="none"><path d="M51.249 150.754c-3.454-1.73-5.458-.099-4.478 3.638l.706 2.688c8.007 30.503-2.998 73.868-24.584 96.861l-.662.706c-2.644 2.816-1.65 5.288 2.192 5.521l136.651 8.259c9.377.567 23.956-2.028 32.559-5.794l21.283-9.316-13.767-18.806c-5.549-7.58-16.85-17.132-25.253-21.34l-124.647-62.418z" fill="#000"/><path d="M9.298 290.938c13.001 129.203 122.073 230.062 254.702 230.062 141.385 0 256-114.615 256-256s-114.615-256-256-256c-84.794 0-159.96 41.226-206.547 104.728" stroke="#000" stroke-width="17" stroke-linecap="round" stroke-linejoin="round"/><path d="M361.259 190.733c-4.06-1.129-8.339-1.733-12.759-1.733-26.234 0-47.5 21.266-47.5 47.5 0 4.115.523 8.109 1.507 11.917" stroke="#000" stroke-width="17" stroke-linecap="round"/><path d="M213.468 406.97c13.141-16.776 37.347-28.026 65.032-28.026 30.37 0 56.552 13.538 68.536 33.056" stroke="#000" stroke-width="17" stroke-linecap="round" stroke-linejoin="round"/></g></svg>')
                         new Vivus('vivus_img_load_err', {type: 'delayed', duration: 77, animTimingFunction: Vivus.EASE_OUT_BOUNCE})
                         scope.$apply(function (){
@@ -30,4 +31,4 @@ angular.module('ShinyaApp.imageonloadDirective', [])
             })
         }
     }
-})
+}])

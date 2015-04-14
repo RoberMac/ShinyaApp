@@ -2,7 +2,6 @@ angular.module('ShinyaApp', [
     'ngRoute',
     'ngTouch',
     'ngAnimate',
-    'ngMessages',
     'angular-jwt',
     'angular-storage',
     'ShinyaApp.posHelperServices',
