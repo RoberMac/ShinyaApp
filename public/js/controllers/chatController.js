@@ -358,7 +358,6 @@ angular.module('ShinyaApp.chatController', [])
     $scope.msgOutbox = {
         'textMsg': ''
     }
-    $scope.msgPosInfo = []
     function onTextMsg(data) {
         var isMe     = $rootScope.socket.id === data.id,
             isBottom = syPosHelper.isBottom($scope.isScrollDown) || $scope.isScrollDown;
@@ -389,12 +388,6 @@ angular.module('ShinyaApp.chatController', [])
         } else if (!isMe && !$scope.contentItem){
             $scope.newMsgNotify('newMsg', '新消息')
         }
-        // 存儲消息頂部與底部位置
-        $scope.msgPosInfo.push({
-            'id': data.date,
-            'topPos': syPosHelper.getElemTopPos(data.date),
-            'bottomPos': syPosHelper.getElemBottomPos(data.date)
-        })
     }
     $scope.emitTextMsg = function (){
 
@@ -419,7 +412,7 @@ angular.module('ShinyaApp.chatController', [])
      **************
      */
     function connectSIO(){
-        $rootScope.socket = io(':80', {
+        $rootScope.socket = io(':8080', {
             'query': 'token=' + token
             // 'secure': true
         })
@@ -442,12 +435,6 @@ angular.module('ShinyaApp.chatController', [])
                             $scope.img_list[data[i].date] = syMsgHelper.imgSanitization(data[i].img_list)
                         }
                     })
-                    // 存儲消息頂部與底部位置
-                    $scope.msgPosInfo.push({
-                        'id': data[i].date,
-                        'topPos': syPosHelper.getElemTopPos(data[i].date),
-                        'bottomPos': syPosHelper.getElemBottomPos(data[i].date)
-                    })
                 }
             })
         })
@@ -467,7 +454,7 @@ angular.module('ShinyaApp.chatController', [])
     function reconnectSIO(){
         console.log('reconnect')
         $rootScope.socket.disconnect()
-        $rootScope.socket.connect(':80')
+        $rootScope.socket.connect(':8080')
         $rootScope.socket.on('textMsg', function (msg){
             onTextMsg(msg)
         })

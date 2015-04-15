@@ -50,7 +50,7 @@ var db_helper = {
                                             return err
                                         }
                                         // 獲取 國家代碼 和 城市名
-                                        getCountryAndCity('203.198.69.77', function (country, city){
+                                        getCountryAndCity(register_form.register_info.ip, function (country, city){
                                             getGeoWeather(place.lat, place.lon, function (beginWeather){
                                                 // 獲取城市天氣
                                                 getCityWeather(city, function (weather){
@@ -139,7 +139,7 @@ var db_helper = {
                                 'weather': found.geo_info.weather,
                                 'isGeoServices': found.isGeoServices
                             }, key, {
-                                expiresInMinutes: 60
+                                expiresInMinutes: 60 * 24 * 7
                             })
                             log.info('[Login: Success]', login_form.user)
                             res.json({'token': token})
@@ -176,7 +176,7 @@ var db_helper = {
                                 'weather': found.geo_info.weather,
                                 'isGeoServices': found.isGeoServices
                             }, key, {
-                                expiresInMinutes: 60
+                                expiresInMinutes: 60 * 24 * 7
                             })
                             log.info('[Login: Success]', login_form.user)
                             res.json({'token': token})

@@ -29,7 +29,7 @@ angular.module('ShinyaApp.beepDirective', [])
             $scope.isAtMsgShow = false
             function atMsg(id){
                 $scope.isAtMsgShow = true
-                var elem = document.getElementById(id)
+                var elem = document.getElementById(id).querySelector('.content_box')
                 elem.classList.add('atMsg')
                 $timeout(function (){
                     elem.classList.remove('atMsg')
@@ -42,7 +42,7 @@ angular.module('ShinyaApp.beepDirective', [])
                 $scope.isViewMsg = true
                 if ($scope.contentItem){
                     // 有用戶提到（@）你，滾動到相應位置
-                    var pos = syPosHelper.getElemTopPos($scope.contentItem) - syPosHelper.chatBoxHeight / 2
+                    var pos = syPosHelper.getElemTopPos($scope.contentItem)
                     syPosHelper.scrollToPos(pos || null, $scope.isScrollDown)
                     atMsg($scope.contentItem)
                     $scope.contentItem = 0
