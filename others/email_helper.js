@@ -32,12 +32,12 @@ var email_helper = {
             }
         })
     },
-    app_error: function (email, text, callback){
+    send_log_email: function (email, title, text, callback){
 
         var mailOptions = {
             from: '深夜，破曉 <shenyepoxiao@yahoo.com>',
             to: email,
-            subject: '服務器出現錯誤',
+            subject: title,
             text: text
         }
         transporter.sendMail(mailOptions, function(err, info){

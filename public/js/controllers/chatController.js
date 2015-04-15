@@ -385,9 +385,9 @@ angular.module('ShinyaApp.chatController', [])
         if ((isBottom || isMe) && $scope.isChatBox){
             syPosHelper.scrollToPos()
         } else if (data.at && data.at.indexOf('@' + decodeToken.username) >= 0){
-            $scope.msgNotify('atMsg', data.username, data.date)
+            $scope.newMsgNotify('atMsg', data.username, data.date)
         } else if (!isMe && !$scope.contentItem){
-            $scope.msgNotify('newMsg', '新消息')
+            $scope.newMsgNotify('newMsg', '新消息')
         }
         // 存儲消息頂部與底部位置
         $scope.msgPosInfo.push({
@@ -419,7 +419,7 @@ angular.module('ShinyaApp.chatController', [])
      **************
      */
     function connectSIO(){
-        $rootScope.socket = io(':8080', {
+        $rootScope.socket = io(':80', {
             'query': 'token=' + token
             // 'secure': true
         })
@@ -467,7 +467,7 @@ angular.module('ShinyaApp.chatController', [])
     function reconnectSIO(){
         console.log('reconnect')
         $rootScope.socket.disconnect()
-        $rootScope.socket.connect(':8080')
+        $rootScope.socket.connect(':80')
         $rootScope.socket.on('textMsg', function (msg){
             onTextMsg(msg)
         })

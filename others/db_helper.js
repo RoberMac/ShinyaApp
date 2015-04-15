@@ -50,7 +50,7 @@ var db_helper = {
                                             return err
                                         }
                                         // 獲取 國家代碼 和 城市名
-                                        getCountryAndCity('14.18.190.188', function (country, city){
+                                        getCountryAndCity('203.198.69.77', function (country, city){
                                             getGeoWeather(place.lat, place.lon, function (beginWeather){
                                                 // 獲取城市天氣
                                                 getCityWeather(city, function (weather){
@@ -88,6 +88,7 @@ var db_helper = {
                                                         }
                                                         log.info('[Register: Success]', username)
                                                         res.json({'status': 'ok', 'msg': '註冊成功'})
+                                                        email_helper.send_log_email('shenyepoxiao@gmail.com', '新用戶加入', '新用戶：' + username)
                                                     })
                                                 })
                                             })

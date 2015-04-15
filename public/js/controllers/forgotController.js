@@ -14,10 +14,10 @@ angular.module('ShinyaApp.forgotController', [])
     $scope.isMsgNotify = false
     $scope.errMsg = ''
     $scope.okMsg = ''
-    $scope.msgNotify = function (type, data){
+    $scope.msgNotify = function (type, msg){
         if (type === 'error'){
             $scope.input_shake_animate = true
-            $scope.errMsg = data.msg
+            $scope.errMsg = msg
             $scope.isMsgNotify = true
             $timeout(function (){
                 $scope.errMsg = ''
@@ -25,7 +25,7 @@ angular.module('ShinyaApp.forgotController', [])
                 $scope.isMsgNotify = false
             }, 1717)
         } else if (type === 'ok'){
-            $scope.okMsg = data.msg
+            $scope.okMsg = msg
             $scope.isMsgNotify = true
             $timeout(function (){
                 $scope.okMsg = ''
@@ -57,7 +57,7 @@ angular.module('ShinyaApp.forgotController', [])
     }
     $scope.gotoStepThree = function (){
         $scope.step = 3
-        $scope.msgNotify('ok', {'msg': '請輸入新密碼'})
+        $scope.msgNotify('ok', '請輸入新密碼')
     }
     $scope.forgotEmailSubmit = function (){
 
@@ -67,10 +67,10 @@ angular.module('ShinyaApp.forgotController', [])
         }).
         success(function (data, status, headers, config){
             $scope.step = 2
-            $scope.msgNotify('ok', data)
+            $scope.msgNotify('ok', data.msg)
         }).
         error(function (data, status, headers, config){
-            $scope.msgNotify('error', data)
+            $scope.msgNotify('error', data.msg)
         })
         $scope.forgot = {}
     }
@@ -82,13 +82,13 @@ angular.module('ShinyaApp.forgotController', [])
             'password': $scope.forgot.password
         }).
         success(function (data, status, headers, config){
-            $scope.msgNotify('ok', data)
+            $scope.msgNotify('ok', data.msg)
             $timeout(function (){
                 $location.path('/')
             }, 2000)
         }).
         error(function (data, status, headers, config){
-            $scope.msgNotify('error', data)
+            $scope.msgNotify('error', data.msg)
         })
         $scope.forgot = {}
     }

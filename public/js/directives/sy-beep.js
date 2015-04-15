@@ -74,7 +74,7 @@ angular.module('ShinyaApp.beepDirective', [])
                 }
 
             }
-            $scope.msgNotify = function(type, msg, pos){
+            $scope.newMsgNotify = function(type, msg, pos){
                 $scope.$apply(function (){
                     if (type === 'newMsg'){
                         $scope.msgNotifyBox = {

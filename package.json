@@ -1,6 +1,6 @@
 {
   "name": "ShinyaApp",
-  "version": "0.1.0",
+  "version": "0.2.6",
   "description": "A Chat App",
   "main": "app.js",
   "author": {

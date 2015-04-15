@@ -76,7 +76,11 @@
     - 定義服務器 500 錯誤：app.js[60]
     - 屏蔽非瀏覽器發出的請求
 
-
+- 提交到 Coding.net 需修改
+    - /public/js/controllers/chatController.js: SocketIO Port
+    - 靜態圖片「七牛雲存儲」
+    - getCityWeather 的 「IP 地址」
+    - JS / CSS 由服務器提供
 
 新浪圖床：
 thumb150: width = height = 150px

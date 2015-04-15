@@ -413,11 +413,10 @@ ul {
     }
         #img_fullscreen_box #check_origin_img span {
             padding: 1px;
+            color: #CECECF;
             border: 1px solid #CECECF;
             font-size: 10px;
-        }
-        #img_fullscreen_box #check_origin_img a {
-            color: #CECECF;
+            cursor: pointer;
         }
 /* #notify_box & #at_box */
 .all_notify_box {
