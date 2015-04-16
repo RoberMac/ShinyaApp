@@ -39,8 +39,7 @@ var place_list = [
     {'name': 'Grand Central Station', 'lat': 40.752754, 'lon': -73.977261}, // K-PAX K星異客
     {'name': 'The Winchester Tavern', 'lat': 51.478029, 'lon': -0.047706}, // Shaun of the Dead 殭屍肖恩
     {'name': 'Hendon Police Training College', 'lat': 51.593906, 'lon': -0.240091}, // Hot Fuzz 熱血警探
-    {'name': '‘The First Post', 'lat': 51.785074, 'lon': -0.195785}, // The World's End 世界盡頭
-    // 美国往事 死亡詩社
+    {'name': 'The First Post', 'lat': 51.785074, 'lon': -0.195785}, // The World's End 世界盡頭
     // Documentaries
     {'name': 'すきやばし 次郎', 'lat': 35.672784, 'lon': 139.764048}, // 二郎は鮨の夢を見る
     // Others

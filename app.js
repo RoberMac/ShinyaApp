@@ -21,7 +21,7 @@ touch(log_file, function (){
     log_reader.on('line', function (data){
         if (data.level <= 4){
             // 發送郵件提醒
-            email_helper.app_error('shenyepoxiao@gmail.com', data.msg)
+            email_helper.send_log_email('shenyepoxiao@gmail.com', '服務器出現錯誤', data.msg)
         } else {
             console.log(data.date, data.msg)
         }
@@ -30,7 +30,7 @@ touch(log_file, function (){
 process.on('uncaughtException', function (err) {
     log.alert(err.toString('utf8'));
     // 發送郵件提醒
-    email_helper.app_error('shenyepoxiao@gmail.com', err.stack, function (){
+    email_helper.send_log_email('shenyepoxiao@gmail.com', '服務器出現錯誤', err.stack, function (){
         process.exit(1)
     })
 });
@@ -39,7 +39,7 @@ process.on('uncaughtException', function (err) {
 global.io   = require('socket.io')(http)
 global.User = require('./models/db').User
 global.News = require('./models/db').News
-global.key  = fs.readFileSync(__dirname + '/others/jwt.key')
+global.key  = process.env.KEY || fs.readFileSync(__dirname + '/others/jwt.key')
 global.log  = new Log('info', fs.createWriteStream(log_file))
 
 // read database config form VCAP_SERVICES env

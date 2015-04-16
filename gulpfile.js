@@ -5,12 +5,10 @@ var gulp = require('gulp'),
     minifyCSS = require('gulp-minify-css');
 
 var paths = {
-    js_sy: ['public/js/**/*.js', '!public/js/libs/*.js'],
-    js_libs: ['public/js/libs/angular.min.js', 'public/js/libs/*.js', '!public/js/libs/*.map', '!public/js/libs/vivus.min.js'],
+    js_sy: ['public/js/core.js', 'public/js/directives/*.js', 'public/js/services/*.js', 'public/js/controllers/*.js'],
+    js_libs: ['public/js/libs/angular.min.js', 'public/js/libs/*.js', '!public/js/libs/*.map'],
     css_sy: 'public/css/style.css',
     css_libs: ['public/css/*.css', '!public/css/style.css'],
-    watch_js: ['public/js/*'],
-    watch_css: ['public/css/*']
 };
 
 // Minify all AngularJS libs
@@ -58,11 +56,14 @@ gulp.task('css_sy', function () {
 })
 
 // Rerun the task when a file changes 
-// gulp.task('watch', function() {
+gulp.task('watch', function() {
 
-//     gulp.watch(paths.watch_js, ['js_sy', 'js_libs']);
-//     gulp.watch(paths.watch_css, ['css_sy', 'css_libs']);
-// });
+    gulp.watch(paths.js_sy, ['js_sy']);
+    gulp.watch(paths.js_libs, ['js_libs']);
+    gulp.watch(paths.css_sy, ['css_sy']);
+    gulp.watch(paths.css_libs, ['css_libs']);
+});
 
 // The default task (called when you run `gulp` from cli) 
-gulp.task('default', ['js_sy', 'js_libs', 'css_libs', 'css_sy']);
+gulp.task('default', ['watch', 'js_sy', 'js_libs', 'css_libs', 'css_sy']);
+

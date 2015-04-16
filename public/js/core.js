@@ -8,6 +8,7 @@ angular.module('ShinyaApp', [
     'ShinyaApp.timeHelperServices',
     'ShinyaApp.geoHelperServices',
     'ShinyaApp.msgHelperServices',
+    'ShinyaApp.logoDirective',
     'ShinyaApp.notifyDirective',
     'ShinyaApp.autofocusDirective',
     'ShinyaApp.hideKeyboardDirective',
@@ -48,6 +49,9 @@ angular.module('ShinyaApp', [
 }])
 .controller('rootController', ['$rootScope', '$scope', '$timeout', '$location', '$route', '$window', 'jwtHelper', 'store', 
     function($rootScope, $scope, $timeout, $location, $route, $window, jwtHelper, store){
+    
+    $scope.isLogoLoaded = false
+    $rootScope.isSubmit = true
 
     // 檢測是否為手機瀏覽器
     // https://stackoverflow.com/questions/11381673/detecting-a-mobile-browser

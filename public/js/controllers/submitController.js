@@ -1,7 +1,8 @@
 angular.module('ShinyaApp.submitController', [])
-.controller('submitController', ['$scope', '$http', '$timeout', '$location', '$route', '$window', 'jwtHelper', 'store',
-    function ($scope, $http, $timeout, $location, $route, $window, jwtHelper, store){
+.controller('submitController', ['$scope', '$rootScope', '$http', '$timeout', '$location', '$route', '$window', 'jwtHelper', 'store',
+    function ($scope, $rootScope, $http, $timeout, $location, $route, $window, jwtHelper, store){
 
+    $rootScope.isSubmit = true
     /*
      **********
      * 消息提醒
@@ -16,10 +17,10 @@ angular.module('ShinyaApp.submitController', [])
     $scope.isMsgNotify = false
     $scope.errMsg = ''
     $scope.okMsg = ''
-    $scope.msgNotify = function (type, data){
+    $scope.msgNotify = function (type, msg){
         if (type === 'error'){
             $scope.input_shake_animate = true
-            $scope.errMsg = data.msg
+            $scope.errMsg = msg
             $scope.isMsgNotify = true
             $timeout(function (){
                 $scope.errMsg = ''
@@ -27,7 +28,7 @@ angular.module('ShinyaApp.submitController', [])
                 $scope.isMsgNotify = false
             }, 1717)
         } else if (type === 'ok'){
-            $scope.okMsg = data.msg
+            $scope.okMsg = msg
             $scope.isMsgNotify = true
             $timeout(function (){
                 $scope.okMsg = ''
@@ -47,19 +48,19 @@ angular.module('ShinyaApp.submitController', [])
         if (jwtHelper.isTokenExpired(store.get('id_token'))){
             // 此時 $scope.msgNotify 方法還沒定義
             $timeout(function (){
-                $scope.msgNotify('ok', {'msg': '請重新登錄'})
+                $scope.msgNotify('ok', '請重新登錄')
             }, 0)
         }
     }
     // 監聽開啟／關閉「位置服務」
     $scope.$on('turnOnGeoServices', function (msg){
         $timeout(function (){
-            $scope.msgNotify('ok', {'msg': '驗證身份以開啟服務'})
+            $scope.msgNotify('ok', '驗證身份以開啟服務')
         }, 0)
     })
     $scope.$on('turnOffGeoServices', function (msg){
         $timeout(function (){
-            $scope.msgNotify('ok', {'msg': '驗證身份以取消服務'})
+            $scope.msgNotify('ok', '驗證身份以取消服務')
         }, 0)
     })
 
@@ -97,7 +98,7 @@ angular.module('ShinyaApp.submitController', [])
             $location.path('/chat').replace()
         }).
         error(function (data, status, headers, config){
-            $scope.msgNotify('error', data)
+            $scope.msgNotify('error', data.msg)
         })
         $scope.login = {}
     }
@@ -109,12 +110,12 @@ angular.module('ShinyaApp.submitController', [])
             "password": $scope.register.password
         }).
         success(function (data, status, headers, config){
-            $scope.msgNotify('ok', data)
+            $scope.msgNotify('ok', data.msg)
             // switch to [login]
             $scope.toggleSubmit()
         }).
         error(function (data, status, headers, config){
-            $scope.msgNotify('error', data)
+            $scope.msgNotify('error', data.msg)
         })
         $scope.register = {}
     }
