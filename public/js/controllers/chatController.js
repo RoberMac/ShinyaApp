@@ -2,6 +2,7 @@ angular.module('ShinyaApp.chatController', [])
 .controller('chatController', ['$rootScope', '$scope', '$http', '$timeout', '$window', '$location', '$filter', 'jwtHelper','store', 'syPosHelper', 'syTimeHelper', 'syGeoHelper', 'syMsgHelper', 
     function ($rootScope, $scope, $http, $timeout, $window, $location, $filter, jwtHelper, store, syPosHelper, syTimeHelper, syGeoHelper, syMsgHelper){
 
+    $rootScope.isSubmit = false
     /*
      **********
      * 頁面切換
@@ -120,6 +121,7 @@ angular.module('ShinyaApp.chatController', [])
     $scope.toggleNewsExist = function (){
         $scope.isNewsExist = !$scope.isNewsExist
     }
+    $scope.newsErrMsg = '此時段新聞不存在'
     $scope.newsBox = {}
     $scope.selectDateNewsBox = []
     $scope.timezoneOffset = new Date().getTimezoneOffset() / 60
@@ -135,9 +137,9 @@ angular.module('ShinyaApp.chatController', [])
         }).
         error(function (data, status, headers, config){
             if (status === 401){
-                $location.path('/').replace()
+                $scope.quit()
             } else {
-                callback('error', data.msg)
+                callback('error', data.msg || '網絡出錯，請稍候再試')
             }
         })
     }
@@ -168,6 +170,7 @@ angular.module('ShinyaApp.chatController', [])
                     if ($scope.currentPage === 'loadBox'){
                         $scope.toggleCurrentPage('newsBox')
                     }
+                    $scope.newsErrMsg = news
                     if ($scope.isNewsExist){
                         $scope.toggleNewsExist()
                     }
@@ -216,7 +219,7 @@ angular.module('ShinyaApp.chatController', [])
         store.remove('id_token')
         store.remove('isGeoServices')
         $rootScope.socket.disconnect()
-        $location.path('/')
+        $location.path('/').replace()
     }
     $scope.isGeoServices = store.get('isGeoServices') || decodeToken.isGeoServices
     $scope.toggleGeoServices = function (){
@@ -236,7 +239,9 @@ angular.module('ShinyaApp.chatController', [])
         }).
         error(function (data, status, headers, config){
             if (status === 401){
-                $location.path('/')
+                $scope.quit()
+            } else if (status === 404){
+                $scope.isLoadErr = true
             }
         })
     }
@@ -271,6 +276,7 @@ angular.module('ShinyaApp.chatController', [])
             // 未獲取「位置服務」所需信息，跳轉到「過場動畫」
             if ($scope.currentPage === 'infoBox'){
                 $scope.toggleCurrentPage('loadBox')
+                $scope.isLoadErr = false
             }
             $window.navigator.geolocation.getCurrentPosition(function (pos){
                 console.log(pos.coords.latitude, pos.coords.longitude)
@@ -303,7 +309,7 @@ angular.module('ShinyaApp.chatController', [])
                 }).
                 error(function (data, status, headers, config){
                     if (status === 401){
-                        $location.path('/')
+                        $scope.quit()
                     }
                 })
             })
@@ -411,11 +417,7 @@ angular.module('ShinyaApp.chatController', [])
      * Socket.IO
      **************
      */
-    function connectSIO(){
-        $rootScope.socket = io(':8080', {
-            'query': 'token=' + token
-            // 'secure': true
-        })
+    function listenSIO(){
         $rootScope.socket.on('connect', function (){
             // 獲取最近的十條消息
             $rootScope.socket.emit('latestMsg', $scope.msgInbox.length >= 0)
@@ -451,13 +453,18 @@ angular.module('ShinyaApp.chatController', [])
             $scope.onUserIO(msg)
         })
     }
+    function connectSIO(){
+        $rootScope.socket = io(':8080', {
+            'query': 'token=' + token
+            // 'secure': true
+        })
+        listenSIO()
+    }
     function reconnectSIO(){
         console.log('reconnect')
         $rootScope.socket.disconnect()
         $rootScope.socket.connect(':8080')
-        $rootScope.socket.on('textMsg', function (msg){
-            onTextMsg(msg)
-        })
+        listenSIO()
     }
     if (!$rootScope.socket){
         connectSIO()

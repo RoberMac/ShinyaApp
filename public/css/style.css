@@ -50,11 +50,40 @@ ul {
     list-style: none;
 }
 
-.logo {
-    margin: 10px auto;
-    max-width: 9%;
+/* 開場動畫 */
+#opening_animation {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    display: table;
 }
-
+.vertically_center {
+    display: table-cell;
+    vertical-align: middle;
+}
+#logo {
+    position: absolute;
+    display: table;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+}
+    #logo svg {
+        max-width: 17%;
+    }
+#logo.logo_loaded {
+    height: 20%;
+}
+    #logo.logo_loaded svg {
+        margin: 10px auto;
+        max-width: 7%;
+    }
+#outer_box {
+    opacity: 0;
+}
+#outer_box.logo_loaded {
+    opacity: 1;
+}
 /* main_box */
 .main_box {
     position: absolute;
@@ -67,9 +96,6 @@ ul {
     box-shadow:      0px 3px 15px 0px rgba(0,0,0,0.50);
     border-radius: 10px;
 }
-    .main_box .logo {
-        display: none;
-    }
     .main_box .bottom_right_corner {
         position: absolute;
         bottom: 10px;
@@ -458,10 +484,6 @@ ul {
     z-index: 2;
 }
 /* user_info_box */
-.vertically_center {
-    display: table-cell;
-    vertical-align: middle;
-}
 #user_info_box {
     position: absolute;
     top: 15%;
@@ -981,6 +1003,7 @@ ul {
         border: 1px solid #CECECF;
         -webkit-border-radius: 20px;
         border-radius: 20px;
+        cursor: w-resize;;
     }
     .load_animate:before {
         content: '';
@@ -992,6 +1015,9 @@ ul {
         border-radius: 5px;
         top: 0px;
         left: 0px;
+    }
+    .load_animate.load_err:before {
+        top: -999px;
     }
 /* chat_submit_box */
 #chat_submit_box {
@@ -1046,7 +1072,8 @@ ul {
     background-color: transparent;
     -webkit-border-radius: 50%;
     border-radius: 50%;
-    cursor: pointer;    
+    cursor: pointer;
+    z-index: 2;
 }
 .sunAndMoon.sun {
     border-right: 17px solid #fff;
@@ -1064,18 +1091,15 @@ ul {
     color: #CECECF;
 }
 /* Animate */
+#logo, #logo svg {
+    -webkit-transition: all 1.7s ease-in-out;
+    transition: all 1.7s ease-in-out;
+}
+
 input,
-.sunAndMoon,
-.geoOnAndOff,
-.setting_all_title,
 .syShow,
-#chat_box .all .img_pointer,
-#img_box img,
-#mute,
 #quit:before,
-#info_date_box .register_date,
-#info_date_box .all,
-.general_animate.ng-animate {
+.general_animate {
     -webkit-transition: all .7s ease-in-out;
     transition: all .7s ease-in-out;
 }
@@ -1123,6 +1147,10 @@ input,
 .load_animate {
     animation: load_animate 1.7s infinite linear;
     -webkit-animation: load_animate 1.7s infinite linear;
+}
+.load_animate:before {
+    -webkit-transition: all 7.7s ease-in-out;
+    transition: all 7.7s ease-in-out;
 }
 .input_shake_animate {
     animation: input_shake_animate .5s ease-in-out;
@@ -1242,6 +1270,12 @@ input,
 
 /* All Mobile Devices */
 @media (max-device-width: 1024px), (max-width: 1024px) {
+    #logo.logo_loaded {
+        height: 30%;
+    }
+        #logo svg {
+            max-width: 77%;
+        }
     #setting {
         width: 22px;
         height: 22px;
@@ -1290,6 +1324,9 @@ input,
 }
 /* Mobile Phone in portrait and landscape */
 @media (max-device-width: 767px), (max-width: 767px) {
+    #logo.logo_loaded svg {
+        max-width: 25%;
+    }
     .main_box, #img_box {
         width: 94%;
         top: 3.5%;
@@ -1302,10 +1339,6 @@ input,
         top: 3.5%;
         left: 3%;
     }
-        .main_box .logo {
-            display: block;
-            max-width: 30%;
-        }
         .main_box .bottom_right_corner {
             bottom: 2%;
             right: 5%;
@@ -1377,6 +1410,12 @@ input,
 /* Mobile Phone in landscape */
 @media (max-device-width : 767px) and (orientation : landscape), 
 (max-width: 767px) and (orientation : landscape) {
+    #logo.logo_loaded svg {
+        max-width: 10%;
+    }
+        #logo svg {
+            max-width: 37%;
+        }
     .main_box, #img_box {
         width: 97%;
         top: 1.5%;
@@ -1388,9 +1427,6 @@ input,
     .back_button {
         top: 1.5%;
         left: 1.5%;
-    }
-    .main_box .logo {
-        max-width: 10%;
     }
     .form_box {
         top: 30%;
@@ -1431,6 +1467,9 @@ input,
     body {
         font-size: 17px;
     }
+    #logo.logo_loaded svg {
+        max-width: 21%;
+    }
     .main_box, #img_box {
         width: 96%;
         top: 2%;
@@ -1443,10 +1482,6 @@ input,
         top: 2%;
         left: 2%;
     }
-        .main_box .logo {
-            display: block;
-            max-width: 30%;
-        }
     .form_box {
         top: 33.3%;
         left: 19.1%;
@@ -1504,9 +1539,12 @@ input,
 /* iPad in landscape */
 @media (min-device-width : 768px) and (max-device-width : 1024px) and (orientation : landscape),
   (min-width: 768px) and (max-width: 1024px) and (orientation : landscape) { 
-    .main_box .logo {
-        max-width: 15%;
+    #logo.logo_loaded svg {
+        max-width: 11%;
     }
+        #logo svg {
+            max-width: 17%;
+        }
     #info_inner_box #info_date_box > div {
         margin: 5% auto;
     }

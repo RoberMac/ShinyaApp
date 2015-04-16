@@ -6,7 +6,7 @@ var gulp = require('gulp'),
 
 var paths = {
     js_sy: ['public/js/core.js', 'public/js/directives/*.js', 'public/js/services/*.js', 'public/js/controllers/*.js'],
-    js_libs: ['public/js/libs/angular.min.js', 'public/js/libs/*.js', '!public/js/libs/*.map', '!public/js/libs/vivus.min.js'],
+    js_libs: ['public/js/libs/angular.min.js', 'public/js/libs/*.js', '!public/js/libs/*.map'],
     css_sy: 'public/css/style.css',
     css_libs: ['public/css/*.css', '!public/css/style.css'],
 };

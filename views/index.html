@@ -16,11 +16,17 @@
     <link rel="stylesheet" href="/public/dist/sy.min.css">
 </head>
 <body ng-controller="rootController">
-    <div>
-        <img class="logo" src="/public/img/logo.svg" alt="logo">
+
+    <sy-logo></sy-logo>
+
+    <!-- ng-if 無須綁定值，當 libs.js 加載完畢會自動終結「開場動畫」 -->
+    <div id="opening_animation" ng-if="">
+        <div class="vertically_center">
+            <div class="load_animate"></div>
+        </div>
     </div>
 
-    <div ng-view></div>
+    <div id="outer_box" ng-view ng-class="{'logo_loaded': isLogoLoaded}"></div>
 
     <script src="/public/dist/libs.min.js"></script>
     <script src="/public/dist/sy.min.js"></script>

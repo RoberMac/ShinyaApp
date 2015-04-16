@@ -1,5 +1,7 @@
 angular.module('ShinyaApp.forgotController', [])
-.controller('forgotController', ['$scope', '$http', '$timeout', '$location', function($scope, $http, $timeout, $location){
+.controller('forgotController', ['$scope', '$rootScope', '$http', '$timeout', '$location', function($scope, $rootScope, $http, $timeout, $location){
+
+    $rootScope.isSubmit = false
     /*
      **********
      * 消息提醒

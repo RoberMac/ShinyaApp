@@ -1,7 +1,8 @@
 angular.module('ShinyaApp.submitController', [])
-.controller('submitController', ['$scope', '$http', '$timeout', '$location', '$route', '$window', 'jwtHelper', 'store',
-    function ($scope, $http, $timeout, $location, $route, $window, jwtHelper, store){
+.controller('submitController', ['$scope', '$rootScope', '$http', '$timeout', '$location', '$route', '$window', 'jwtHelper', 'store',
+    function ($scope, $rootScope, $http, $timeout, $location, $route, $window, jwtHelper, store){
 
+    $rootScope.isSubmit = true
     /*
      **********
      * 消息提醒
