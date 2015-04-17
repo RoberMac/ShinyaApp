@@ -71,14 +71,13 @@ var geo_helper = {
             if (!err && res.statusCode == 200) {
                 callback({
                     description: body.weather[0].description,
-                    temp: body.main.temp,
                     code: body.weather[0].id,
                     isNight: new Date() > body.sys.sunset * 1000
                 })
             } else {
                 log.error('[Geo: getCityWeather]', err, res.statusCode)
                 callback({
-                    description: '獲取天氣失敗',
+                    description: '多雲',
                     code: 802,
                     isNight: false
                 })
@@ -109,7 +108,7 @@ var geo_helper = {
             } else {
                 log.error('[Geo: getGeoWeather]', err, res.statusCode)
                 callback({
-                    description: '獲取天氣失敗',
+                    description: '多雲',
                     temp: 17,
                     code: 802,
                     isNight: false

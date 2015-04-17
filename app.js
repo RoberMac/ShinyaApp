@@ -9,6 +9,7 @@ var express    = require('express'),
     http       = require('http').Server(app),
     mongoose   = require('mongoose'),
     helmet     = require('helmet'),
+    compress   = require('compression'),
     Log        = require('log'),
     touch      = require('touch');
 
@@ -66,6 +67,7 @@ var io_helper = require('./others/io_helper')
 app.set('trust proxy', true)
 
 // Middleware
+app.use(compress())
 app.use(logger('combined'))
 app.use(bodyParser.json())
 // app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
