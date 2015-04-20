@@ -22,21 +22,22 @@ touch(log_file, function (){
     log_reader.on('line', function (data){
         if (data.level <= 4){
             // 發送郵件提醒
-            // email_helper.send_log_email('shenyepoxiao@gmail.com', '服務器出現錯誤', data.msg)
+            email_helper.send_log_email('shenyepoxiao@gmail.com', '服務器出現錯誤', data.msg)
         } else {
             console.log(data.date, data.msg)
         }
     })
 })
-// process.on('uncaughtException', function (err) {
-//     log.alert(err.toString('utf8'));
-//     // 發送郵件提醒
-//     email_helper.send_log_email('shenyepoxiao@gmail.com', '服務器出現錯誤', err.stack, function (){
-//         process.exit(1)
-//     })
-// });
+process.on('uncaughtException', function (err) {
+    log.alert(err.toString('utf8'));
+    // 發送郵件提醒
+    email_helper.send_log_email('shenyepoxiao@gmail.com', '服務器出現錯誤', err.stack, function (){
+        process.exit(1)
+    })
+});
 
 // global variables
+global.Q    = require('q')
 global.io   = require('socket.io')(http)
 global.User = require('./models/db').User
 global.News = require('./models/db').News
