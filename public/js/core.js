@@ -28,15 +28,15 @@ angular.module('ShinyaApp', [
     $locationProvider.html5Mode(true)
     $routeProvider.
         when('/', {
-            templateUrl: '/public/js/templates/submit.html',
+            templateUrl: '/public/dist/submit.min.html',
             controller: 'submitController'
         }).
         when('/chat', {
-            templateUrl: '/public/js/templates/chat.html',
+            templateUrl: '/public/dist/chat.min.html',
             controller: 'chatController'
         }).
         when('/forgot', {
-            templateUrl: '/public/js/templates/forgot.html',
+            templateUrl: '/public/dist/forgot.min.html',
             controller: 'forgotController'
         }).
         otherwise({

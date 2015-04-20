@@ -11,34 +11,66 @@ var API_KEY = {
     }),
     freegeoip = geocoder('freegeoip', 'https');
 
+// Q
+var q_request = function (url){
+
+    var deferred = Q.defer()
+    request({
+        url: url,
+        json: true
+    }, function (err, res, body){
+        if (!err && res.statusCode == 200) {
+            deferred.resolve([err, res, body])
+        } else {
+            deferred.reject([err, res, body])
+        }
+    })
+    return deferred.promise
+},
+    q_geocode  = Q.nbind(freegeoip.geocode, freegeoip),
+    q_reverse  = Q.nbind(google_geocoder.reverse, google_geocoder);
+
+
 var geo_helper = {
     // 地理位置
-    getCountryAndCity: function (ip, callback){
+    getCountryAndCity: function (ip){
 
         log.info('[Geo: getCountryAndCity]')
-        freegeoip.geocode(ip, function (err, data){
-            if (err){
-                log.error('[Geo: getCountryAndCity]', err)
-                callback('CN', 'beijing')
-                return err
+
+        return q_geocode(ip)
+        .then(function(data){
+            try {
+                if (data[0].countryCode && data[0].city){
+                    return [data[0].countryCode, data[0].city]
+                } else {
+                    throw ''
+                }
+            } catch (e){
+                return ['CN', 'beijing']
             }
-            callback(data[0].countryCode, data[0].city)
+        }, function (err){
+            log.error('[Geo: getCountryAndCity]', err)
+            return ['CN', 'beijing']
         })
     },
-    getStreetName: function (origin, callback){
+    getStreetName: function (origin){
 
         log.info('[Geo: getStreetName]')
-        google_geocoder.reverse({
+
+        return q_reverse({
             lat: origin.lat, 
             lon: origin.lon
-        }, function (err, data){
-            if (err){
-                log.error('[Geo: getStreetName]', err)
-                callback('洛陽城四零四號山洞')
-                return err
+        })
+        .then(function (data){
+            try {
+                return data[0].streetName
+            } catch (e){
+                return '洛陽城四零四號山洞'
             }
-            callback(data[0].streetName)
-        });
+        }, function (err){
+            log.error('[Geo: getStreetName]', err)
+            return '洛陽城四零四號山洞'
+        })
     },
     isSamePlace: function (last, now){
 
@@ -56,36 +88,36 @@ var geo_helper = {
             )
     },
     // 天氣
-    getCityWeather: function (city, callback){
+    getCityWeather: function (city){
 
         log.info('[Geo: getCityWeather]')
         var url = 'http://api.openweathermap.org/data/2.5/weather?q='
                     + city
                     +'&lang=zh_tw&units=metric&APPID='
-                    + API_KEY['OpenWeatherMap'];
-        request({
-            url: url,
-            json: true
-            // timeout: 2500
-        }, function (err, res, body){
-            if (!err && res.statusCode == 200) {
-                callback({
+                    + API_KEY['OpenWeatherMap'],
+            error_obj = {
+                description: '多雲',
+                code: 802,
+                isNight: false
+            };
+
+        return q_request(url)
+        .spread(function (err, res, body){
+            try {
+                return {
                     description: body.weather[0].description,
-                    temp: body.main.temp,
                     code: body.weather[0].id,
                     isNight: new Date() > body.sys.sunset * 1000
-                })
-            } else {
-                log.error('[Geo: getCityWeather]', err, res.statusCode)
-                callback({
-                    description: '獲取天氣失敗',
-                    code: 802,
-                    isNight: false
-                })
+                }
+            } catch (e){
+                return error_obj
             }
+        }, function (err, res, body){
+            log.error('[Geo: getCityWeather]', err, res.statusCode)
+            return error_obj
         })
     },
-    getGeoWeather: function (lat, lon, callback){
+    getGeoWeather: function (lat, lon){
 
         log.info('[Geo: getGeoWeather]')
         var url = 'http://api.openweathermap.org/data/2.5/weather?lat='
@@ -93,28 +125,29 @@ var geo_helper = {
                     + '&lon='
                     + lon
                     + '&lang=zh_tw&units=metric&APPID='
-                    + API_KEY['OpenWeatherMap'];
-        request({
-            url: url,
-            json: true
-            // timeout: 2500
-        }, function (err, res, body){
-            if (!err && res.statusCode == 200) {
-                callback({
+                    + API_KEY['OpenWeatherMap'],
+            error_obj = {
+                description: '多雲',
+                temp: 17,
+                code: 802,
+                isNight: false
+            };
+
+        return q_request(url)
+        .spread(function (err, res, body){
+            try {
+                return {
                     description: body.weather[0].description,
                     temp: Math.round(body.main.temp),
                     code: body.weather[0].id,
                     isNight: new Date() > body.sys.sunset * 1000
-                })
-            } else {
-                log.error('[Geo: getGeoWeather]', err, res.statusCode)
-                callback({
-                    description: '獲取天氣失敗',
-                    temp: 17,
-                    code: 802,
-                    isNight: false
-                })
+                }
+            } catch (e){
+                return error_obj
             }
+        }, function (err, res, body){
+            log.error('[Geo: getGeoWeather]', err, res.statusCode)
+            return error_obj
         })
     }
 }

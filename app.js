@@ -9,6 +9,7 @@ var express    = require('express'),
     http       = require('http').Server(app),
     mongoose   = require('mongoose'),
     helmet     = require('helmet'),
+    compress   = require('compression'),
     Log        = require('log'),
     touch      = require('touch');
 
@@ -36,6 +37,7 @@ process.on('uncaughtException', function (err) {
 });
 
 // global variables
+global.Q    = require('q')
 global.io   = require('socket.io')(http)
 global.User = require('./models/db').User
 global.News = require('./models/db').News
@@ -66,6 +68,7 @@ var io_helper = require('./others/io_helper')
 app.set('trust proxy', true)
 
 // Middleware
+app.use(compress())
 app.use(logger('combined'))
 app.use(bodyParser.json())
 // app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded

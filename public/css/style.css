@@ -638,6 +638,9 @@ ul {
     overflow: auto;
     -webkit-overflow-scrolling: touch;
 }
+    #news_inner_box::-webkit-scrollbar {
+        display: none;
+    }
     #news_inner_box #news_dont_exist {
         position: relative;
         top: 47%;

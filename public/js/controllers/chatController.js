@@ -16,7 +16,7 @@ angular.module('ShinyaApp.chatController', [])
      *
      *          左滑：若處於 `info_box`，切換到 `chat_box`
      *
-     *      桌面段：根據點擊 `.sunAndMoon` 切換
+     *      桌面端：根據點擊 `.sunAndMoon` 切換
      *
      */
     $scope.isChatBox = true

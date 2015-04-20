@@ -1,4 +1,5 @@
-var nodemailer        = require('nodemailer')
+var nodemailer = require('nodemailer'),
+    Q          = require('q');
 
 var transporter = nodemailer.createTransport({
     service: 'Yahoo',
@@ -7,6 +8,9 @@ var transporter = nodemailer.createTransport({
         'pass': process.env.YAHOO_PWD || ''
     }
 })
+
+// Q
+var q_sendMail = Q.nbind(transporter.sendMail, transporter)
 
 var email_helper = {
 
@@ -23,13 +27,11 @@ var email_helper = {
                     + code + 
                     '</p><p style=\'font-size: 12px; text-align: center; color:#CECECF;\'>請在 60 分鐘內驗證</p><div>'
         }
-        transporter.sendMail(mailOptions, function(err, info){
-            if (err){
-                log.error('[Forgot: SendMail Wrong]', err)
-                return err;
-            } else {
-                log.info('[Forgot: Send Forgot Mail Success]', info.response)
-            }
+        q_sendMail(mailOptions)
+        .then(function (info){
+            log.info('[Forgot: Send Forgot Mail Success]', info.response)
+        }, function (err){
+            log.error('[Forgot: Send Forgot Mail Wrong]', err)
         })
     },
     send_log_email: function (email, title, text, callback){
@@ -40,15 +42,14 @@ var email_helper = {
             subject: title,
             text: text
         }
-        transporter.sendMail(mailOptions, function(err, info){
-            if (err){
-                return err;
-            } else {
-                log.info('[Forgot: Send Error Mail Success]', info.response)
-            }
+        q_sendMail(mailOptions)
+        .then(function (info){
+            log.info('[Forgot: Send Log Mail Success]', info.response)
             if (callback){
                 callback()
             }
+        }, function (err){
+            log.error('[Forgot: Send Log Mail Wrong]', err)
         })
     }
 }
