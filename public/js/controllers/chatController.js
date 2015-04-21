@@ -454,16 +454,17 @@ angular.module('ShinyaApp.chatController', [])
         })
     }
     function connectSIO(){
-        $rootScope.socket = io(':8080', {
+        $rootScope.socket = io('', {
             'query': 'token=' + token
             // 'secure': true
         })
+        window.socket = $rootScope.socket
         listenSIO()
     }
     function reconnectSIO(){
         console.log('reconnect')
         $rootScope.socket.disconnect()
-        $rootScope.socket.connect(':8080')
+        $rootScope.socket.connect('')
         listenSIO()
     }
     if (!$rootScope.socket){
