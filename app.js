@@ -86,7 +86,7 @@ app.use(helmet.hidePoweredBy({ setTo: 'PHP 4.2.0' }))
 app.use(helmet.contentSecurityPolicy({
     defaultSrc: ["'self'"],
     // scriptSrc: ["'self'", "'unsafe-inline'", "'unsafe-eval'"],
-    styleSrc: ["'self'", "http://*.clouddn.com"],
+    // styleSrc: ["'self'", "http://*.qbox.me.com"],
     imgSrc: ["*"],
     connectSrc: ['*'],
     reportOnly: false, // set to true if you only want to report errors

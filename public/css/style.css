@@ -746,8 +746,10 @@ ul {
         right: 0px;
         font-size: 11px;
     }
-        #geo_inner_box .all_weather_description .all_celcius {
-            font-size: 17px !important;
+        #geo_inner_box .all_weather_description > svg {
+            width: 9px;
+            height: 7px;
+            margin: 3px 0 4px 3px;
         }
     #geo_inner_box #now_weather {
         top: 0px;
@@ -765,6 +767,9 @@ ul {
     #geo_inner_box #last_weather_description {
         top: 0px;
     }
+        #geo_inner_box #last_weather_description > svg > path {
+            fill: #CECECF;
+        }
     /* http://stackoverflow.com/a/2812830/3786947 */
     #geo_inner_box #distance {
         position: absolute;

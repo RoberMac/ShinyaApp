@@ -1,11 +1,6 @@
 var validator = require('validator'),
     sjwt      = require('socketio-jwt');
 
-// io.use(function (a, b){
-//     a.my_token = key;
-//     b();
-// })
-
 io.use(sjwt.authorize({
     secret: key,
     handshake: true
@@ -35,10 +30,6 @@ io.on('connection', function (socket) {
     // socket.on('room', function (roomNum){
     //     io.to(socket.id).emit('room', socket.id)
     // })
-    // socket.on('add username', function (msg){
-    //     io.emit('add username', msg)
-    //     console.log('add username: ' + msg)
-    // })
     socket.on('textMsg', function (msg) {
 
         // 提取文本中的 URL
@@ -52,7 +43,6 @@ io.on('connection', function (socket) {
                     img_list.push(url)
                 }
             }
-            console.log(img_list)
         }
         // 初始化消息對象
         var newMsg = {
@@ -70,7 +60,6 @@ io.on('connection', function (socket) {
             msgCache.shift()
             msgCache.push(newMsg)
         }
-        console.log(msgCache)
         io.emit('textMsg', newMsg)
     })
     socket.on('disconnect', function (msg) {

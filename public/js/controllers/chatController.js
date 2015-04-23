@@ -55,6 +55,10 @@ angular.module('ShinyaApp.chatController', [])
     }
     $scope.currentPage = 'infoBox'
     $scope.toggleCurrentPage = function (name){
+        if ($scope.currentPage === 'geoBox'){
+            // 重置位置狀態，方便再次獲取
+            $scope.geoBox.distance = ''
+        }
         $timeout(function (){
             $scope.currentPage = name
         })
@@ -127,12 +131,17 @@ angular.module('ShinyaApp.chatController', [])
     $scope.timezoneOffset = new Date().getTimezoneOffset() / 60
     $scope.selectDate = new Date().getHours()
     function getSelectedDateNews(callback){
+        // 設置十秒期限
+        var loadTimer = $timeout(function (){
+            $scope.isLoadErr = true
+        }, 10000)
         $http.
         post('/api/getSelectedDateNews', {
             selectDate: $scope.selectDate,
             timezoneOffset: $scope.timezoneOffset
         }).
         success(function (data, status, headers, config){
+            $timeout.cancel(loadTimer)
             callback('ok', data.msg)
         }).
         error(function (data, status, headers, config){
@@ -218,6 +227,7 @@ angular.module('ShinyaApp.chatController', [])
     $scope.quit = function (){
         store.remove('id_token')
         store.remove('isGeoServices')
+        $scope.msgInbox = []
         $rootScope.socket.disconnect()
         $location.path('/').replace()
     }
@@ -240,8 +250,6 @@ angular.module('ShinyaApp.chatController', [])
         error(function (data, status, headers, config){
             if (status === 401){
                 $scope.quit()
-            } else if (status === 404){
-                $scope.isLoadErr = true
             }
         })
     }
@@ -277,6 +285,11 @@ angular.module('ShinyaApp.chatController', [])
             if ($scope.currentPage === 'infoBox'){
                 $scope.toggleCurrentPage('loadBox')
                 $scope.isLoadErr = false
+                // 設置十秒期限
+                var loadTimer = $timeout(function (){
+                    console.log('load error')
+                    $scope.isLoadErr = true
+                }, 10000)
             }
             $window.navigator.geolocation.getCurrentPosition(function (pos){
                 console.log(pos.coords.latitude, pos.coords.longitude)
@@ -288,14 +301,14 @@ angular.module('ShinyaApp.chatController', [])
                     }
                 }).
                 success(function (data, status, headers, config){
-
+                    $timeout.cancel(loadTimer)
                     var last_code    = data.msg.last_geo.weather.code,
                         last_isNight = data.msg.last_geo.weather.isNight,
                         now_code     = data.msg.now_geo.weather.code,
                         now_isNight  = data.msg.now_geo.weather.isNight
                         last_weather = syGeoHelper.getGeoWeatherType(last_code, last_isNight),
                         now_weather  = syGeoHelper.getGeoWeatherType(now_code, now_isNight);
-
+                    
                     $scope.geoBox = data.msg
                     $scope.geoBox.distance = syGeoHelper.getDistance(data.msg.last_geo, data.msg.now_geo)
                     $scope.weatherBox = {
@@ -306,14 +319,42 @@ angular.module('ShinyaApp.chatController', [])
                     if ($scope.currentPage === 'loadBox'){
                         $scope.toggleCurrentPage('geoBox')
                     }
+                    $timeout(function (){
+                        new Vivus('last_weather_svg', {
+                            type: 'delayed',
+                            duration: 50, 
+                            file: 'public/img/Climacons_Font/' + last_weather + '.svg'
+                        }, function (){
+                            resetWeatherIcon('last_weather_svg', '#CECECF')
+                        })
+                        new Vivus('now_weather_svg', {
+                            type: 'delayed',
+                            duration: 50, 
+                            file: 'public/img/Climacons_Font/' + now_weather + '.svg'
+                        }, function (){
+                            resetWeatherIcon('now_weather_svg', '#000')
+                        })
+                    })
                 }).
                 error(function (data, status, headers, config){
                     if (status === 401){
                         $scope.quit()
+                    } else if (status === 404){
+                        $scope.isLoadErr = true
                     }
                 })
             })
         }
+    }
+    function resetWeatherIcon(id, color){
+        angular.element(document.getElementById(id))
+        .children()
+        .contents()
+        .find('path')
+        .css({
+            stroke: 'inherit',
+            fill  : color || '#000'
+        })
     }
     /********
      * @user
@@ -422,6 +463,7 @@ angular.module('ShinyaApp.chatController', [])
             // 獲取最近的十條消息
             $rootScope.socket.emit('latestMsg', $scope.msgInbox.length >= 0)
             $rootScope.socket.on('latestMsg', function (data){
+                $scope.msgInbox = []
                 var data_len = data.length
                 for (var i = 0; i < data_len; i++){
                     $scope.$apply(function (){
@@ -455,16 +497,14 @@ angular.module('ShinyaApp.chatController', [])
     }
     function connectSIO(){
         $rootScope.socket = io('', {
-            'query': 'token=' + token
-            // 'secure': true
+            'query': 'token=' + token,
+            'secure': true
         })
-        window.socket = $rootScope.socket
         listenSIO()
     }
     function reconnectSIO(){
-        console.log('reconnect')
         $rootScope.socket.disconnect()
-        $rootScope.socket.connect('')
+        $rootScope.socket.connect()
         listenSIO()
     }
     if (!$rootScope.socket){

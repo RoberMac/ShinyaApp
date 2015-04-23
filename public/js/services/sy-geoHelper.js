@@ -107,8 +107,8 @@ angular.module('ShinyaApp.geoHelperServices', [])
         '900': {'type': 'wind', 'icon': 'tornado'},
         '901': {'type': 'wind', 'icon': 'tornado'},
         '902': {'type': 'wind', 'icon': 'tornado'},
-        '903': {'type': 'wind', 'icon': 'thermometer low'},
-        '904': {'type': 'wind', 'icon': 'thermometer full'},
+        '903': {'type': 'wind', 'icon': 'thermometer-low'},
+        '904': {'type': 'wind', 'icon': 'thermometer-full'},
         '905': {'type': 'wind', 'icon': 'wind'},
         '906': {'type': 'wind', 'icon': 'hail'},
         // Additional
@@ -124,7 +124,9 @@ angular.module('ShinyaApp.geoHelperServices', [])
         '960': {'type': 'wind', 'icon': 'tornado'},
         '961': {'type': 'wind', 'icon': 'tornado'},
         '962': {'type': 'wind', 'icon': 'tornado'}
-    }
+    },
+        flat_list = ['sun', 'wind', 'thermometer-full', 'thermometer-low', 'tornado'];
+
     this.getCityWeatherType = function (code){
 
         if (code in weather_condition_codes){
@@ -135,14 +137,18 @@ angular.module('ShinyaApp.geoHelperServices', [])
     },
     this.getGeoWeatherType = function (code, isNight){
 
-        if (code in weather_condition_codes){
-            if (isNight){
-                return weather_condition_codes[code]['icon'] + ' moon'
+        if (flat_list.indexOf(weather_condition_codes[code]) < 0){
+            if (code in weather_condition_codes){
+                if (isNight){
+                    return weather_condition_codes[code]['icon'] + '-moon'
+                } else {
+                    return weather_condition_codes[code]['icon'] + '-sun'
+                }
             } else {
-                return weather_condition_codes[code]['icon'] + ' sun'
+                return 'cloud refresh'
             }
         } else {
-            return 'cloud refresh'
+            return weather_condition_codes[code]['icon']
         }
     },
     this.getDistance = function (origin, destination){
