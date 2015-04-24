@@ -26,8 +26,8 @@ var feed_list = {
     'FR': [
         {'source_name': 'Le Monde', 'url': 'http://feeds.lefigaro.fr/c/32266/f/438191/index.rss'}, // Le Monde
         {'source_name': 'Google News', 'url': 'https://news.google.com/news?pz=1&cf=all&ned=fr&hl=fr&output=rss'}, // Google News
-        {'source_name': 'Yahoo France', 'url': 'https://fr.news.yahoo.com/france/?format=rss'}, // Yahoo - France
-        {'source_name': 'Yahoo', 'url': 'https://fr.news.yahoo.com/?format=rss'} // Yahoo - Toute l'actualité en France et dans le monde
+        {'source_name': 'L\'Equipe.fr', 'url': 'http://www.lequipe.fr/rss/actu_rss.xml'}, // L'Equipe.fr
+        {'source_name': 'LE FIGARO', 'url': 'http://feeds.lefigaro.fr/c/32266/f/438191/index.rss'} // LE FIGARO
     ],
     'HK': [ 
         {'source_name': 'Google 新聞', 'url': 'https://news.google.com.hk/news?pz=1&cf=all&ned=hk&hl=zh-TW&output=rss'}, // Google 新聞

@@ -922,6 +922,7 @@ ul {
             display: block;
             width: 80px;
             height: 80px;
+            cursor: pointer;
         }
     #setting_inner_box #setting_bottom_right {
         bottom: 0px;

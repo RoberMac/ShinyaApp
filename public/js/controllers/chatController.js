@@ -292,7 +292,6 @@ angular.module('ShinyaApp.chatController', [])
                 }, 10000)
             }
             $window.navigator.geolocation.getCurrentPosition(function (pos){
-                console.log(pos.coords.latitude, pos.coords.longitude)
                 $http.
                 post('/api/getGeoServices', {
                     coords: {
