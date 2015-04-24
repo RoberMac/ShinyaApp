@@ -26,8 +26,8 @@ var feed_list = {
     'FR': [
         {'source_name': 'Le Monde', 'url': 'http://feeds.lefigaro.fr/c/32266/f/438191/index.rss'}, // Le Monde
         {'source_name': 'Google News', 'url': 'https://news.google.com/news?pz=1&cf=all&ned=fr&hl=fr&output=rss'}, // Google News
-        {'source_name': 'Yahoo France', 'url': 'https://fr.news.yahoo.com/france/?format=rss'}, // Yahoo - France
-        {'source_name': 'Yahoo', 'url': 'https://fr.news.yahoo.com/?format=rss'} // Yahoo - Toute l'actualité en France et dans le monde
+        {'source_name': 'L\'Equipe.fr', 'url': 'http://www.lequipe.fr/rss/actu_rss.xml'}, // L'Equipe.fr
+        {'source_name': 'LE FIGARO', 'url': 'http://feeds.lefigaro.fr/c/32266/f/438191/index.rss'} // LE FIGARO
     ],
     'HK': [ 
         {'source_name': 'Google 新聞', 'url': 'https://news.google.com.hk/news?pz=1&cf=all&ned=hk&hl=zh-TW&output=rss'}, // Google 新聞
@@ -64,7 +64,6 @@ var feed_list = {
         {'source_name': 'Google News', 'url': 'https://news.google.com/news?pz=1&cf=all&ned=ru&hl=ru&output=rss'} // Google News
     ],
     'TW': [
-        {'source_name': 'Yahoo 奇摩新聞', 'url': 'https://tw.news.yahoo.com/rss'}, // Yahoo 奇摩新聞
         {'source_name': '蘋果日報', 'url': 'http://www.appledaily.com.tw/rss/newcreate/kind/rnews/type/new'}, // 蘋果日報 - 即時新聞
         {'source_name': 'Google 新聞', 'url': 'https://news.google.com/news?cf=all&ned=tw&hl=zh-TW&output=rss'}, // Google 新聞
         {'source_name': '聯合新聞網', 'url': 'http://udn.com/rssfeed/news/1/1?ch=news'}, // 聯合新聞網 - 即時 / 要聞
@@ -75,11 +74,17 @@ var feed_list = {
         {'source_name': 'Engadget 中文版', 'url': 'http://chinese.engadget.com/rss.xml'} // Engadget 中文版
     ],
     'US': [
-        {'source_name': 'Reddit - news', 'url': 'https://www.reddit.com/r/news/new/'}, // Reddit - news
         {'source_name': 'BBC World', 'url': 'http://feeds.bbci.co.uk/news/world/rss.xml'}, // BBC World
+        {'source_name': 'CNN', 'url': 'http://rss.cnn.com/rss/cnn_topstories.rss'}, // CNN.com - Top Stories
         {'source_name': 'NYT International', 'url': 'http://www.nytimes.com/services/xml/rss/nyt/InternationalHome.xml'}, // NYT International
         {'source_name': 'Yahoo', 'url': 'https://news.yahoo.com/rss'}, // Yahoo - Latest News & Headlines
-        {'source_name': 'Google News', 'url': 'https://news.google.com/?output=rss'} // Google News
+        {'source_name': 'Google News', 'url': 'https://news.google.com/?output=rss'}, // Google News
+        // Tech
+        {'source_name': 'Hacker News', 'url': 'http://hnrss.org/newest'}, // Hacker News: Newest
+        {'source_name': 'WIRED', 'url': 'http://feeds.wired.com/wired/index'}, // WIRED
+        {'source_name': 'Re/code', 'url': 'https://recode.net/feed/'}, // Re/code
+        {'source_name': 'Designer News', 'url': 'https://news.layervault.com/?format=rss'}, // Designer News
+        {'source_name': 'The Verge', 'url': 'https://www.theverge.com/rss/index.xml'} // The Verge
     ]
 }
 function updateCountryNews(country, now, news, callback){

@@ -39,16 +39,9 @@ var geo_helper = {
 
         return q_geocode(ip)
         .then(function(data){
-            try {
-                if (data[0].countryCode && data[0].city){
-                    return [data[0].countryCode, data[0].city]
-                } else {
-                    throw ''
-                }
-            } catch (e){
-                return ['CN', 'beijing']
-            }
-        }, function (err){
+            return [data[0].countryCode, data[0].city]
+        })
+        .fail(function (err){
             log.error('[Geo: getCountryAndCity]', err)
             return ['CN', 'beijing']
         })
@@ -62,12 +55,9 @@ var geo_helper = {
             lon: origin.lon
         })
         .then(function (data){
-            try {
-                return data[0].streetName
-            } catch (e){
-                return '洛陽城四零四號山洞'
-            }
-        }, function (err){
+            return data[0].streetName
+        })
+        .fail(function (){
             log.error('[Geo: getStreetName]', err)
             return '洛陽城四零四號山洞'
         })
@@ -94,27 +84,23 @@ var geo_helper = {
         var url = 'http://api.openweathermap.org/data/2.5/weather?q='
                     + city
                     +'&lang=zh_tw&units=metric&APPID='
-                    + API_KEY['OpenWeatherMap'],
-            error_obj = {
-                description: '多雲',
-                code: 802,
-                isNight: false
-            };
+                    + API_KEY['OpenWeatherMap'];
 
         return q_request(url)
         .spread(function (err, res, body){
-            try {
-                return {
-                    description: body.weather[0].description,
-                    code: body.weather[0].id,
-                    isNight: new Date() > body.sys.sunset * 1000
-                }
-            } catch (e){
-                return error_obj
+            return {
+                description: body.weather[0].description,
+                code: body.weather[0].id,
+                isNight: new Date() > body.sys.sunset * 1000
             }
-        }, function (err, res, body){
-            log.error('[Geo: getCityWeather]', err, res.statusCode)
-            return error_obj
+        })
+        fail(function (err){
+            log.error('[Geo: getCityWeather]', err)
+            return {
+                description: '多雲',
+                code: 802,
+                isNight: false
+            }
         })
     },
     getGeoWeather: function (lat, lon){
@@ -125,29 +111,25 @@ var geo_helper = {
                     + '&lon='
                     + lon
                     + '&lang=zh_tw&units=metric&APPID='
-                    + API_KEY['OpenWeatherMap'],
-            error_obj = {
+                    + API_KEY['OpenWeatherMap'];
+
+        return q_request(url)
+        .spread(function (err, res, body){
+            return {
+                description: body.weather[0].description,
+                temp: Math.round(body.main.temp),
+                code: body.weather[0].id,
+                isNight: new Date() > body.sys.sunset * 1000
+            }
+        })
+        .fail(function (err){
+            log.error('[Geo: getGeoWeather]', err)
+            return {
                 description: '多雲',
                 temp: 17,
                 code: 802,
                 isNight: false
-            };
-
-        return q_request(url)
-        .spread(function (err, res, body){
-            try {
-                return {
-                    description: body.weather[0].description,
-                    temp: Math.round(body.main.temp),
-                    code: body.weather[0].id,
-                    isNight: new Date() > body.sys.sunset * 1000
-                }
-            } catch (e){
-                return error_obj
             }
-        }, function (err, res, body){
-            log.error('[Geo: getGeoWeather]', err, res.statusCode)
-            return error_obj
         })
     }
 }
