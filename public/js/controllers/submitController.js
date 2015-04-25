@@ -55,12 +55,12 @@ angular.module('ShinyaApp.submitController', [])
     // 監聽開啟／關閉「位置服務」
     $scope.$on('turnOnGeoServices', function (msg){
         $timeout(function (){
-            $scope.msgNotify('ok', '驗證身份以開啟服務')
+            $scope.msgNotify('ok', '已開啟服務，請重新登錄')
         }, 0)
     })
     $scope.$on('turnOffGeoServices', function (msg){
         $timeout(function (){
-            $scope.msgNotify('ok', '驗證身份以取消服務')
+            $scope.msgNotify('ok', '已關閉服務，請重新登錄')
         }, 0)
     })
 
