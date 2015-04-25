@@ -38,6 +38,7 @@ var geo_helper = {
         log.info('[Geo: getCountryAndCity]')
 
         return q_geocode(ip)
+        .timeout(3000)
         .then(function(data){
             return [data[0].countryCode, data[0].city]
         })
@@ -54,10 +55,11 @@ var geo_helper = {
             lat: origin.lat, 
             lon: origin.lon
         })
+        .timeout(3000)
         .then(function (data){
             return data[0].streetName
         })
-        .fail(function (){
+        .fail(function (err){
             log.error('[Geo: getStreetName]', err)
             return '洛陽城四零四號山洞'
         })
@@ -87,6 +89,7 @@ var geo_helper = {
                     + API_KEY['OpenWeatherMap'];
 
         return q_request(url)
+        .timeout(3000)
         .spread(function (err, res, body){
             return {
                 description: body.weather[0].description,
@@ -94,7 +97,7 @@ var geo_helper = {
                 isNight: new Date() > body.sys.sunset * 1000
             }
         })
-        fail(function (err){
+        .fail(function (err){
             log.error('[Geo: getCityWeather]', err)
             return {
                 description: '多雲',
@@ -114,6 +117,7 @@ var geo_helper = {
                     + API_KEY['OpenWeatherMap'];
 
         return q_request(url)
+        .timeout(3000)
         .spread(function (err, res, body){
             return {
                 description: body.weather[0].description,
