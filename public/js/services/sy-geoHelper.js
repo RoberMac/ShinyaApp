@@ -137,18 +137,17 @@ angular.module('ShinyaApp.geoHelperServices', [])
     },
     this.getGeoWeatherType = function (code, isNight){
 
-        if (flat_list.indexOf(weather_condition_codes[code]) < 0){
+        var icon = weather_condition_codes[code]['icon']
+        if (flat_list.indexOf(icon) < 0){
             if (code in weather_condition_codes){
                 if (isNight){
-                    return weather_condition_codes[code]['icon'] + '-moon'
+                    return icon + '-moon'
                 } else {
-                    return weather_condition_codes[code]['icon'] + '-sun'
+                    return icon + '-sun'
                 }
-            } else {
-                return 'cloud refresh'
             }
         } else {
-            return weather_condition_codes[code]['icon']
+            return icon
         }
     },
     this.getDistance = function (origin, destination){

@@ -57,7 +57,9 @@ angular.module('ShinyaApp.chatController', [])
     $scope.toggleCurrentPage = function (name){
         if ($scope.currentPage === 'geoBox'){
             // 重置位置狀態，方便再次獲取
-            $scope.geoBox.distance = ''
+            $timeout(function (){
+                $scope.geoBox.distance = ''
+            }, 717)
         }
         $timeout(function (){
             $scope.currentPage = name
@@ -78,7 +80,6 @@ angular.module('ShinyaApp.chatController', [])
      */
     var token = store.get('id_token'),
         decodeToken = jwtHelper.decodeToken(token);
-    console.log(decodeToken)
     // 從 JWT 解碼獲取用戶信息
     $scope.infoBox = {
         title      : '加入於',
@@ -240,10 +241,11 @@ angular.module('ShinyaApp.chatController', [])
         success(function (data, status, headers, config){
             if (data.msg === 'on'){
                 store.set('isGeoServices', true)
-                $scope.$emit('preTurnOnGeoServices', '驗證身份以開啟服務')
+                store.set('nextStep', 'geoServices')
+                $scope.$emit('preTurnOnGeoServices', '已開啟服務，請重新登錄')
             } else {
                 store.set('isGeoServices', false)
-                $scope.$emit('preTurnOffGeoServices', '驗證身份以關閉服務')
+                $scope.$emit('preTurnOffGeoServices', '已關閉服務，請重新登錄')
             }
             $scope.quit()
         }).
@@ -287,7 +289,6 @@ angular.module('ShinyaApp.chatController', [])
                 $scope.isLoadErr = false
                 // 設置十秒期限
                 var loadTimer = $timeout(function (){
-                    console.log('load error')
                     $scope.isLoadErr = true
                 }, 10000)
             }
@@ -503,13 +504,23 @@ angular.module('ShinyaApp.chatController', [])
     }
     function reconnectSIO(){
         $rootScope.socket.disconnect()
-        $rootScope.socket.connect()
+        $rootScope.socket.connect('', {
+            'query': 'token=' + token,
+            'secure': true
+        })
         listenSIO()
     }
+    // init
     if (!$rootScope.socket){
         connectSIO()
     } else {
         reconnectSIO()
     }
-
+    // 開啟「位置服務」後登錄自動跳轉到 `geoBox`
+    if (store.get('nextStep') === 'geoServices'){
+        $scope.isChatBox = !$scope.isChatBox
+        $scope.isSun     = !$scope.isSun
+        $scope.getGeoServices()
+        store.remove('nextStep')
+    }
 }])

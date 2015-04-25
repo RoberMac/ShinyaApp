@@ -8,18 +8,23 @@ io.use(sjwt.authorize({
 
 var msgCache   = [],
     onlineUser = [],
+    multiLoginUser = [],
     userCount  = 0;
 io.on('connection', function (socket) {
-
-    log.info('[SIO: Connect]', socket.decoded_token.username, socket.id, userCount)
-    userCount ++
-    onlineUser.push(socket.decoded_token.username)
+    var username =  socket.decoded_token.username
+    log.info('[SIO: Connect]', username, socket.id, userCount)
+    if (onlineUser.indexOf(username) < 0){
+        userCount ++
+        onlineUser.push(username)
+    } else {
+        multiLoginUser.push(username)
+    }
     io.emit('userJoin', {
         'count' : userCount,
         'onlineUser': onlineUser
     })
 
-    log.info('[SIO: latestMsg]', socket.decoded_token.username)
+    log.info('[SIO: latestMsg]', username)
     socket.on('latestMsg', function (msg){
         if (msg === true){
             io.sockets.connected[socket.id].emit('latestMsg', msgCache)            
@@ -49,7 +54,7 @@ io.on('connection', function (socket) {
                 'id'      : socket.id,
                 'date'    : Date.now(),
                 'msg'     : msg.msg,
-                'username': socket.decoded_token.username,
+                'username': username,
                 'at'      : msg.at,
                 'img_list': img_list
             }
@@ -63,9 +68,15 @@ io.on('connection', function (socket) {
         io.emit('textMsg', newMsg)
     })
     socket.on('disconnect', function (msg) {
-        log.info('[SIO: Disconnect]', socket.decoded_token.username, userCount)
-        userCount --
-        onlineUser.splice(onlineUser.indexOf(socket.decoded_token.username), 1)
+        log.info('[SIO: Disconnect]', username, userCount)
+        if (onlineUser.indexOf(username) >= 0){
+            if (multiLoginUser.indexOf(username) >= 0){
+                multiLoginUser.splice(onlineUser.indexOf(username), 1)
+            } else {
+                userCount --
+                onlineUser.splice(onlineUser.indexOf(username), 1)
+            }
+        }
         io.emit('disconnect', {
             'count' : userCount,
             'onlineUser': onlineUser
