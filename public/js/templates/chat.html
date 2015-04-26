@@ -67,7 +67,7 @@
                             <span>來源：{{news.source_name}}</span>
                         </div>
                     </div>
-                    <div ng-if="!isNewsExist" id="news_dont_exist">
+                    <div ng-show="!isNewsExist" id="news_dont_exist">
                         <h3>{{newsErrMsg}}</h3>
                     </div>
                 </div>
@@ -193,6 +193,7 @@
                 </div>
                 <span ng-click="nextHour()">&gt;</span>                    
             </div>
+            <div id="news_country" class="bottom_right_corner general_animate" ng-class="selectCountry" ng-click="selectNextCountry()">{{selectCountry}}</div>
         </div>
         <!-- 地理位置服務：外部部件 -->
         <div ng-if="currentPage === 'geoBox' && isGeoServices" id="geo_outer_box" class="general_animate">

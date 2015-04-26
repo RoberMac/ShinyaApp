@@ -51,11 +51,9 @@ angular.module('ShinyaApp.forgotController', [])
     $scope.forgot = {}
     $scope.step = 1
     $scope.returnToPreviousStep = function (){
-        if ($scope.step === 1){
-            $location.path('/')
-        } else {
-            $scope.step = $scope.step - 1
-        }
+        $scope.step === 1
+        ? $location.path('/')
+        : $scope.step = $scope.step - 1
     }
     $scope.gotoStepThree = function (){
         $scope.step = 3

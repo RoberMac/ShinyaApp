@@ -20,33 +20,27 @@ angular.module('ShinyaApp.chatController', [])
      *
      */
     $scope.isChatBox = true
-    if (syTimeHelper.getDaytimeOrNight(new Date().getHours()) === 'daytime'){
-        $scope.isSun = true        
-    } else {
-        $scope.isSun = false
-    }
+
+    syTimeHelper.getDaytimeOrNight(new Date().getHours()) === 'daytime'
+    ? $scope.isSun = true
+    : $scope.isSun = false
+
     $scope.isInfoBox = false
     $scope.toggleChatBox = function (action){
 
         if (!!action){
             // 移動端
             if (action === 'left'){
-                if ($scope.isChatBox){
-                    $scope.isChatBox = !$scope.isChatBox
-                }
+                $scope.isChatBox ? $scope.isChatBox = !$scope.isChatBox : null
             } else if (action === 'right'){
-                if (!$scope.isChatBox && $scope.currentPage === 'infoBox'){
-                    $scope.isChatBox = !$scope.isChatBox
-                } else {
-                    $scope.toggleCurrentPage('infoBox')
-                }
+                !$scope.isChatBox && $scope.currentPage === 'infoBox'
+                ? $scope.isChatBox = !$scope.isChatBox
+                : $scope.toggleCurrentPage('infoBox')
             }
         } else {
             // 桌面端
-            if (!$scope.isChatBox){
-                // 從 `geo_box` / `news_box` 返回 `chat_box` 時，重置 `user_info_box`
-                $scope.toggleCurrentPage('infoBox')
-            }
+            // 從 `geo_box` / `news_box` 返回 `chat_box` 時，重置 `user_info_box`
+            $scope.isChatBox ? null : $scope.toggleCurrentPage('infoBox')
             $scope.isChatBox = !$scope.isChatBox
             $scope.isSun     = !$scope.isSun
         }
@@ -86,6 +80,7 @@ angular.module('ShinyaApp.chatController', [])
         username   : decodeToken.username,
         numero     : decodeToken.numero,
         date       : $filter('date')(decodeToken.date, 'yyyy 年 M 月 d 日'),
+        country    : decodeToken.country,
         partsOfADay: syTimeHelper.partsOfADay(~~($filter('date')(decodeToken.date, 'H'))),
         weather    : decodeToken.weather.description
     }
@@ -109,15 +104,15 @@ angular.module('ShinyaApp.chatController', [])
      *****************
      * 用戶註冊當日新聞
      *****************
-     *     `$scope.newsBox` 緩存獲取到的新聞
-     *     `$scope.selectDateNewsBox` 當前展示的新聞，從 `$scope.newsBox` 獲取
+     *     `localStorage[news_id]` 緩存獲取到的新聞
+     *     `$scope.selectDateNewsBox` 當前展示的新聞，從 `localStorage[news_id]` 獲取
      *     `$scope.selectDate` 本地時間
      *     `$scope.previousHour` 獲取上一個時間段新聞
      *          更新：`$scope.selectDate`、`$scope.selectDateNewsBox`
      *     `$scope.nextHour` 獲取下一個時間段新聞
      *          更新：`$scope.selectDate`、`$scope.selectDateNewsBox`
      *     `getSelectedDateNews` 獲取新聞，
-     *         成功：保存到 `$scope.newsBox`，更新 `$scope.selectDateNewsBox`
+     *         成功：保存到 `localStorage[news_id]`，更新 `$scope.selectDateNewsBox`
      *         失敗：
      *             狀態碼 401：JWT 過期，跳轉到首頁
      *             狀態碼 400：此時段新聞未獲取，`$scope.isNewsExist` -> false
@@ -127,10 +122,10 @@ angular.module('ShinyaApp.chatController', [])
         $scope.isNewsExist = !$scope.isNewsExist
     }
     $scope.newsErrMsg = '此時段新聞不存在'
-    $scope.newsBox = {}
     $scope.selectDateNewsBox = []
     $scope.timezoneOffset = new Date().getTimezoneOffset() / 60
     $scope.selectDate = new Date().getHours()
+    $scope.selectCountry = $scope.infoBox.country || 'US'
     function getSelectedDateNews(callback){
         // 設置十秒期限
         var loadTimer = $timeout(function (){
@@ -139,6 +134,7 @@ angular.module('ShinyaApp.chatController', [])
         $http.
         post('/api/getSelectedDateNews', {
             selectDate: $scope.selectDate,
+            selectCountry: $scope.selectCountry,
             timezoneOffset: $scope.timezoneOffset
         }).
         success(function (data, status, headers, config){
@@ -149,41 +145,37 @@ angular.module('ShinyaApp.chatController', [])
             if (status === 401){
                 $scope.quit()
             } else {
+                status === 400 ? $timeout.cancel(loadTimer) : null
                 callback('error', data.msg || '網絡出錯，請稍候再試')
             }
         })
     }
+    $scope.selectNextCountry = function (){
+        var country_list = ['CN', 'HK', 'TW', 'US', 'JP', 'DE', 'FR', 'IN', 'KR', 'RU', 'BR']
+        $scope.selectCountry = country_list[country_list.indexOf($scope.selectCountry) + 1] || 'CN'
+        $scope.getSelectedDateNews()
+    }
     $scope.getSelectedDateNews = function(){
-        if ($scope.selectDate in $scope.newsBox){
-            // 從 `$scope.newsBox` 獲取，不執行 `getSelectedDateNews`
-            $scope.selectDateNewsBox = $scope.newsBox[$scope.selectDate]
-            if ($scope.currentPage === 'infoBox'){
-                $scope.toggleCurrentPage('newsBox')
-            }
-            if (!$scope.isNewsExist){
-                $scope.toggleNewsExist()
-            }
+        var news_id = syTimeHelper.getTodayMs(decodeToken.date) + $scope.selectCountry + $scope.selectDate,
+            selectDateNews = store.get(news_id);
+        if (selectDateNews){
+            // 從 `localStorage[news_id]` 獲取，不執行 `getSelectedDateNews`
+            $scope.selectDateNewsBox = selectDateNews
+            $scope.currentPage === 'infoBox' ? $scope.toggleCurrentPage('newsBox') : null
+            $scope.isNewsExist ? null : $scope.toggleNewsExist()
         } else {
             // 過場動畫
             $scope.toggleCurrentPage('loadBox')
             getSelectedDateNews(function (status, news){
                 if (status === 'ok'){
-                    $scope.newsBox[$scope.selectDate] = news
-                    $scope.selectDateNewsBox = $scope.newsBox[$scope.selectDate]
-                    if ($scope.currentPage === 'loadBox'){
-                        $scope.toggleCurrentPage('newsBox')
-                    }
-                    if (!$scope.isNewsExist){
-                        $scope.toggleNewsExist()
-                    }
+                    store.set(news_id, news)
+                    $scope.selectDateNewsBox = news
+                    $scope.currentPage === 'loadBox' ?  $scope.toggleCurrentPage('newsBox') : null
+                    $scope.isNewsExist ? null : $scope.toggleNewsExist()
                 } else {
-                    if ($scope.currentPage === 'loadBox'){
-                        $scope.toggleCurrentPage('newsBox')
-                    }
+                    $scope.currentPage === 'loadBox' ? $scope.toggleCurrentPage('newsBox') : null
                     $scope.newsErrMsg = news
-                    if ($scope.isNewsExist){
-                        $scope.toggleNewsExist()
-                    }
+                    $scope.isNewsExist ? $scope.toggleNewsExist() : null
                 }
             })
         }
@@ -216,9 +208,7 @@ angular.module('ShinyaApp.chatController', [])
      *
      */
     $scope.gotoSettingBox = function (){
-        if ($scope.currentPage === 'infoBox'){
-            $scope.toggleCurrentPage('settingBox')
-        }
+        $scope.currentPage === 'infoBox' ? $scope.toggleCurrentPage('settingBox') : null
      }
     $scope.isMuted = !!store.get('isMuted')
     $scope.toggleMuted = function (){
@@ -250,9 +240,7 @@ angular.module('ShinyaApp.chatController', [])
             $scope.quit()
         }).
         error(function (data, status, headers, config){
-            if (status === 401){
-                $scope.quit()
-            }
+            status === 401 ? $scope.quit() : null
         })
     }
     /*
@@ -273,15 +261,11 @@ angular.module('ShinyaApp.chatController', [])
     $scope.getGeoServices = function (){
         if (!$scope.isGeoServices){
             // 未開啟「位置服務」
-            if ($scope.currentPage === 'infoBox'){
-                $scope.toggleCurrentPage('geoBox')
-            }
+            $scope.currentPage === 'infoBox' ? $scope.toggleCurrentPage('geoBox') : null
         } else if ($scope.geoBox.distance) {
             // 已開啟「位置服務」
             // 已獲取「位置服務」所需信息，跳轉到 `geo_box`
-            if ($scope.currentPage === 'infoBox'){
-                $scope.toggleCurrentPage('geoBox')
-            }
+            $scope.currentPage === 'infoBox' ? $scope.toggleCurrentPage('geoBox') : null
         } else {
             // 未獲取「位置服務」所需信息，跳轉到「過場動畫」
             if ($scope.currentPage === 'infoBox'){
@@ -316,9 +300,7 @@ angular.module('ShinyaApp.chatController', [])
                         'now_weather': now_weather
                     }
                     $scope.isSameDay = syTimeHelper.isSameDay($scope.geoBox.now_geo.date, $scope.geoBox.last_geo.date)
-                    if ($scope.currentPage === 'loadBox'){
-                        $scope.toggleCurrentPage('geoBox')
-                    }
+                    $scope.currentPage === 'loadBox' ? $scope.toggleCurrentPage('geoBox') : null
                     $timeout(function (){
                         new Vivus('last_weather_svg', {
                             type: 'delayed',
@@ -337,11 +319,11 @@ angular.module('ShinyaApp.chatController', [])
                     })
                 }).
                 error(function (data, status, headers, config){
-                    if (status === 401){
-                        $scope.quit()
-                    } else if (status === 404){
-                        $scope.isLoadErr = true
-                    }
+                    status === 401
+                    ? $scope.quit()
+                    : status === 404
+                        ? $scope.isLoadErr = true
+                        : null
                 })
             })
         }
@@ -375,16 +357,12 @@ angular.module('ShinyaApp.chatController', [])
             // 是否需要「新增」
             var at_list_len = at_list.length
             for (var i = 0; i < at_list_len; i ++){
-                if ($scope.atUser.indexOf(at_list[i]) < 0){
-                    $scope.atUser.push(at_list[i])
-                }
+                $scope.atUser.indexOf(at_list[i]) < 0 ? $scope.atUser.push(at_list[i]) : null
             }
             // 是否需要「刪減」
             var at_user_len = $scope.atUser.length
             for(var i = 0; i < at_user_len; i ++){
-                if (at_list.indexOf($scope.atUser[i]) < 0){
-                    $scope.atUser.splice(i, 1)
-                }
+                at_list.indexOf($scope.atUser[i]) < 0 ? $scope.atUser.splice(i, 1) : null
             }
         } else {
             $scope.atUser = []
@@ -417,9 +395,9 @@ angular.module('ShinyaApp.chatController', [])
                 'msg'       : syMsgHelper.msgSanitization(data.msg, data.img_list),
                 'username'  : data.username,
             })
-            if (data.img_list.length > 0){
-                $scope.img_list[data.date] = syMsgHelper.imgSanitization(data.img_list)
-            }
+            data.img_list.length > 0 
+            ? $scope.img_list[data.date] = syMsgHelper.imgSanitization(data.img_list)
+            : null
         })
         /* 新消息抵達時：
          *      當用戶處於 chat_box 底部，滾動到底部
@@ -475,9 +453,9 @@ angular.module('ShinyaApp.chatController', [])
                             'msg'       : syMsgHelper.msgSanitization(data[i].msg, data[i].img_list),
                             'username'  : data[i].username
                         })
-                        if (data[i].img_list.length > 0){
-                            $scope.img_list[data[i].date] = syMsgHelper.imgSanitization(data[i].img_list)
-                        }
+                        data[i].img_list.length > 0
+                        ? $scope.img_list[data[i].date] = syMsgHelper.imgSanitization(data[i].img_list)
+                        : null
                     })
                 }
             })
@@ -511,11 +489,9 @@ angular.module('ShinyaApp.chatController', [])
         listenSIO()
     }
     // init
-    if (!$rootScope.socket){
-        connectSIO()
-    } else {
-        reconnectSIO()
-    }
+    $rootScope.socket
+    ? reconnectSIO()
+    : connectSIO()
     // 開啟「位置服務」後登錄自動跳轉到 `geoBox`
     if (store.get('nextStep') === 'geoServices'){
         $scope.isChatBox = !$scope.isChatBox
