@@ -40,17 +40,17 @@ angular.module('ShinyaApp.timeHelperServices', [])
         ? 'daytime'
         : 'night'
     },
+    this.getTodayMs = function (date){
+
+        var date = new Date(date)
+        return Date.UTC(
+                date.getUTCFullYear(),
+                date.getUTCMonth(),
+                date.getUTCDate()
+            )
+    }
     this.isSameDay = function (now, last){
         
-        var now  = new Date(now),
-            last = new Date(last);
-            getTodayMs = function (date){
-                return Date.UTC(
-                        date.getUTCFullYear(),
-                        date.getUTCMonth(),
-                        date.getUTCDate()
-                    )
-            }
-        return getTodayMs(now) === getTodayMs(last)
+        return this.getTodayMs(now) === this.getTodayMs(last)
     }
 })

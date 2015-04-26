@@ -164,6 +164,7 @@ var db_helper = {
                             'username': found.username,
                             'numero': found.register_info.numero,
                             'date': found.register_info.date,
+                            'country': found.geo_info.country,
                             'weather': found.geo_info.weather,
                             'isGeoServices': found.isGeoServices
                         }, key, {

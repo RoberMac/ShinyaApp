@@ -4,7 +4,9 @@ var Feedparser = require('feedparser'),
 var feed_list = {
     'BR': [
         {'source_name': 'Yahoo Mundo', 'url': 'https://br.noticias.yahoo.com/mundo/?format=rss'}, // Yahoo Mundo
-        {'source_name': 'G1 - Brasil', 'url': 'http://g1.globo.com/dynamo/brasil/rss2.xml'} // G1 - Brasil
+        {'source_name': 'G1', 'url': 'http://g1.globo.com/dynamo/brasil/rss2.xml'}, // G1 - Brasil
+        {'source_name': 'R7', 'url': 'http://noticias.r7.com/brasil/feed.xml'}, // R7 - Brasil
+        {'source_name': 'UOL Notícias', 'url': 'http://rss.uol.com.br/feed/noticias.xml'} // UOL Notícias
     ],
     'CN': [
         {'source_name': 'Google 新聞', 'url': 'https://news.google.com/news?cf=all&ned=cn&hl=zh-CN&output=rss'}, // Google 新聞
@@ -18,8 +20,8 @@ var feed_list = {
         {'source_name': 'Engadget 中文版', 'url': 'http://cn.engadget.com/rss.xml'} // Engadget 中文版
     ],
     'DE': [
-        {'source_name': 'SPIEGEL ONLINE', 'url': 'http://www.spiegel.de/schlagzeilen/tops/index.rss'}, // SPIEGEL ONLINE - Schlagzeilen
-        {'source_name': 'SPIEGEL ONLINE', 'url': 'http://www.spiegel.de/schlagzeilen/index.rss'}, // SPIEGEL ONLINE - Schlagzeilen
+        {'source_name': 'T-Online', 'url': 'http://feeds.t-online.de/rss/nachrichten'}, // T-Online
+        {'source_name': 'Bild.de', 'url': 'http://rss.bild.de/bild.xml'}, // Bild.de
         {'source_name': 'Google News', 'url': 'https://news.google.com/news?pz=1&cf=all&ned=de&hl=de&output=rss'}, // Google News
         {'source_name': 'Yahoo nachrichten', 'url': 'https://de.nachrichten.yahoo.com/rss'} // Yahoo nachrichten
     ],
@@ -35,13 +37,13 @@ var feed_list = {
         {'source_name': 'Yahoo 新聞', 'url': 'https://hk.news.yahoo.com/rss/hong-kong'}, // Yahoo 新聞 - 港聞新聞
         {'source_name': '東方日報', 'url': 'http://orientaldaily.on.cc/rss/news.xml'}, // 東方日報 - 要聞港聞
         {'source_name': '聚言時報', 'url': 'http://polymerhk.com/feed'}, // 聚言時報
-        {'source_name': '香港電台網站', 'url': 'http://www.rthk.org.hk/rthk/news/rss/c_expressnews.xml'}, // 香港電台網站 - 即時新聞
         {'source_name': 'Goal.com', 'url': 'http://www.goal.com/hk/feeds/news?fmt=rss'}, // Goal.com News
         {'source_name': '紐約時報中文網', 'url': 'http://cn.nytimes.com/rss/zh-hant'}, // 紐約時報中文網 
         {'source_name': 'BBC 中文網', 'url': 'http://www.bbc.co.uk/zhongwen/trad/index.xml'}, // BBC 中文網
         {'source_name': 'Engadget 中文版', 'url': 'http://chinese.engadget.com/rss.xml'} // Engadget 中文版
     ],
     'IN': [
+        {'source_name': 'The Times of India', 'url': 'http://dynamic.feedsportal.com/pf/555218/http://toi.timesofindia.indiatimes.com/rssfeedstopstories.cms'}, // The Times of India
         {'source_name': 'NDTV - ताज़ातरीन', 'url': 'http://feeds.feedburner.com/ndtvkhabar'}, // NDTV - ताज़ातरीन
         {'source_name': 'NDTV - देश से', 'url': 'http://feeds.feedburner.com/Khabar-India'}, // NDTV - देश से
         {'source_name': 'Google News', 'url': 'https://news.google.com/news?pz=1&cf=all&ned=in&hl=in&output=rss'} // Google News
@@ -55,6 +57,9 @@ var feed_list = {
     ],
     'KR': [
         {'source_name': 'Google News', 'url': 'https://news.google.com.hk/news?pz=1&cf=all&ned=kr&hl=kr&output=rss'}, // Google News
+        {'source_name': '이티뉴스', 'url': 'http://rss.etnews.com/Section902.xml'}, // 이티뉴스
+        {'source_name': '전체뉴스', 'url': 'http://rss.edaily.co.kr/edaily_news.xml'}, // 전체뉴스
+        {'source_name': 'dongA.com', 'url': 'http://rss.donga.com/total.xml'}, // dongA.com
         {'source_name': '경향신문', 'url': 'http://www.khan.co.kr/rss/rssdata/total_news.xml'} // 경향신문
     ],
     'RU': [
@@ -97,13 +102,12 @@ function updateCountryNews(country, now, news, callback){
         'HK': {'HK': news},
         'IN': {'IN': news},
         'JP': {'JP': news},
-        'KR': {'BR': news},
+        'KR': {'KR': news},
         'RU': {'RU': news},
         'TW': {'TW': news},
         'US': {'US': news}
     }
     if (country in list){
-        log.info('[News: Country]', country)
         News.findOneAndUpdate({date: now}, list[country], function (err){
             if (err) {
                 log.error('[DB: Not Found]', err)
@@ -187,7 +191,6 @@ function getNews(frequency){
                             // 若不是「新聞列表」最後的新聞源，獲取下一個新聞源新聞
                             if (feed_pointer < feed_len - 1){
                                 if (cache.length > 0){
-                                    log.info('[News: Cache]', feed_item[feed_pointer]['source_name'])
                                     all_news.push({
                                         'source_name': feed_item[feed_pointer]['source_name'],
                                         'news': cache

@@ -695,6 +695,79 @@ ul {
             font-size: 11px;
             padding: 0 3px;
         }
+    #news_country {
+        width: 27px;
+        height: 27px;
+        font-size: 11px;
+        line-height: 27px;
+        border-radius: 14px;
+        cursor: pointer;
+    }
+        #news_country.CN {
+            color: #E74010;
+            border: 1px solid #E74010;
+        }
+        #news_country.HK {
+            color: #E74010;
+            border: 1px solid #E74010;
+        }
+        #news_country.TW {
+            color: #021DA6;
+            border-top: 1px solid #021DA6;
+            border-right: 1px solid #FF2600;
+            border-bottom: 1px solid #FF2600;
+            border-left: 1px solid #021DA6;
+        }
+        #news_country.US {
+            color: #002868;
+            border-top: 1px solid #002868;
+            border-right: 1px solid #BF0A30;
+            border-bottom: 1px solid #BF0A30;
+            border-left: 1px solid #BF0A30;
+        }
+        #news_country.JP {
+            color: #C70025;
+            border: 1px solid #C70025;
+        }
+        #news_country.DE {
+            color: #1E1E1E;
+            border-top: 1px solid #BF0A30;
+            border-right: 1px solid #BF0A30;
+            border-bottom: 1px solid #FED100;
+            border-left: 1px solid #FED100;
+        }
+        #news_country.FR {
+            color: #00209F;
+            border-top: 1px solid #00209F;
+            border-right: 1px solid #00209F;
+            border-bottom: 1px solid #F42A41;
+            border-left: 1px solid #F42A41;
+        }
+        #news_country.IN {
+            color: #000;
+            border-top: 1px solid #138808;
+            border-right: 1px solid #138808;
+            border-bottom: 1px solid #FF9933;
+            border-left: 1px solid #FF9933;
+        }
+        #news_country.KR {
+            color: #000080;
+            border-top: 1px solid #C60C30;
+            border-right: 1px solid #C60C30;
+            border-bottom: 1px solid #003478;
+            border-left: 1px solid #003478;
+        }
+        #news_country.RU {
+            color: #0000FE;
+            border: 1px solid #FE0000;
+        }
+        #news_country.BR {
+            color: #3200FE;
+            border-top: 1px solid #007600;
+            border-right: 1px solid #007600;
+            border-bottom: 1px solid #FEFE00;
+            border-left: 1px solid #FEFE00;
+        }
 /* geoBox: inner */
 #geo_inner_box {
     position: absolute;

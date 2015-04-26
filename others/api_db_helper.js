@@ -24,7 +24,7 @@ var api_db_helper = {
                 log.warning('[DB: Not Found]')
                 res.status(400).json({'status': 'error', 'msg': '用戶不存在'})
             } else {
-                var country    = userInfo.geo_info.country,
+                var country    = body.selectCountry,
                     userDate   = userInfo.register_info.date,
                     selectDate = body.selectDate + body.timezoneOffset,
                     selectDate = Date.UTC(
