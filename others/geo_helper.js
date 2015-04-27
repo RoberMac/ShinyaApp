@@ -71,7 +71,7 @@ var geo_helper = {
         ? false
         : true
     },
-    getTodayMs: function (date){
+    getDayMs: function (date){
 
         return Date.UTC(
                 date.getUTCFullYear(),

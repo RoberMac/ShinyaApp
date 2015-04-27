@@ -695,9 +695,25 @@ ul {
             font-size: 11px;
             padding: 0 3px;
         }
+    #news_today {
+        width: 27px;
+        height: 27px;
+        color: #CECECF;
+        border: 1px solid #CECECF;
+        font-size: 10px;
+        line-height: 27px;
+        border-radius: 14px;
+        cursor: pointer;
+    }
+        #news_today.today {
+            color: #000;
+            border: 1px solid #000;
+        }
     #news_country {
         width: 27px;
         height: 27px;
+        color: #000;
+        border: 1px solid #000;
         font-size: 11px;
         line-height: 27px;
         border-radius: 14px;
@@ -1352,7 +1368,7 @@ input,
 /* All Mobile Devices */
 @media (max-device-width: 1024px), (max-width: 1024px) {
     #logo.logo_loaded {
-        height: 30%;
+        height: 32%;
     }
         #logo svg {
             max-width: 77%;

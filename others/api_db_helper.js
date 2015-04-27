@@ -14,7 +14,6 @@ function queryError(err, next){
 
 var api_db_helper = {
 
-    getTodayMs: geo_helper.getTodayMs,
     // 獲取選定時段新聞
     getSelectedDateNews: function (user, body, User, res, next){
 
@@ -25,7 +24,7 @@ var api_db_helper = {
                 res.status(400).json({'status': 'error', 'msg': '用戶不存在'})
             } else {
                 var country    = body.selectCountry,
-                    userDate   = userInfo.register_info.date,
+                    userDate   = body.isTodayNews ? new Date() : userInfo.register_info.date,
                     selectDate = body.selectDate + body.timezoneOffset,
                     selectDate = Date.UTC(
                         userDate.getUTCFullYear(),
@@ -89,7 +88,7 @@ var api_db_helper = {
                 res.status(400).json({'status': 'error', 'msg': '用戶不存在'})
             } else {
                 if (geo_helper.isSamePlace(found.last_geo, coords) 
-                    && (new Date() - geo_helper.getTodayMs(found.last_geo.date)) < 86400000){
+                    && (new Date() - geo_helper.getDayMs(found.last_geo.date)) < 86400000){
                     // 同一天同一位置多次請求
                     var msg = {
                         last_geo: found.last_geo,
