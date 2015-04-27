@@ -147,7 +147,7 @@
                     </div>
                 </div>
                 <!-- 過場動畫 -->
-                <div ng-show="currentPage === 'loadBox'" id="load_inner_box" class="general_animate">
+                <div ng-show="currentPageIs('loadBox')" id="load_inner_box" class="general_animate">
                     <div class="vertically_center">
                         <div class="load_animate" ng-class="{'load_err': isLoadErr}" ng-click="toggleCurrentPage('infoBox')"></div>
                     </div>
@@ -155,7 +155,7 @@
             </div>
         </div>
         <!-- 基本信息：外部部件 -->
-        <div ng-if="currentPage === 'infoBox'" id="info_outer_box" class="general_animate">
+        <div ng-if="currentPageIs('infoBox')" id="info_outer_box" class="general_animate">
             <div id="info_username_box">
                 <!-- 用戶名 -->
                 <h2>{{::infoBox.username}}</h2>
@@ -182,9 +182,9 @@
             </div>
         </div>
         <!-- 註冊當日新聞：外部部件-->
-        <div ng-if="currentPage === 'newsBox'" id="news_outer_box" class="general_animate">
+        <div ng-if="currentPageIs('newsBox')" id="news_outer_box" class="general_animate">
             <div id="news_title">
-                <h3>當日新聞</h3>
+                <h3>{{newsDateTitle}}</h3>
             </div>
             <div id="news_select_date">
                 <span ng-click="previousHour()">&lt;</span>
@@ -193,10 +193,15 @@
                 </div>
                 <span ng-click="nextHour()">&gt;</span>                    
             </div>
-            <div id="news_country" class="bottom_right_corner general_animate" ng-class="selectCountry" ng-click="selectNextCountry()">{{selectCountry}}</div>
+        </div>
+        <div ng-if="isShowNewsOptions" class="general_animate">
+            <div id="news_country" class="bottom_right_corner general_animate" ng-class="selectCountry" ng-click="selectNextCountry()">
+                {{selectCountry}}
+            </div>
+            <div id="news_today" class="bottom_left_corner general_animate" ng-class="{'today': isTodayNews}" ng-click="toggleTodayNews()">今日</div>
         </div>
         <!-- 地理位置服務：外部部件 -->
-        <div ng-if="currentPage === 'geoBox' && isGeoServices" id="geo_outer_box" class="general_animate">
+        <div ng-if="currentPageIs('geoBox') && isGeoServices" id="geo_outer_box" class="general_animate">
             <div id="now_geo" class="all_geo">
                 <h3>現在</h3>
                 <a ng-href="http://maps.google.com/maps?z=12&t=h&q=loc:{{geoBox.now_geo.lat}}+{{geoBox.now_geo.lon}}" target="_blank">{{geoBox.now_geo.location}}</a>
@@ -214,7 +219,7 @@
     </div>
 </div>
 <!-- 返回上一層按鈕 -->
-<div ng-if="!isMobile" class="back_button general_animate" ng-click="toggleCurrentPage('infoBox')">
+<div ng-if="!isMobile" class="back_button general_animate" ng-click="toggleCurrentPage('infoBox', true)">
 </div>
 <!-- 頁面切換提示標誌 -->
 <div ng-if="!isMobile" class="sunAndMoon general_animate" ng-class="{'sun': isSun, 'moon': !isSun}" ng-click="toggleChatBox()">

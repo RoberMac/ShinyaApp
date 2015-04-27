@@ -40,7 +40,7 @@ angular.module('ShinyaApp.timeHelperServices', [])
         ? 'daytime'
         : 'night'
     },
-    this.getTodayMs = function (date){
+    this.getDayMs = function (date){
 
         var date = new Date(date)
         return Date.UTC(

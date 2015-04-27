@@ -3,7 +3,6 @@ var geo_helper        = require('./geo_helper'),
     getBeginPlace     = require('./begin_place_helper'),
     getCountryAndCity = geo_helper.getCountryAndCity,
     getCityWeather    = geo_helper.getCityWeather,
-    getTodayMs        = geo_helper.getTodayMs,
     getGeoWeather     = geo_helper.getGeoWeather;
 
 // Q
