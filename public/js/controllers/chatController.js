@@ -26,6 +26,7 @@ angular.module('ShinyaApp.chatController', [])
     $scope.isChatBox = true
     $scope.isInfoBox = false
     $scope.isShowNewsOptions = false
+    $scope.isLoadErr = false
     $scope.toggleChatBox = function (action){
 
         if (!!action){
@@ -80,7 +81,6 @@ angular.module('ShinyaApp.chatController', [])
     var token = store.get('id_token'),
         decodeToken = jwtHelper.decodeToken(token);
     // 從 JWT 解碼獲取用戶信息
-    console.log(decodeToken)
     $scope.infoBox = {
         title      : '加入於',
         username   : decodeToken.username,
@@ -134,7 +134,7 @@ angular.module('ShinyaApp.chatController', [])
     $scope.newsDateTitle = '當日新聞'
     $scope.selectDateNewsBox = []
     $scope.selectDate = new Date().getHours()
-    $scope.selectCountry = $scope.infoBox.country || 'US'
+    $scope.selectCountry = $scope.infoBox.country || 'CN'
     var timezoneOffset = new Date().getTimezoneOffset() / 60,
         // 「今日新聞」存儲到 todayNews Namespaced，方便檢測是否過期並刪除
         todayNews = store.getNamespacedStore('todayNews', '-'),
@@ -187,6 +187,7 @@ angular.module('ShinyaApp.chatController', [])
                         + $scope.selectDate,
             selectDateNews = $scope.isTodayNews ? todayNews.get(news_id) : store.get(news_id);
         $scope.isShowNewsOptions = true
+        $scope.isLoadErr = false
         if (selectDateNews){
             // 從 `localStorage[news_id]` 獲取，不執行 `getSelectedDateNews`
             $scope.selectDateNewsBox = selectDateNews

@@ -1,5 +1,7 @@
-var Feedparser = require('feedparser'),
-    request = require('request');
+var zlib       = require('zlib'),
+    Feedparser = require('feedparser'),
+    iconv_lite = require('iconv-lite'),
+    request    = require('request');
 
 var feed_list = {
     'BR': [
@@ -20,6 +22,7 @@ var feed_list = {
         {'source_name': 'Engadget 中文版', 'url': 'http://cn.engadget.com/rss.xml'} // Engadget 中文版
     ],
     'DE': [
+        {'source_name': 'SPIEGEL ONLINE', 'url': 'http://www.spiegel.de/schlagzeilen/tops/index.rss', 'encoding': 'Windows-1252'}, // SPIEGEL ONLINE - Schlagzeilen
         {'source_name': 'T-Online', 'url': 'http://feeds.t-online.de/rss/nachrichten'}, // T-Online
         {'source_name': 'Bild.de', 'url': 'http://rss.bild.de/bild.xml'}, // Bild.de
         {'source_name': 'Google News', 'url': 'https://news.google.com/news?pz=1&cf=all&ned=de&hl=de&output=rss'}, // Google News
@@ -33,8 +36,8 @@ var feed_list = {
     ],
     'HK': [ 
         {'source_name': 'Google 新聞', 'url': 'https://news.google.com.hk/news?pz=1&cf=all&ned=hk&hl=zh-TW&output=rss'}, // Google 新聞
-        {'source_name': 'Yahoo 新聞', 'url': 'https://hk.news.yahoo.com/rss'}, // Yahoo 新聞 - 最新焦點新聞 & 頭條報道
         {'source_name': 'Yahoo 新聞', 'url': 'https://hk.news.yahoo.com/rss/hong-kong'}, // Yahoo 新聞 - 港聞新聞
+        {'source_name': '香港電台網站', 'url': 'http://www.rthk.org.hk/rthk/news/rss/c_expressnews.xml', 'encoding': 'BIG5'}, // 香港電台網站 - 即時新聞
         {'source_name': '東方日報', 'url': 'http://orientaldaily.on.cc/rss/news.xml'}, // 東方日報 - 要聞港聞
         {'source_name': '聚言時報', 'url': 'http://polymerhk.com/feed'}, // 聚言時報
         {'source_name': 'Goal.com', 'url': 'http://www.goal.com/hk/feeds/news?fmt=rss'}, // Goal.com News
@@ -120,6 +123,19 @@ function updateCountryNews(country, now, news, callback){
         log.warning('[News: Not Found]', country)
     }
 }
+// via https://github.com/danmactough/node-feedparser/blob/master/examples/compressed.js
+function decompressRes (res, encoding) {
+
+    var decompress;
+
+    encoding.match(/\bdeflate\b/)
+    ? decompress = zlib.createInflate()
+    : encoding.match(/\bgzip\b/)
+        ? decompress = zlib.createGunzip()
+        : null
+
+    return decompress ? res.pipe(decompress) : res
+}
 function getNews(frequency){
 
     var now = new Date(),
@@ -155,52 +171,79 @@ function getNews(frequency){
                     (function getNextNews(){
 
                         var feedparser = new Feedparser(),
-                            req  = request(feed_item[feed_pointer]['url']),
+                            encoding = feed_item[feed_pointer]['encoding'] || 'UTF8'
                             cache        = [];
-                        req.on('error', function (err){
-                            log.error('[News: Request Error]', err)
-                        })
-                        req.on('response', function (res){
-                            var stream = this;
-                            if (res.statusCode != 200){
-                                return this.emit('error', new Error('Bad status code'));
-                            }
-                            log.info('[News: Response]', feed_item[feed_pointer]['source_name'])
-                            stream.pipe(feedparser);
-                        })
-                        feedparser.on('error', function(err){
-                            log.warning('[News: Parse Error]', err)
-                        })
-                        feedparser.on('readable', function(){
 
+                        // 抓取當前新聞源
+                        request({
+                            url: feed_item[feed_pointer]['url'],
+                            gzip: true,
+                            timeout: 10000,
+                            headers: {
+                                'accept': 'text/html,application/xhtml+xml',
+                                'user-agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/42.0.2311.90 Safari/537.36'
+                            },
+                            pool: false
+                        })
+                        .on('error', function (err){
+                            log.error('[News: Request Error]', feed_item[feed_pointer]['source_name'], err)
+                            // 若不是「新聞列表」最後的新聞源，獲取下一個新聞源新聞
+                            if (feed_pointer < feed_len - 1){
+                                feed_pointer ++
+                                getNextNews()
+                            } else {
+                                log.info('[News: Fetch & Parse Finished]', country)
+                                updateCountryNews(country, now, all_news, function (){
+                                    if (country_pointer < country_len - 1){
+                                        country_pointer ++
+                                        getCountryNews(country_list[country_pointer])
+                                    } else {
+                                        log.info('[News: Done]', now)
+                                    }
+                                })
+                            }
+                        })
+                        .on('response', function (res){
+                            if (res.statusCode != 200){
+                                return this.emit('error', new Error('Bad status code', res.statusCode))
+                            }
+                            decompressRes(res, res.headers['content-encoding'] || '')
+                            .pipe(iconv_lite.decodeStream(encoding))
+                            .pipe(feedparser)
+                        })
+
+                        // 解析當前新聞源
+                        feedparser
+                        .on('error', function(err){
+                            log.warning('[News: Parse Error]', feed_item[feed_pointer]['source_name'], err)
+                        })
+                        .on('readable', function(){
                             var stream = this,
                                 meta = this.meta,
                                 item;
                             while (item = stream.read()){
-                                if (item.date < now && item.date > restrict){
-                                    cache.push({
-                                        'title': item.title,
-                                        'url'  : item.link,
-                                        'date' : item.date
-                                        // item.link.substr(item.link.indexOf('&url')+5)
-                                    })
-                                }
+                                item.date < now && item.date > restrict
+                                ? cache.push({
+                                    'title': item.title,
+                                    'url'  : item.link,
+                                    'date' : item.date
+                                })
+                                : null
                             }
                         })
-                        feedparser.on('end', function (){
+                        .on('end', function (){
                             // 若不是「新聞列表」最後的新聞源，獲取下一個新聞源新聞
                             if (feed_pointer < feed_len - 1){
-                                if (cache.length > 0){
-                                    all_news.push({
-                                        'source_name': feed_item[feed_pointer]['source_name'],
-                                        'news': cache
-                                    })
-                                }
+                                cache.length > 0
+                                ? all_news.push({
+                                    'source_name': feed_item[feed_pointer]['source_name'],
+                                    'news': cache
+                                })
+                                : null
                                 feed_pointer ++
                                 getNextNews()
                             } else {
                                 if (cache.length > 0){
-                                    log.info('[News: Cache]', feed_item[feed_pointer]['source_name'])
                                     all_news.push({
                                         'source_name': feed_item[feed_pointer]['source_name'],
                                         'news': cache
@@ -217,7 +260,7 @@ function getNews(frequency){
                                 })
                             }
                         })
-                    })() 
+                    })()
                 })(country_list[country_pointer])
             })
         } else {
