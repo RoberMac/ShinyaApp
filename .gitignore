@@ -4,3 +4,4 @@ public/others/*.pem
 others/*.key
 others/*.pem
 logs
+public/dist/*

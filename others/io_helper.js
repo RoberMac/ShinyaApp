@@ -24,7 +24,6 @@ io.on('connection', function (socket) {
         'onlineUser': onlineUser
     })
 
-    log.info('[SIO: latestMsg]', username)
     socket.on('latestMsg', function (msg){
         if (msg === true){
             io.sockets.connected[socket.id].emit('latestMsg', msgCache)            

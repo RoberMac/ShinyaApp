@@ -8,7 +8,12 @@
                     <span>{{contentItem.date | date: 'H:mm:ss'}}</span>
                 </div>
                 <div ng-if="!contentItem.isMe" class="username_box">
-                    <span>{{contentItem.username}}</span>
+                    <span ng-click="toggleOtherUserInfo(contentItem.username, contentItem.date)">{{contentItem.username}}</span>
+                    <div ng-if="otherUserInfoId === contentItem.date" class="other_user_info general_animate">
+                        <span class="numero" ng-class="numero(otherUserInfo.numero)">No.{{otherUserInfo.numero}}</span>
+                        <span class="country" ng-class="otherUserInfo.country">{{otherUserInfo.country}}</span>
+                        <span>{{otherUserInfo.date}}</span>
+                    </div>
                 </div>
                 <div class="content_box" ng-class="{'syShow': isAtMsgShow, 'img_msg': contentItem.isImg}" ng-click="toggleImgBox(contentItem)">
                     <pre>{{contentItem.msg}}</pre>
@@ -159,7 +164,7 @@
                 <h2>{{::infoBox.username}}</h2>
                 <div id="info_numero_box">
                     <!-- 註冊序號 -->
-                    <p>第 <span ng-class="numero">{{::infoBox.numero}}</span> 號用戶</p>
+                    <p>第 <span ng-class="numero(infoBox.numero)">{{::infoBox.numero}}</span> 號用戶</p>
                 </div>
             </div>
             <!-- 進入：地理位置服務 -->
