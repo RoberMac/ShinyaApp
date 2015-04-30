@@ -1,3 +1,6 @@
+- BUG
+    - 當用戶註銷登錄另外帳號，Socket.IO 不會以最新 token 重連
+    - 更新 IE 用戶所訪問的頁面
 - #!chat
     - Chat
         - Animation

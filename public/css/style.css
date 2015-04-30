@@ -85,6 +85,85 @@ ul {
 #outer_box.logo_loaded {
     opacity: 1;
 }
+/* 國家色 */
+.CN {
+    color: #E74010;
+    border-color: #E74010;
+}
+.HK {
+    color: #E74010;
+    border-color: #E74010;
+}
+.TW {
+    color: #021DA6;
+    border-top-color: #021DA6;
+    border-right-color: #FF2600;
+    border-bottom-color: #FF2600;
+    border-left-color: #021DA6;
+}
+.US {
+    color: #002868;
+    border-top-color: #002868;
+    border-right-color: #BF0A30;
+    border-bottom-color: #BF0A30;
+    border-left-color: #BF0A30;
+}
+.JP {
+    color: #C70025;
+    border-color: #C70025;
+}
+.DE {
+    color: #1E1E1E;
+    border-top-color: #BF0A30;
+    border-right-color: #BF0A30;
+    border-bottom-color: #FED100;
+    border-left-color: #FED100;
+}
+.FR {
+    color: #00209F;
+    border-top-color: #00209F;
+    border-right-color: #00209F;
+    border-bottom-color: #F42A41;
+    border-left-color: #F42A41;
+}
+.IN {
+    color: #000;
+    border-top-color: #138808;
+    border-right-color: #138808;
+    border-bottom-color: #FF9933;
+    border-left-color: #FF9933;
+}
+.KR {
+    color: #000080;
+    border-top-color: #C60C30;
+    border-right-color: #C60C30;
+    border-bottom-color: #003478;
+    border-left-color: #003478;
+}
+.RU {
+    color: #0000FE;
+    border: #FE0000;
+}
+.BR {
+    color: #3200FE;
+    border-top: #007600;
+    border-right: #007600;
+    border-bottom: #FEFE00;
+    border-left: #FEFE00;
+}
+/* Numero */
+.gold {
+    color: #D4AF37;
+    border-color: #D4AF37;
+}
+.aluminum {
+    color: #999;
+    border-color: #999;
+}
+.steel {
+    color: #666;
+    border-color: #666;
+}
 /* main_box */
 .main_box {
     position: absolute;
@@ -136,7 +215,6 @@ ul {
                 width: 4px;
                 height: 4px;
                 border: 1px solid #CECECF;
-                -webkit-border-radius: 3px;
                 border-radius: 3px;
             }
     .main_box .bottom_center_corner {
@@ -162,7 +240,6 @@ ul {
             width: 12px;
             height: 12px;
             border-radius: 7px;
-            -webkit-border-radius: 6px;
             border: 1px solid #CECECF;
             border-bottom-left-radius: 0px;
             -webkit-transform: rotate(-45deg);
@@ -177,7 +254,6 @@ ul {
                 width: 4px;
                 height: 4px;
                 border-radius: 3px;
-                -webkit-border-radius: 3px;
                 border: 1px solid #CECECF;
                 cursor: pointer;
             }
@@ -199,7 +275,6 @@ ul {
         .form_box .form_title span {
             margin: 5px;
             padding: 4px;
-            -webkit-border-radius: 4px;
             border-radius: 4px;
             cursor: pointer;
         }
@@ -221,7 +296,6 @@ ul {
         line-height: 20px;
         color: #555;
         background-color: transparent;
-        -webkit-border-radius: 5px;
         border-radius: 5px;
         border: 1px solid #CECECF;
         overflow: hidden;
@@ -345,14 +419,24 @@ ul {
     #chat_box .username_box {
         text-align: left;
         font-size: 1.1rem;
+        line-height: 17px;
         margin-top: 10px;
         margin-bottom: 1px;
         color: #000;
     }
-        #chat_box .username_box span {
-            -webkit-border-radius: 4px;
-            border-radius: 4px;
+        #chat_box .username_box > span {
             padding: 0px 2px;
+            cursor: pointer;
+        }
+    #chat_box .username_box .other_user_info {
+        display: inline-block;
+    }
+        #chat_box .username_box .other_user_info span {
+            padding: 0px 2px;
+            margin-left: 5px;
+            border-width: 1px;
+            border-style: solid;
+            border-radius: 3px;
         }
 /* img_box */
 #img_box {
@@ -469,7 +553,6 @@ ul {
         padding: 3px 7px;
         line-height: 14px;
         background-color: #FFF;
-        -webkit-border-radius: 5px;
         border-radius: 5px;
     }
         .all_notify_box span.online {
@@ -516,7 +599,6 @@ ul {
     line-height: 34px;
     border: 1px solid #FFF;
     border-radius: 17px;
-    -webkit-border-radius: 17px;    
     cursor: pointer;
 }
     #info_inner_box #info_date_box .all span {
@@ -525,7 +607,6 @@ ul {
     #info_inner_box #info_date_box .all.clouds {
         width: 77px;
         height: 77px;
-        -webkit-border-radius: 38.5px;
         border-radius: 38.5px;
         background-color: #CECECF;
         border: 1px solid #CECECF;
@@ -545,7 +626,6 @@ ul {
             width: 50px;
             height: 25px;
             margin-top: 8%;
-            -webkit-border-radius: 0 25px 0 25px;
             border-radius: 0 25px 0 25px;
             -webkit-transform: rotate(1440deg);
             transform: rotate(1440deg);
@@ -584,7 +664,6 @@ ul {
             width: 50px;
             height: 25px;
             margin-top: 8%;
-            -webkit-border-radius: 0 25px 0 25px;
             border-radius: 0 25px 0 25px;
             -webkit-transform: rotate(1440deg);
             transform: rotate(1440deg);
@@ -620,20 +699,10 @@ ul {
     }
     #info_numero_box span {
         padding: 1px 5px;
-        -webkit-border-radius: 5px;
         border-radius: 5px;
         border-left: 2px solid;
         border-right: 2px solid;
     }
-        #info_numero_box span.gold {
-            border-color: #D4AF37;
-        }
-        #info_numero_box span.aluminum {
-            border-color: #999;
-        }
-        #info_numero_box span.steel {
-            border-color: #666;
-        }
 /* newsBox: inner */
 #news_inner_box {
     position: absolute;
@@ -716,78 +785,13 @@ ul {
     #news_country {
         width: 27px;
         height: 27px;
-        color: #000;
-        border: 1px solid #000;
+        border-width: 1px;
+        border-style:solid;
         font-size: 1.1rem;
         line-height: 27px;
         border-radius: 14px;
         cursor: pointer;
     }
-        #news_country.CN {
-            color: #E74010;
-            border: 1px solid #E74010;
-        }
-        #news_country.HK {
-            color: #E74010;
-            border: 1px solid #E74010;
-        }
-        #news_country.TW {
-            color: #021DA6;
-            border-top: 1px solid #021DA6;
-            border-right: 1px solid #FF2600;
-            border-bottom: 1px solid #FF2600;
-            border-left: 1px solid #021DA6;
-        }
-        #news_country.US {
-            color: #002868;
-            border-top: 1px solid #002868;
-            border-right: 1px solid #BF0A30;
-            border-bottom: 1px solid #BF0A30;
-            border-left: 1px solid #BF0A30;
-        }
-        #news_country.JP {
-            color: #C70025;
-            border: 1px solid #C70025;
-        }
-        #news_country.DE {
-            color: #1E1E1E;
-            border-top: 1px solid #BF0A30;
-            border-right: 1px solid #BF0A30;
-            border-bottom: 1px solid #FED100;
-            border-left: 1px solid #FED100;
-        }
-        #news_country.FR {
-            color: #00209F;
-            border-top: 1px solid #00209F;
-            border-right: 1px solid #00209F;
-            border-bottom: 1px solid #F42A41;
-            border-left: 1px solid #F42A41;
-        }
-        #news_country.IN {
-            color: #000;
-            border-top: 1px solid #138808;
-            border-right: 1px solid #138808;
-            border-bottom: 1px solid #FF9933;
-            border-left: 1px solid #FF9933;
-        }
-        #news_country.KR {
-            color: #000080;
-            border-top: 1px solid #C60C30;
-            border-right: 1px solid #C60C30;
-            border-bottom: 1px solid #003478;
-            border-left: 1px solid #003478;
-        }
-        #news_country.RU {
-            color: #0000FE;
-            border: 1px solid #FE0000;
-        }
-        #news_country.BR {
-            color: #3200FE;
-            border-top: 1px solid #007600;
-            border-right: 1px solid #007600;
-            border-bottom: 1px solid #FEFE00;
-            border-left: 1px solid #FEFE00;
-        }
 /* geoBox: inner */
 #geo_inner_box {
     position: absolute;
@@ -804,7 +808,6 @@ ul {
             width: 60px;
             height: 60px;
             border-radius: 30px;
-            -webkit-border-radius: 30px;
             border: 1px solid #CECECF;
         }
             #geo_inner_box #turnOnGeoServices .geoStatus .geoOnAndOff {
@@ -813,7 +816,6 @@ ul {
                 width: 50px;
                 height: 50px;
                 border-radius: 25px;
-                -webkit-border-radius: 25px;
                 border: 1px solid #CECECF;
                 cursor: pointer;
             }
@@ -940,7 +942,6 @@ ul {
             height: 80px;
             border-left: 64px solid #000;
             border-right: 4px solid #000;
-            -webkit-border-radius: 40px;
             border-radius: 40px;
             -webkit-transform: rotate(-15deg);
             transform: rotate(-15deg);
@@ -954,7 +955,6 @@ ul {
             width: 60px;
             height: 60px;
             border-right: 3px solid #000;
-            -webkit-border-radius: 30px;
             border-radius: 30px;
 
         }
@@ -966,7 +966,6 @@ ul {
             width: 40px;
             height: 40px;
             border-right: 2px solid #000;
-            -webkit-border-radius: 20px;
             border-radius: 20px;
         }
         #mute.voiced {
@@ -980,7 +979,6 @@ ul {
             width: 80px;
             height: 80px;
             border-radius: 40px;
-            -webkit-border-radius: 40px;
             border: 1px solid #000;
         }
             #setting_inner_box #setting_top_right .geoStatus .geoOnAndOff {
@@ -989,7 +987,6 @@ ul {
                 width: 66px;
                 height: 66px;
                 border-radius: 33px;
-                -webkit-border-radius: 33px;
                 border: 1px solid #000;
                 cursor: pointer;
             }
@@ -1036,7 +1033,6 @@ ul {
                     left: 47%;
                     width: 0px;
                     height: 14px;
-                    -webkit-border-radius: 50%;
                     border-radius: 50%;
                     border-right: 14px solid #000;
                 }
@@ -1052,7 +1048,6 @@ ul {
                     left: 47%;
                     width: 14px;
                     height: 14px;
-                    -webkit-border-radius: 50%;
                     border-radius: 50%;
                     border-right: 3px solid #000;
                 }
@@ -1098,7 +1093,6 @@ ul {
         width: 40px;
         height: 40px;
         border: 1px solid #CECECF;
-        -webkit-border-radius: 20px;
         border-radius: 20px;
         cursor: w-resize;;
     }
@@ -1108,7 +1102,6 @@ ul {
         width: 10px;
         height: 10px;
         background-color: #000;
-        -webkit-border-radius: 5px;
         border-radius: 5px;
         top: 0px;
         left: 0px;
@@ -1124,7 +1117,6 @@ ul {
     width: 56.25%;
     height: 6%;
     background: #fff;
-    -webkit-border-radius: 4px;
     border-radius: 4px;
 
 }
@@ -1138,13 +1130,11 @@ ul {
     width: 100%;
     height: 100%;
     background-color: transparent;
-    -webkit-border-radius: 5px;
     border-radius: 5px;
     overflow: hidden;
     -webkit-appearance: none;
 }
 .show_back_button {
-    -webkit-border-radius: 70px 10px 10px 10px;
     border-radius: 70px 10px 10px 10px;
 }
 .back_button {
@@ -1154,7 +1144,6 @@ ul {
     width: 70px;
     height: 70px;
     background: #fff;
-    -webkit-border-radius: 10px;
     border-radius: 10px;
     z-index: -1;
     cursor: pointer;
@@ -1167,7 +1156,6 @@ ul {
     height: 17px;
     color: #fff;
     background-color: transparent;
-    -webkit-border-radius: 50%;
     border-radius: 50%;
     cursor: pointer;
     z-index: 2;
@@ -1388,14 +1376,12 @@ input,
             left: 5px;
             width: 8px;
             height: 8px;
-            -webkit-border-radius: 5px;
             border-radius: 5px;
         }
     #getGeoServices {
         width: 24px;
         height: 24px;
         border-radius: 12px;
-        -webkit-border-radius: 12px;
         border-bottom-left-radius: 0px;
     }
         #getGeoServices:before {
@@ -1404,7 +1390,6 @@ input,
             width: 8px;
             height: 8px;
             border-radius: 6px;
-            -webkit-border-radius: 6px;
         }
     #img_box {
         height: 77px;
@@ -1465,7 +1450,6 @@ input,
         bottom: 8.5%;
         left: 3%;
         width: 94%;
-        -webkit-border-radius: 4px;
         border-radius: 4px;
         color: #fff;
     }
@@ -1491,7 +1475,6 @@ input,
         width: 94%;
         height: 6.5%;
         border-top: 1px solid #CECECF;
-        -webkit-border-radius: 0px 0px 10px 10px;
         border-radius: 0px 0px 10px 10px;
     }
     #img_404 img {
@@ -1550,7 +1533,6 @@ input,
         width: 97%;
         height: 8%;
         border-top: 1px solid #CECECF;
-        -webkit-border-radius: 0px 0px 10px 10px;
         border-radius: 0px 0px 10px 10px;
     }
     #img_404 img {
@@ -1591,7 +1573,6 @@ input,
         .form_box .form_title span {
             margin: 7px;
             padding: 7px;
-            -webkit-border-radius: 5px;
             border-radius: 5px;
         }
         .form_box input, .notification {
@@ -1608,7 +1589,6 @@ input,
         left: 2%;
         width: 96%;
         font-size: 1.4rem;
-        -webkit-border-radius: 4px;
         border-radius: 4px;
         color: #fff;
     }
@@ -1625,7 +1605,6 @@ input,
         width: 96%;
         height: 6.5%;
         border-top: 1px solid #CECECF;
-        -webkit-border-radius: 0px 0px 10px 10px;
         border-radius: 0px 0px 10px 10px;
     }
     #img_404 img {
