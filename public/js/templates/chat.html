@@ -1,4 +1,4 @@
-<div class="main_box" ng-class="{'input_shake_animate': input_shake_animate, 'chat_box': isChatBox, 'show_back_button': currentPage !== 'infoBox' && !isMobile}" ng-swipe-left="toggleChatBox('left')" ng-swipe-right="toggleChatBox('right')" ng-swipe-disable-mouse>
+<div class="main_box" ng-class="{'input_shake_animate': input_shake_animate, 'chat_box': isChatBox, 'show_back_button': currentPage !== 'infoBox' && !isMobile}" ng-swipe-left="toggleChatBox('left')" ng-swipe-right="toggleChatBox('right', true)" ng-swipe-disable-mouse>
     <!-- 聊天頁面 -->
     <!-- 由於 ng-switch 會操作 DOM，故若不處於 `chat_box` 時，新消息抵達時不能處理 -->
     <div ng-show="isChatBox" id="chat_box" class="general_animate" sy-autoscroll>
@@ -57,11 +57,9 @@
                 <!-- 註冊當日新聞：主體 -->
                 <div ng-switch-when="newsBox" id="news_inner_box" class="general_animate">
                     <div class="general_animate" ng-if="isNewsExist" ng-repeat="news in selectDateNewsBox" id="news_source_box">
-                        <div ng-repeat="item in news.news">
-                            <div id="news_content_box">
-                                <span>{{item.date | date: 'HH:mm'}}</span>
-                                <a ng-href="{{item.url}}" target="_blank">{{item.title}}</a>
-                            </div>
+                        <div class="news_content_box" ng-repeat="item in news.news">
+                            <span>{{item.date | date: 'HH:mm'}}</span>
+                            <a ng-href="{{item.url}}" target="_blank">{{item.title}}</a>
                         </div>
                         <div id="news_source">
                             <span>來源：{{news.source_name}}</span>

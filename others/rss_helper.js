@@ -61,7 +61,6 @@ var feed_list = {
     'KR': [
         {'source_name': 'Google News', 'url': 'https://news.google.com.hk/news?pz=1&cf=all&ned=kr&hl=kr&output=rss'}, // Google News
         {'source_name': '이티뉴스', 'url': 'http://rss.etnews.com/Section902.xml'}, // 이티뉴스
-        {'source_name': '전체뉴스', 'url': 'http://rss.edaily.co.kr/edaily_news.xml'}, // 전체뉴스
         {'source_name': 'dongA.com', 'url': 'http://rss.donga.com/total.xml'}, // dongA.com
         {'source_name': '경향신문', 'url': 'http://www.khan.co.kr/rss/rssdata/total_news.xml'} // 경향신문
     ],

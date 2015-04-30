@@ -27,7 +27,7 @@ angular.module('ShinyaApp.chatController', [])
     $scope.isInfoBox = false
     $scope.isShowNewsOptions = false
     $scope.isLoadErr = false
-    $scope.toggleChatBox = function (action){
+    $scope.toggleChatBox = function (action, isShowNewsOptions){
 
         if (!!action){
             // 移動端
@@ -37,6 +37,7 @@ angular.module('ShinyaApp.chatController', [])
                 !$scope.isChatBox && $scope.currentPage === 'infoBox'
                 ? $scope.isChatBox = !$scope.isChatBox
                 : $scope.toggleCurrentPage('infoBox')
+                isShowNewsOptions ? $scope.isShowNewsOptions = false : null
             }
         } else {
             // 桌面端
