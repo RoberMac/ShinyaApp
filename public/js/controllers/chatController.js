@@ -27,7 +27,7 @@ angular.module('ShinyaApp.chatController', [])
     $scope.isInfoBox = false
     $scope.isShowNewsOptions = false
     $scope.isLoadErr = false
-    $scope.toggleChatBox = function (action){
+    $scope.toggleChatBox = function (action, isShowNewsOptions){
 
         if (!!action){
             // 移動端
@@ -37,6 +37,7 @@ angular.module('ShinyaApp.chatController', [])
                 !$scope.isChatBox && $scope.currentPage === 'infoBox'
                 ? $scope.isChatBox = !$scope.isChatBox
                 : $scope.toggleCurrentPage('infoBox')
+                isShowNewsOptions ? $scope.isShowNewsOptions = false : null
             }
         } else {
             // 桌面端
@@ -44,6 +45,7 @@ angular.module('ShinyaApp.chatController', [])
             $scope.isChatBox ? null : $scope.toggleCurrentPage('infoBox')
             $scope.isChatBox = !$scope.isChatBox
             $scope.isSun     = !$scope.isSun
+            isShowNewsOptions ? $scope.isShowNewsOptions = false : null
         }
         $scope.now_img_list = []
         $scope.isZoomIn = false
@@ -90,7 +92,9 @@ angular.module('ShinyaApp.chatController', [])
         partsOfADay: syTimeHelper.partsOfADay(~~($filter('date')(decodeToken.date, 'H'))),
         weather    : decodeToken.weather.description
     }
-    $scope.numero = syTimeHelper.getNumero($scope.infoBox.numero)
+    $scope.numero = function (numero){
+        return syTimeHelper.getNumero($scope.infoBox.numero)
+    }
     $scope.getDaytimeOrNight = syTimeHelper.getDaytimeOrNight(~~($filter('date')(decodeToken.date, 'H')))
     $scope.partWeather = ''
     $scope.togglePartWeather = function (){
@@ -104,6 +108,46 @@ angular.module('ShinyaApp.chatController', [])
             $timeout(function (){
                 $scope.infoBox.title = '當日天氣'
             }, 777)
+        }
+    }
+    /*
+     ********************
+     * 查看其他用戶基本信息
+     ********************
+     *      `$scope.otherUserInfo` 當前查看的「用戶基本信息」
+     *      `$scope.otherUserInfoI` 當前查看的信息 id
+     *      `$scope.toggleOtherUserInfo` 查看／隱藏「用戶基本信息」
+     *
+     */
+    $scope.otherUserInfo = {}
+    $scope.otherUserInfoId = 0
+    $scope.toggleOtherUserInfo = function (username, id){
+        if (id === $scope.otherUserInfoId){
+            // 隱藏「用戶基本信息」
+            $scope.otherUserInfoId = 0
+            return;
+        }
+        if (store.get(username)){
+            $scope.otherUserInfo = store.get(username)
+            $scope.otherUserInfoId = id
+        } else {
+            $http
+            .post('/api/getUserInfo', {
+                username: username
+            })
+            .success(function (data, status, headers, config){
+                var info = {
+                    numero: data.msg.numero,
+                    country: data.msg.country || 'CN',
+                    date: $filter('date')(data.msg.date, 'yyyy 年 M 月 d 日'),
+                }
+                // 存儲於本地
+                store.set(username, info)
+                $scope.otherUserInfo = info
+                $scope.otherUserInfoId = id
+            })
+            .error(function (data, status, headers, config){
+            })
         }
     }
     /*

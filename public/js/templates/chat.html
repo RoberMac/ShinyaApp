@@ -1,4 +1,4 @@
-<div class="main_box" ng-class="{'input_shake_animate': input_shake_animate, 'chat_box': isChatBox, 'show_back_button': currentPage !== 'infoBox' && !isMobile}" ng-swipe-left="toggleChatBox('left')" ng-swipe-right="toggleChatBox('right')" ng-swipe-disable-mouse>
+<div class="main_box" ng-class="{'input_shake_animate': input_shake_animate, 'chat_box': isChatBox, 'show_back_button': currentPage !== 'infoBox' && !isMobile}" ng-swipe-left="toggleChatBox('left')" ng-swipe-right="toggleChatBox('right', true)" ng-swipe-disable-mouse>
     <!-- 聊天頁面 -->
     <!-- 由於 ng-switch 會操作 DOM，故若不處於 `chat_box` 時，新消息抵達時不能處理 -->
     <div ng-show="isChatBox" id="chat_box" class="general_animate" sy-autoscroll>
@@ -8,7 +8,12 @@
                     <span>{{contentItem.date | date: 'H:mm:ss'}}</span>
                 </div>
                 <div ng-if="!contentItem.isMe" class="username_box">
-                    <span>{{contentItem.username}}</span>
+                    <span ng-click="toggleOtherUserInfo(contentItem.username, contentItem.date)">{{contentItem.username}}</span>
+                    <div ng-if="otherUserInfoId === contentItem.date" class="other_user_info general_animate">
+                        <span class="numero" ng-class="numero(otherUserInfo.numero)">No.{{otherUserInfo.numero}}</span>
+                        <span class="country" ng-class="otherUserInfo.country">{{otherUserInfo.country}}</span>
+                        <span>{{otherUserInfo.date}}</span>
+                    </div>
                 </div>
                 <div class="content_box" ng-class="{'syShow': isAtMsgShow, 'img_msg': contentItem.isImg}" ng-click="toggleImgBox(contentItem)">
                     <pre>{{contentItem.msg}}</pre>
@@ -57,11 +62,9 @@
                 <!-- 註冊當日新聞：主體 -->
                 <div ng-switch-when="newsBox" id="news_inner_box" class="general_animate">
                     <div class="general_animate" ng-if="isNewsExist" ng-repeat="news in selectDateNewsBox" id="news_source_box">
-                        <div ng-repeat="item in news.news">
-                            <div id="news_content_box">
-                                <span>{{item.date | date: 'HH:mm'}}</span>
-                                <a ng-href="{{item.url}}" target="_blank">{{item.title}}</a>
-                            </div>
+                        <div class="news_content_box" ng-repeat="item in news.news">
+                            <span>{{item.date | date: 'HH:mm'}}</span>
+                            <a ng-href="{{item.url}}" target="_blank">{{item.title}}</a>
                         </div>
                         <div id="news_source">
                             <span>來源：{{news.source_name}}</span>
@@ -161,7 +164,7 @@
                 <h2>{{::infoBox.username}}</h2>
                 <div id="info_numero_box">
                     <!-- 註冊序號 -->
-                    <p>第 <span ng-class="numero">{{::infoBox.numero}}</span> 號用戶</p>
+                    <p>第 <span ng-class="numero(infoBox.numero)">{{::infoBox.numero}}</span> 號用戶</p>
                 </div>
             </div>
             <!-- 進入：地理位置服務 -->
@@ -222,7 +225,7 @@
 <div ng-if="!isMobile" class="back_button general_animate" ng-click="toggleCurrentPage('infoBox', true)">
 </div>
 <!-- 頁面切換提示標誌 -->
-<div ng-if="!isMobile" class="sunAndMoon general_animate" ng-class="{'sun': isSun, 'moon': !isSun}" ng-click="toggleChatBox()">
+<div ng-if="!isMobile" class="sunAndMoon general_animate" ng-class="{'sun': isSun, 'moon': !isSun}" ng-click="toggleChatBox(null, true)">
 </div>
 <sy-img></sy-img>
 <sy-usercount></sy-usercount>

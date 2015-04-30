@@ -9,11 +9,10 @@ var jwt       = require('jsonwebtoken'),
 router.get(['/', '/chat', '/forgot'], function (req, res, next){
 
     log.info('[GET: /]', req.ip)
-    if (platform.parse(req.get('user-agent')).name === 'IE'){
-        res.redirect('//browsehappy.com')
-    } else {
-        res.sendFile('/vagrant/ShinyaApp/views/index.html')
-    }
+
+    platform.parse(req.get('user-agent')).name === 'IE'
+    ? res.redirect('//browsehappy.com')
+    : res.sendFile('/vagrant/ShinyaApp/views/index.html')
 })
 
 
@@ -31,7 +30,7 @@ router.post('/register', function (req, res, next){
             platform  : platform.parse(req.get('user-agent')).description
         }
     }
-    db_helper.register(register_form, validator, User, res, next)
+    db_helper.register(register_form, validator, res, next)
 })
 
 router.post('/login', function (req, res, next){
@@ -42,7 +41,7 @@ router.post('/login', function (req, res, next){
         user     : validator.trim(req.body.user),
         password : req.body.password
     }
-    db_helper.login(login_form, validator, bcrypt, jwt, User, key, res, next)
+    db_helper.login(login_form, validator, bcrypt, jwt, key, res, next)
 })
 
 router.post('/forgot_email', function (req, res, next){
@@ -52,7 +51,7 @@ router.post('/forgot_email', function (req, res, next){
     var forgot_email_form = {
         email: req.body.email,
     }
-    db_helper.forgot_email(forgot_email_form, User, jwt, key, res, next)
+    db_helper.forgot_email(forgot_email_form, jwt, key, res, next)
 
 })
 
@@ -62,11 +61,11 @@ router.post('/forgot_code', function (req, res, next){
     if (!req.body.password){
         log.warning('[Forgot: Required Password]')
         next({'code': 400, 'status': 'error', 'msg': '請填寫新密碼'})
-        return null
+        return;
     } else if (!req.body.code) {
         log.warning('[Forgot: Required Code]')
         next({'code': 400, 'status': 'error', 'msg': '請填寫驗證碼'})
-        return null
+        return;
     }
     // 電郵地址信息
     var forgot_code_form = {
@@ -86,14 +85,15 @@ router.post('/forgot_code', function (req, res, next){
                 log.warning('[Forgot: WTF]', err)
                 res.status(400).json({'status': 'error', 'msg': '我不知道你說什麼'})
             }
-        } else {
-            var update_form = {
-                email: decode.email,
-                code    : forgot_code_form.code,
-                password: forgot_code_form.password
-            }
-            db_helper.forgot_code(update_form, User, res, next)
+            return;
         }
+        var update_form = {
+            email: decode.email,
+            code: forgot_code_form.code,
+            password: forgot_code_form.password,
+            ip: req.ip
+        }
+        db_helper.forgot_code(update_form, res, next)
     })
 })
 
