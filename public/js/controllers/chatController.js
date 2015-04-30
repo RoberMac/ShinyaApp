@@ -45,6 +45,7 @@ angular.module('ShinyaApp.chatController', [])
             $scope.isChatBox ? null : $scope.toggleCurrentPage('infoBox')
             $scope.isChatBox = !$scope.isChatBox
             $scope.isSun     = !$scope.isSun
+            isShowNewsOptions ? $scope.isShowNewsOptions = false : null
         }
         $scope.now_img_list = []
         $scope.isZoomIn = false

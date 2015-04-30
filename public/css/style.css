@@ -413,6 +413,9 @@ ul {
     -webkit-overflow-scrolling: touch;
     z-index: 1;
 }
+    #img_fullscreen_box::-webkit-scrollbar {
+        display: none;
+    }
     #img_fullscreen_box > div {
         position: absolute;
         width: 100%;
