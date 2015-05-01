@@ -430,13 +430,16 @@ ul {
         }
     #chat_box .username_box .other_user_info {
         display: inline-block;
+        cursor: pointer;
     }
         #chat_box .username_box .other_user_info span {
             padding: 0px 2px;
-            margin-left: 5px;
+            margin-left: 4px;
+            margin-right: 3px;
             border-width: 1px;
             border-style: solid;
             border-radius: 3px;
+            cursor: pointer;
         }
 /* img_box */
 #img_box {
@@ -750,9 +753,12 @@ ul {
 }
     #news_title {
         position: absolute;
-        top: 30px;
+        bottom: 87%;
         width: 100%;
     }
+        #news_title h3 {
+            letter-spacing: 2px;
+        }
     #news_select_date {
         position: absolute;
         bottom: 10px;
@@ -782,6 +788,13 @@ ul {
             color: #000;
             border: 1px solid #000;
         }
+    #news_date {
+        padding: 0 2px;
+        font-size: 11px;
+        color: #000;
+        border: 1px solid #000;
+        border-radius: 3px;
+    }
     #news_country {
         width: 27px;
         height: 27px;
@@ -1208,7 +1221,8 @@ input,
     -webkit-transition: all .7s ease-in-out .7s;
     transition:         all .7s ease-in-out .7s;
 }
-    /* 觸法動畫 */
+
+    /* 觸發動畫 */
     input.submit_animate:hover {
         border-color: #000;
         color: #000;

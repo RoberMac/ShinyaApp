@@ -27,7 +27,12 @@ angular.module('ShinyaApp.chatController', [])
     $scope.isInfoBox = false
     $scope.isShowNewsOptions = false
     $scope.isLoadErr = false
-    $scope.toggleChatBox = function (action, isShowNewsOptions){
+    function resetNewsSetting(){
+        $scope.isTodayNews = false
+        $scope.isShowNewsOptions = false
+        $scope.isOtherDateNews = false
+    }
+    $scope.toggleChatBox = function (action, isResetNewsSetting){
 
         if (!!action){
             // 移動端
@@ -37,7 +42,7 @@ angular.module('ShinyaApp.chatController', [])
                 !$scope.isChatBox && $scope.currentPage === 'infoBox'
                 ? $scope.isChatBox = !$scope.isChatBox
                 : $scope.toggleCurrentPage('infoBox')
-                isShowNewsOptions ? $scope.isShowNewsOptions = false : null
+                isResetNewsSetting ? resetNewsSetting() : null
             }
         } else {
             // 桌面端
@@ -45,7 +50,7 @@ angular.module('ShinyaApp.chatController', [])
             $scope.isChatBox ? null : $scope.toggleCurrentPage('infoBox')
             $scope.isChatBox = !$scope.isChatBox
             $scope.isSun     = !$scope.isSun
-            isShowNewsOptions ? $scope.isShowNewsOptions = false : null
+            isResetNewsSetting ? resetNewsSetting() : null
         }
         $scope.now_img_list = []
         $scope.isZoomIn = false
@@ -62,7 +67,7 @@ angular.module('ShinyaApp.chatController', [])
                 $scope.geoBox.distance = ''
             }, 717)
         }
-        isShowNewsOptions ? $scope.isShowNewsOptions = false : null
+        isShowNewsOptions ? resetNewsSetting() : null
         $timeout(function (){
             $scope.currentPage = name
         })
@@ -116,11 +121,14 @@ angular.module('ShinyaApp.chatController', [])
      ********************
      *      `$scope.otherUserInfo` 當前查看的「用戶基本信息」
      *      `$scope.otherUserInfoI` 當前查看的信息 id
+     *      `$scope.isOtherDateNews` 切換「今日」／「日期」
      *      `$scope.toggleOtherUserInfo` 查看／隱藏「用戶基本信息」
+     *      `$scope.getOtherDateNews` 查看當前用戶註冊當日新聞
      *
      */
     $scope.otherUserInfo = {}
     $scope.otherUserInfoId = 0
+    $scope.isOtherDateNews = false
     $scope.toggleOtherUserInfo = function (username, id){
         if (id === $scope.otherUserInfoId){
             // 隱藏「用戶基本信息」
@@ -137,9 +145,11 @@ angular.module('ShinyaApp.chatController', [])
             })
             .success(function (data, status, headers, config){
                 var info = {
+                    username: username,
                     numero: data.msg.numero,
                     country: data.msg.country || 'CN',
                     date: $filter('date')(data.msg.date, 'yyyy 年 M 月 d 日'),
+                    pure_date: data.msg.date
                 }
                 // 存儲於本地
                 store.set(username, info)
@@ -149,6 +159,15 @@ angular.module('ShinyaApp.chatController', [])
             .error(function (data, status, headers, config){
             })
         }
+    }
+    $scope.getOtherDateNews = function (username){
+        // 跳轉到「新聞界面」
+        $scope.isChatBox = !$scope.isChatBox
+        $scope.isSun     = !$scope.isSun
+        // 更新新聞設置
+        $scope.isTodayNews = false
+        $scope.isOtherDateNews = true
+        $scope.getSelectedDateNews(username, $scope.otherUserInfo['pure_date'], true)
     }
     /*
      *****************
@@ -180,15 +199,16 @@ angular.module('ShinyaApp.chatController', [])
     $scope.selectDate = new Date().getHours()
     $scope.selectCountry = $scope.infoBox.country || 'CN'
     var timezoneOffset = new Date().getTimezoneOffset() / 60,
-        // 「今日新聞」存儲到 todayNews Namespaced，方便檢測是否過期並刪除
-        todayNews = store.getNamespacedStore('todayNews', '-'),
-        getSelectedDateNews = function (callback){
+        // 存儲一日，過期刪除
+        one_day_news = store.getNamespacedStore('one-day-news', '-'),
+        getSelectedDateNews = function (callback, username){
             // 設置十秒期限
             var loadTimer = $timeout(function (){
                 $scope.isLoadErr = true
             }, 10000)
             $http.
             post('/api/getSelectedDateNews', {
+                username: username,
                 selectDate: $scope.selectDate,
                 selectCountry: $scope.selectCountry,
                 timezoneOffset: timezoneOffset,
@@ -207,33 +227,46 @@ angular.module('ShinyaApp.chatController', [])
                 }
             })
         },
-        storeTodayNews = function (news_id, news){
-            // 保存「今日新聞」並設置過期時間
-            todayNews.set(news_id, news)
-            store.set('todayNewsExpires', syTimeHelper.getDayMs(new Date()))
+        storeOneDayNews = function (news_id, news){
+            // 保存「一日」並設置過期時間
+            one_day_news.set(news_id, news)
+            var tomorrow = Date.now() + 86400000
+            store.set('oneDayNewsExpires', syTimeHelper.getDayMs(tomorrow))
+        },
+        statefulGetSelectedDateNews = function (){
+            // 保持「當前狀態（今日／當前／其他用戶）」獲取相應新聞
+            $scope.isOtherDateNews
+            ? $scope.getSelectedDateNews($scope.otherUserInfo.username, $scope.otherUserInfo['pure_date'], true)
+            : $scope.isTodayNews
+                ? $scope.getSelectedDateNews(null, Date.now(), true)
+                : $scope.getSelectedDateNews(null, decodeToken.date)
         };
     $scope.toggleTodayNews = function (){
-
-        $scope.isTodayNews = !$scope.isTodayNews
-        $scope.newsDateTitle = $scope.isTodayNews ? '今日新聞' : '當日新聞'
-        $scope.getSelectedDateNews()
+        if ($scope.isTodayNews){
+            $scope.isTodayNews = false
+            $scope.getSelectedDateNews(null, decodeToken.date)
+        } else {
+            $scope.isTodayNews = true
+            $scope.getSelectedDateNews(null, Date.now(), true)
+        }
     }
     $scope.selectNextCountry = function (){
         var country_list = ['CN', 'HK', 'TW', 'US', 'JP', 'DE', 'FR', 'IN', 'KR', 'RU', 'BR']
         $scope.selectCountry = country_list[country_list.indexOf($scope.selectCountry) + 1] || 'CN'
-        $scope.getSelectedDateNews()
+        statefulGetSelectedDateNews()
     }
-    $scope.getSelectedDateNews = function(){
-        var news_id = ($scope.isTodayNews
-                            ? syTimeHelper.getDayMs(new Date())
-                            : syTimeHelper.getDayMs(decodeToken.date))
-                        + $scope.selectCountry
-                        + $scope.selectDate,
-            selectDateNews = $scope.isTodayNews ? todayNews.get(news_id) : store.get(news_id);
+    $scope.getSelectedDateNews = function(username, newsDate, isOneDayNews){
+        // 初始化新聞設置
+        var username = username || decodeToken.username,
+            newsDate = newsDate || Date.now(),
+            isOneDayNews = isOneDayNews || false,
+            news_id = syTimeHelper.getDayMs(newsDate) + $scope.selectCountry + $scope.selectDate,
+            selectDateNews = isOneDayNews ? one_day_news.get(news_id) : store.get(news_id);
         $scope.isShowNewsOptions = true
+        $scope.newsDateTitle = $scope.isTodayNews ? '今日新聞' : '當日新聞'
         $scope.isLoadErr = false
+        // 判斷是否從本地獲取新聞
         if (selectDateNews){
-            // 從 `localStorage[news_id]` 獲取，不執行 `getSelectedDateNews`
             $scope.selectDateNewsBox = selectDateNews
             $scope.currentPage === 'infoBox' ? $scope.toggleCurrentPage('newsBox') : null
             $scope.isNewsExist ? null : $scope.toggleNewsExist()
@@ -244,9 +277,9 @@ angular.module('ShinyaApp.chatController', [])
                 if (status === 'ok'){
                     $scope.isNewsExist ? null : $scope.toggleNewsExist()
                     news
-                    ? $scope.isTodayNews
-                        ? storeTodayNews(news_id, news)
-                        : store.set(news_id, news)
+                    ? isOneDayNews
+                        ? storeOneDayNews(news_id, news) // 存儲一日
+                        : store.set(news_id, news) // 持久存儲
                     : $scope.isNewsExist ? $scope.toggleNewsExist() : null
                     $scope.selectDateNewsBox = news
                     $scope.currentPage === 'loadBox' ?  $scope.toggleCurrentPage('newsBox') : null
@@ -255,25 +288,25 @@ angular.module('ShinyaApp.chatController', [])
                     $scope.newsErrMsg = news
                     $scope.isNewsExist ? $scope.toggleNewsExist() : null
                 }
-            })
+            }, username)
         }
     }
     $scope.previousHour = function (){
         if ($scope.selectDate > 1){
             $scope.selectDate --
-            $scope.getSelectedDateNews()
+            statefulGetSelectedDateNews()
         } else {
             $scope.selectDate = 24
-            $scope.getSelectedDateNews()
+            statefulGetSelectedDateNews()
         }
     }
     $scope.nextHour = function (){
         if ($scope.selectDate < 24){
             $scope.selectDate ++
-            $scope.getSelectedDateNews()
+            statefulGetSelectedDateNews()
         } else {
             $scope.selectDate = 1
-            $scope.getSelectedDateNews()
+            statefulGetSelectedDateNews()
         }
     }
     /**********
@@ -577,12 +610,11 @@ angular.module('ShinyaApp.chatController', [])
         $scope.getGeoServices()
         store.remove('nextStep')
     }
-    // 清除過期的「今日新聞」
-    function removeTodayNews(){
-        // 清除過期的「今日新聞」
+    // 清除過期的新聞
+    function removeOneDayNews(){
         var ls = $window.localStorage,
             len = localStorage.length,
-            reg = /^todayNews-/,
+            reg = /^one-day-news-/,
             j = 0;
         for (var i = 0; i < len; i++){
             reg.test(ls.key(j))
@@ -590,7 +622,7 @@ angular.module('ShinyaApp.chatController', [])
             : j ++
         }
     }
-    store.get('todayNewsExpires') < Date.now()
-    ? removeTodayNews()
+    store.get('oneDayNewsExpires') < Date.now()
+    ? removeOneDayNews()
     : null
 }])

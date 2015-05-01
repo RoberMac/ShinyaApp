@@ -9,7 +9,7 @@
                 </div>
                 <div ng-if="!contentItem.isMe" class="username_box">
                     <span ng-click="toggleOtherUserInfo(contentItem.username, contentItem.date)">{{contentItem.username}}</span>
-                    <div ng-if="otherUserInfoId === contentItem.date" class="other_user_info general_animate">
+                    <div ng-if="otherUserInfoId === contentItem.date" class="other_user_info general_animate" ng-click="getOtherDateNews(contentItem.username)">
                         <span class="numero" ng-class="numero(otherUserInfo.numero)">No.{{otherUserInfo.numero}}</span>
                         <span class="country" ng-class="otherUserInfo.country">{{otherUserInfo.country}}</span>
                         <span>{{otherUserInfo.date}}</span>
@@ -198,10 +198,15 @@
             </div>
         </div>
         <div ng-if="isShowNewsOptions" class="general_animate">
+            <div ng-if="!isOtherDateNews" id="news_today" class="bottom_left_corner general_animate" ng-class="{'today': isTodayNews}" ng-click="toggleTodayNews()">
+                今日
+            </div>
+            <div ng-if="isOtherDateNews" class="bottom_left_corner general_animate">
+                <span id="news_date">{{otherUserInfo.date}}</span>
+            </div>
             <div id="news_country" class="bottom_right_corner general_animate" ng-class="selectCountry" ng-click="selectNextCountry()">
                 {{selectCountry}}
             </div>
-            <div id="news_today" class="bottom_left_corner general_animate" ng-class="{'today': isTodayNews}" ng-click="toggleTodayNews()">今日</div>
         </div>
         <!-- 地理位置服務：外部部件 -->
         <div ng-if="currentPageIs('geoBox') && isGeoServices" id="geo_outer_box" class="general_animate">
