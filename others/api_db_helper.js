@@ -37,7 +37,7 @@ var api_db_helper = {
     // 獲取選定時段新聞
     getSelectedDateNews: function (user, body, res, next){
 
-        q_userFindOne({username: user.username}, 'register_info geo_info')
+        q_userFindOne({username: body.username || user.username}, 'register_info geo_info')
         .then(function (userInfo){
             if (!userInfo){
                 log.warning('[DB: Not Found]')
