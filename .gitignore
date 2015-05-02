@@ -1,6 +1,6 @@
 node_modules/*
-public/others/*.key
-public/others/*.pem
-others/*.key
-others/*.pem
-logs
+public/others/*
+*.key
+logs/*
+
+TODO
