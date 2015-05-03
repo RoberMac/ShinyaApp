@@ -52,6 +52,11 @@ angular.module('ShinyaApp', [
     
     $scope.isLogoLoaded = false
     $rootScope.isSubmit = true
+    // 存儲註銷用戶前的信息
+    // index:
+    //     0: 上次註銷用戶名
+    //     1: 登陸後的「下一步動作」
+    $rootScope.lastInfo = []
 
     // 檢測是否為手機瀏覽器
     // https://stackoverflow.com/questions/11381673/detecting-a-mobile-browser
@@ -76,7 +81,7 @@ angular.module('ShinyaApp', [
 
     // 檢測是否為全屏模式
     if (!$window.navigator.standalone && $rootScope.isMobile){
-        console.log('no fullscreen mode')
+        // TODO
     }
 
     /* 檢查 token
@@ -86,20 +91,17 @@ angular.module('ShinyaApp', [
      */
     // 必須 $routeChangeStart 攔截，否則若 token 過期，socket.io 握手不成功
     $scope.$on('$routeChangeStart', function (event, current, pre, next){
+        var token = store.get('id_token')
         if ($location.path() === '/'){
-            if (store.get('id_token')){
-                if (!jwtHelper.isTokenExpired(store.get('id_token'))){
-                    $location.path('/chat').replace()
-                }
-            }
+            token
+            ? !jwtHelper.isTokenExpired(token)
+                ? $location.path('/chat').replace()
+                : null
+            : null
         } else if ($location.path() === '/chat'){
-            if(!store.get('id_token')){
-                $location.path('/').replace()
-            } else {
-                if (jwtHelper.isTokenExpired(store.get('id_token'))){
-                    $location.path('/').replace()
-                }
-            }
+            !token || jwtHelper.isTokenExpired(token)
+            ? $location.path('/').replace()
+            : null
         }
     })
     // 監聽開啟／關閉「位置服務」

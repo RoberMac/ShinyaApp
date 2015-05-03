@@ -9,10 +9,10 @@
                 </div>
                 <div ng-if="!contentItem.isMe" class="username_box">
                     <span ng-click="toggleOtherUserInfo(contentItem.username, contentItem.date)">{{contentItem.username}}</span>
-                    <div ng-if="otherUserInfoId === contentItem.date" class="other_user_info general_animate" ng-click="getOtherDateNews(contentItem.username)">
+                    <div ng-if="otherUserInfoId === contentItem.date" class="other_user_info general_animate">
                         <span class="numero" ng-class="numero(otherUserInfo.numero)">No.{{otherUserInfo.numero}}</span>
                         <span class="country" ng-class="otherUserInfo.country">{{otherUserInfo.country}}</span>
-                        <span>{{otherUserInfo.date}}</span>
+                        <span class="general_animate" ng-click="getOtherDateNews(contentItem.username)">{{otherUserInfo.date}}</span>
                     </div>
                 </div>
                 <div class="content_box" ng-class="{'syShow': isAtMsgShow, 'img_msg': contentItem.isImg}" ng-click="toggleImgBox(contentItem)">
@@ -152,7 +152,7 @@
                 <!-- 過場動畫 -->
                 <div ng-show="currentPageIs('loadBox')" id="load_inner_box" class="general_animate">
                     <div class="vertically_center">
-                        <div class="load_animate" ng-class="{'load_err': isLoadErr}" ng-click="toggleCurrentPage('infoBox')"></div>
+                        <div class="load_animate" ng-class="{'load_err': isLoadErr}" ng-click="toggleCurrentPage('infoBox', true)"></div>
                     </div>
                 </div>
             </div>
