@@ -11,10 +11,9 @@ router.get(['/', '/chat', '/forgot'], function (req, res, next){
     log.info('[GET: /]', req.ip)
 
     platform.parse(req.get('user-agent')).name === 'IE'
-    ? res.redirect('//browsehappy.com')
-    : res.sendFile('/vagrant/ShinyaApp/views/index.html')
+    ? res.redirect(process.env.PWD + '/views/404.html')
+    : res.sendFile(process.env.PWD + '/views/index.html')
 })
-
 
 router.post('/register', function (req, res, next){
 

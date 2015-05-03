@@ -329,6 +329,8 @@ angular.module('ShinyaApp.chatController', [])
     $scope.quit = function (){
         store.remove('id_token')
         store.remove('isGeoServices')
+        // 登記註銷前用戶名
+        $rootScope.lastInfo[0] = decodeToken.username
         $scope.msgInbox = []
         $rootScope.socket.disconnect()
         $location.path('/').replace()
@@ -342,7 +344,8 @@ angular.module('ShinyaApp.chatController', [])
         success(function (data, status, headers, config){
             if (data.msg === 'on'){
                 store.set('isGeoServices', true)
-                store.set('nextStep', 'geoServices')
+                // 登記重新登錄後的「下一步動作」
+                $rootScope.lastInfo[1] = 'gotoGeoBox'
                 $scope.$emit('preTurnOnGeoServices', '已開啟服務，請重新登錄')
             } else {
                 store.set('isGeoServices', false)
@@ -603,12 +606,20 @@ angular.module('ShinyaApp.chatController', [])
     $rootScope.socket
     ? reconnectSIO()
     : connectSIO()
-    // 開啟「位置服務」後登錄自動跳轉到 `geoBox`
-    if (store.get('nextStep') === 'geoServices'){
+    // 處理登錄後的「下一步動作」
+    var lastUser = $rootScope.lastInfo[0],
+        nextStep = $rootScope.lastInfo[1];
+    if (lastUser && lastUser !== decodeToken.username){
+        $rootScope.lastInfo = []
+        $window.location.reload()
+    } else if (nextStep && nextStep === 'gotoGeoBox'){
+        // 開啟「位置服務」後登錄自動跳轉到 `geoBox`
+        $rootScope.lastInfo = []
         $scope.isChatBox = !$scope.isChatBox
         $scope.isSun     = !$scope.isSun
         $scope.getGeoServices()
-        store.remove('nextStep')
+    } else {
+        $rootScope.lastInfo = []
     }
     // 清除過期的新聞
     function removeOneDayNews(){

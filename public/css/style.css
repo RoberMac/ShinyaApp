@@ -430,7 +430,6 @@ ul {
         }
     #chat_box .username_box .other_user_info {
         display: inline-block;
-        cursor: pointer;
     }
         #chat_box .username_box .other_user_info span {
             padding: 0px 2px;
@@ -439,8 +438,15 @@ ul {
             border-width: 1px;
             border-style: solid;
             border-radius: 3px;
-            cursor: pointer;
         }
+            #chat_box .username_box .other_user_info span:last-child {
+                border-color: #000;
+                cursor: pointer;
+            }
+            #chat_box .username_box .other_user_info span:last-child:hover {
+                color: #fff;
+                background-color: #000;
+            }
 /* img_box */
 #img_box {
     position: absolute;
