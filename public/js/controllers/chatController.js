@@ -167,6 +167,12 @@ angular.module('ShinyaApp.chatController', [])
         // 更新新聞設置
         $scope.isTodayNews = false
         $scope.isOtherDateNews = true
+        $scope.now_img_list = []
+        $scope.isZoomIn = false
+        // 重置新聞時段 & 上／下一個時段新聞可選性
+        $scope.selectDate = new Date().getHours()
+        isShowPreOrNextHour()
+        // 獲取新聞
         $scope.getSelectedDateNews(username, $scope.otherUserInfo['pure_date'], true)
     }
     /*
@@ -178,7 +184,7 @@ angular.module('ShinyaApp.chatController', [])
      *     `$scope.selectDate` 本地時間
      *     `$scope.toggleTodayNews` 切換今日／當日新聞
      *     `$scope.selectNextCountry` 設置獲取新聞的國家
-     *     `$scope.previousHour` 獲取上一個時間段新聞
+     *     `$scope.preHour` 獲取上一個時間段新聞
      *          更新：`$scope.selectDate`、`$scope.selectDateNewsBox`
      *     `$scope.nextHour` 獲取下一個時間段新聞
      *          更新：`$scope.selectDate`、`$scope.selectDateNewsBox`
@@ -244,9 +250,15 @@ angular.module('ShinyaApp.chatController', [])
     $scope.toggleTodayNews = function (){
         if ($scope.isTodayNews){
             $scope.isTodayNews = false
+            // 重置新聞時段 & 上／下一個時段新聞可選性
+            $scope.selectDate = new Date().getHours()
+            isShowPreOrNextHour()
             $scope.getSelectedDateNews(null, decodeToken.date)
         } else {
             $scope.isTodayNews = true
+            // 重置新聞時段 & 上／下一個時段新聞可選性
+            $scope.selectDate = new Date().getHours()
+            isShowPreOrNextHour()
             $scope.getSelectedDateNews(null, Date.now(), true)
         }
     }
@@ -257,6 +269,7 @@ angular.module('ShinyaApp.chatController', [])
     }
     $scope.getSelectedDateNews = function(username, newsDate, isOneDayNews){
         // 初始化新聞設置
+        console.log($scope.selectDate)
         var username = username || decodeToken.username,
             newsDate = newsDate || Date.now(),
             isOneDayNews = isOneDayNews || false,
@@ -291,16 +304,45 @@ angular.module('ShinyaApp.chatController', [])
             }, username)
         }
     }
-    $scope.previousHour = function (){
+    // 判斷是否顯示 上／下一個新聞時段是否為今天「未抓取新聞時段」
+    $scope.isShowPreHour = true 
+    $scope.isShowNextHour = true
+    function isShowPreOrNextHour(){
+        var preHour,
+            nextHour;
+        if ($scope.selectDate === 1){
+            preHour = 24,
+            nextHour = $scope.selectDate + 1;
+        } else if($scope.selectDate === 24){
+            preHour = 23,
+            nextHour = 1;
+        } else {
+            preHour = $scope.selectDate - 1,
+            nextHour = $scope.selectDate + 1;
+        }
+        // 判斷上一個時段是否為今天「未抓取新聞時段」
+        $scope.isTodayNews && (preHour > new Date().getHours())
+        ? $scope.isShowPreHour = false
+        : $scope.isShowPreHour = true
+        // 判斷下一個時段是否為今日「未抓取新聞時段」
+        $scope.isTodayNews && (nextHour > new Date().getHours())
+        ? $scope.isShowNextHour = false
+        : $scope.isShowNextHour = true
+    }
+    $scope.preHour = function (){
+        if (!$scope.isShowPreHour) return;
         if ($scope.selectDate > 1){
             $scope.selectDate --
             statefulGetSelectedDateNews()
         } else {
+            // selectDate === 1
             $scope.selectDate = 24
             statefulGetSelectedDateNews()
         }
+        isShowPreOrNextHour()
     }
     $scope.nextHour = function (){
+        if (!$scope.isShowNextHour) return;
         if ($scope.selectDate < 24){
             $scope.selectDate ++
             statefulGetSelectedDateNews()
@@ -308,6 +350,7 @@ angular.module('ShinyaApp.chatController', [])
             $scope.selectDate = 1
             statefulGetSelectedDateNews()
         }
+        isShowPreOrNextHour()
     }
     /**********
      * 設置界面

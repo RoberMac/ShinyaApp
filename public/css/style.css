@@ -775,6 +775,10 @@ ul {
             font-weight: bold;
             cursor: pointer;
         }
+        #news_select_date > span.disable {
+            color: #CECECF;
+            cursor: default;
+        }
         #news_now {
             display: inline-block;
             font-size: 1.1rem;

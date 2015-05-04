@@ -190,11 +190,11 @@
                 <h3>{{newsDateTitle}}</h3>
             </div>
             <div id="news_select_date">
-                <span ng-click="previousHour()">&lt;</span>
+                <span ng-class="{'disable': !isShowPreHour}" ng-click="preHour()">&lt;</span>
                 <div id="news_now">
                     <span>{{selectDate}}:00</span>
                 </div>
-                <span ng-click="nextHour()">&gt;</span>                    
+                <span class="general_animate" ng-class="{'disable': !isShowNextHour}" ng-click="nextHour()">&gt;</span>                    
             </div>
         </div>
         <div ng-if="isShowNewsOptions" class="general_animate">
