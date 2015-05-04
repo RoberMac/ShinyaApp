@@ -269,7 +269,6 @@ angular.module('ShinyaApp.chatController', [])
     }
     $scope.getSelectedDateNews = function(username, newsDate, isOneDayNews){
         // 初始化新聞設置
-        console.log($scope.selectDate)
         var username = username || decodeToken.username,
             newsDate = newsDate || Date.now(),
             isOneDayNews = isOneDayNews || false,
