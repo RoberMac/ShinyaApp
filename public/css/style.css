@@ -1,7 +1,6 @@
 html {
     height: 100%;
     overflow: hidden;
-    font-size: 62.5%;
 }
 body {
     /* inherit */
@@ -9,7 +8,6 @@ body {
     width: 100%;
     font-family: "Helvetica Neue","Palatino","Hiragino Sans GB","Microsoft YaHei","WenQuanYi Micro Hei",sans-serif;
     font-size: 14px;
-    font-size: 1.4rem;
     -webkit-tap-highlight-color: transparent;
     background-color: #535353;
     -webkit-touch-callout:none;
@@ -183,7 +181,7 @@ ul {
         z-index: 999;
     }
         .main_box .bottom_right_corner a {
-            font-size: 1.2rem;
+            font-size: 12px;
             color: #CECECF;
         }
         /* 「用戶信息界面」右下角，進入「設置界面」按鈕 */
@@ -222,14 +220,14 @@ ul {
         width: 100%;
         bottom: 10px;
         left: 0px;
-        font-size: 1rem;
+        font-size: 10px;
         color: #CECECF;
     }
     .main_box .bottom_left_corner {
         position: absolute;
         bottom: 10px;
         left: 17px;
-        font-size: 1.2rem;
+        font-size: 12px;
         color: #CECECF;
         z-index: 999;
     }
@@ -412,13 +410,13 @@ ul {
             border-bottom-left-radius: 17px;
         }
     #chat_box .info_box {
-        font-size: 1rem;
+        font-size: 10px;
         color: #666;
         margin-bottom: 5px;
     }
     #chat_box .username_box {
         text-align: left;
-        font-size: 1.1rem;
+        font-size: 11px;
         line-height: 17px;
         margin-top: 10px;
         margin-bottom: 1px;
@@ -538,7 +536,7 @@ ul {
             padding: 1px;
             color: #CECECF;
             border: 1px solid #CECECF;
-            font-size: 1rem;
+            font-size: 10px;
             cursor: pointer;
         }
 /* #notify_box & #at_box */
@@ -547,7 +545,7 @@ ul {
     bottom: 16%;
     left: 21.875%;
     width: 56.25%;
-    font-size: 1rem;
+    font-size: 10px;
     overflow: auto;
     -webkit-overflow-scrolling: touch;
     white-space: nowrap;
@@ -604,7 +602,7 @@ ul {
 #info_inner_box #info_date_box .all {
     width: 34px;
     height: 34px;
-    font-size: 1.2rem;
+    font-size: 12px;
     line-height: 34px;
     border: 1px solid #FFF;
     border-radius: 17px;
@@ -703,7 +701,7 @@ ul {
         width: 100%;
     }
     #info_numero_box {
-        font-size: 1.1rem;
+        font-size: 11px;
         color: #555;
     }
     #info_numero_box span {
@@ -739,7 +737,7 @@ ul {
         margin: 5% auto;
     }
         #news_inner_box .news_content_box > span:first-child {
-            font-size: 1.2rem;
+            font-size: 12px;
             color: #CECECF;
         }
         #news_inner_box .news_content_box a {
@@ -750,7 +748,7 @@ ul {
         right: 0px;
         border-top: 1px solid;
         color: #CECECF;
-        font-size: 1rem;
+        font-size: 10px;
         padding: 1px;
     }
 /* newsBox: outer */
@@ -769,7 +767,7 @@ ul {
         position: absolute;
         bottom: 10px;
         width: 100%;
-        font-size: 1.4rem;
+        font-size: 14px;
     }
         #news_select_date > span {
             font-weight: bold;
@@ -781,7 +779,7 @@ ul {
         }
         #news_now {
             display: inline-block;
-            font-size: 1.1rem;
+            font-size: 11px;
             padding: 0 3px;
         }
     #news_today {
@@ -789,7 +787,7 @@ ul {
         height: 27px;
         color: #CECECF;
         border: 1px solid #CECECF;
-        font-size: 1rem;
+        font-size: 10px;
         line-height: 27px;
         border-radius: 14px;
         cursor: pointer;
@@ -810,7 +808,7 @@ ul {
         height: 27px;
         border-width: 1px;
         border-style:solid;
-        font-size: 1.1rem;
+        font-size: 11px;
         line-height: 27px;
         border-radius: 14px;
         cursor: pointer;
@@ -861,7 +859,7 @@ ul {
     #geo_inner_box .all_weather_description {
         position: absolute;
         right: 0px;
-        font-size: 1.1rem;
+        font-size: 11px;
     }
         #geo_inner_box .all_weather_description > svg {
             width: 9px;
@@ -892,7 +890,7 @@ ul {
         width: 100%;
         height: 1px;
         background-color: #000;
-        font-size: 1rem;
+        font-size: 10px;
     }
         #geo_inner_box #distance a {
             position: relative;
@@ -902,7 +900,7 @@ ul {
         }
 /* geoBox: outer */
 #geo_outer_box {
-    font-size: 1.2rem;
+    font-size: 12px;
 }
     #geo_outer_box .all_geo {
         position: absolute;
@@ -913,7 +911,7 @@ ul {
         overflow: hidden;
     }
         #geo_outer_box .all_geo a {
-            font-size: 1rem;
+            font-size: 10px;
         }
     #geo_outer_box #now_geo {
         color: #000;
@@ -1083,7 +1081,7 @@ ul {
     #setting_inner_box .setting_all_title {
         position: absolute;
         padding: 3px 7px;
-        font-size: 1.1rem;
+        font-size: 11px;
         color: #CECECF;
     }
         #setting_inner_box .setting_all_title.setting_on {
@@ -1195,7 +1193,7 @@ ul {
     position: absolute;
     right: 20px;
     bottom: 20px;
-    font-size: 1.2rem;
+    font-size: 12px;
     color: #CECECF;
 }
 /* Animate */
@@ -1568,7 +1566,7 @@ input,
 @media (min-device-width : 768px) and (max-device-width : 1024px),
   (min-width: 768px) and (max-width: 1024px) {
     body {
-        font-size: 1.7rem;
+        font-size: 17px;
     }
     #logo.logo_loaded svg {
         max-width: 21%;
@@ -1612,7 +1610,7 @@ input,
         bottom: 9.5%;
         left: 2%;
         width: 96%;
-        font-size: 1.4rem;
+        font-size: 14px;
         border-radius: 4px;
         color: #fff;
     }
