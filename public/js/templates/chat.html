@@ -1,4 +1,4 @@
-<div class="main_box" ng-class="{'input_shake_animate': input_shake_animate, 'chat_box': isChatBox, 'show_back_button': currentPage !== 'infoBox' && !isMobile}" ng-swipe-left="toggleChatBox('left')" ng-swipe-right="toggleChatBox('right', true)" ng-swipe-disable-mouse>
+<div class="main_box general_box_shadow" ng-class="{'input_shake_animate': input_shake_animate, 'chat_box': isChatBox, 'show_back_button': currentPage !== 'infoBox' && !isMobile}" ng-swipe-left="toggleChatBox('left')" ng-swipe-right="toggleChatBox('right', true)" ng-swipe-disable-mouse>
     <!-- 聊天頁面 -->
     <!-- 由於 ng-switch 會操作 DOM，故若不處於 `chat_box` 時，新消息抵達時不能處理 -->
     <div ng-show="isChatBox" id="chat_box" class="general_animate" sy-autoscroll>
@@ -12,7 +12,7 @@
                     <div ng-if="otherUserInfoId === contentItem.date" class="other_user_info general_animate">
                         <span class="numero" ng-class="numero(otherUserInfo.numero)">No.{{otherUserInfo.numero}}</span>
                         <span class="country" ng-class="otherUserInfo.country">{{otherUserInfo.country}}</span>
-                        <span class="general_animate" ng-click="getOtherDateNews(contentItem.username)">{{otherUserInfo.date}}</span>
+                        <span class="faster_animate" ng-click="getOtherDateNews(contentItem.username)">{{otherUserInfo.date}}</span>
                     </div>
                 </div>
                 <div class="content_box" ng-class="{'syShow': isAtMsgShow, 'img_msg': contentItem.isImg}" ng-click="toggleImgBox(contentItem)">
@@ -22,10 +22,11 @@
             </div>
         </div>
     </div>
-    <div ng-if="isZoomIn" id="img_fullscreen_box" class="general_animate">
+    <!-- 查看圖片 -->
+    <div ng-if="isZoomIn" id="img_fullscreen_box" class="fullscreen_box general_animate">
         <div>
             <div class="vertically_center" ng-click="toggleImageSize()">
-                <img ng-click="toggleImageSize()" ng-src="{{imgURL.medium}}" alt="" sy-imageonload>
+                <img class="general_box_shadow" ng-src="{{imgURL.medium}}" alt="" sy-imageonload>
                 <div id="check_origin_img">
                     <span ng-click="openLink(imgURL.large)">查看原圖</span>
                 </div>
@@ -34,6 +35,30 @@
         <div ng-show="!isImageLoaded">
             <div class="vertically_center">
                 <div class="load_animate" ng-click="toggleImageSize()"></div>
+            </div>
+        </div>
+    </div>
+    <!-- 在線用戶列表 -->
+    <div ng-if="isShowAtUserBox" class="fullscreen_box general_animate">
+        <div>
+            <div class="vertically_center" ng-click="toggleAtUserBox()">
+                <div id="online_user_box" class="general_box_shadow">
+                    <!-- table -->
+                    <div id="watch_face">
+                        <!-- table-row -->
+                        <div>
+                            <h4>在線用戶</h4>                            
+                        </div>
+                        <!-- table-row -->
+                        <div>
+                            <div>
+                                <div ng-repeat="user in onlineUser" class="atUser">
+                                    <span class="faster_animate" ng-click="addAtUser(user)">{{user}}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>   
             </div>
         </div>
     </div>
@@ -230,20 +255,19 @@
 <div ng-if="!isMobile" class="back_button general_animate" ng-click="toggleCurrentPage('infoBox', true)">
 </div>
 <!-- 頁面切換提示標誌 -->
-<div ng-if="!isMobile" class="sunAndMoon general_animate" ng-class="{'sun': isSun, 'moon': !isSun}" ng-click="toggleChatBox(null, true)">
+<div ng-if="!isMobile" class="sunAndMoon general_animate" ng-class="{'sun general_box_shadow': isSun, 'moon': !isSun}" ng-click="toggleChatBox(null, true)">
 </div>
 <sy-img></sy-img>
 <sy-usercount></sy-usercount>
 <sy-beep></sy-beep>
 <div id="at_box" class="all_notify_box general_animate" ng-show="isChatBox" >
-    <span ng-repeat="username in atUser track by $index" class="general_animate">
-        <span ng-class="{'online': isUserOnline(username), 'offline': !isUserOnline(username)}">@</span>
-        {{username.slice(1)}}
+    <span ng-repeat="username in atUser track by $index" class="general_animate" ng-click="removeAtUser(username)">
+        <span ng-class="{'online': isUserOnline(username), 'offline': !isUserOnline(username)}">@</span>{{username.slice(1)}}
     </span>
 </div>
 <!-- 聊天輸入框 -->
 <div id="chat_submit_box" class="general_animate" ng-show="isChatBox">
     <form sy-hide-keyboard novalidate ng-submit="emitTextMsg()" name="form">
-        <input type="text" ng-model="msgOutbox.textMsg" sy-autofocus ng-maxlength="1024" ng-model-options="{ debounce: 500 }">
+        <input id="chat_submit_input" type="text" ng-model="msgOutbox.textMsg" sy-autofocus ng-maxlength="1024" ng-model-options="{ debounce: 500 }">
     </form>
 </div>

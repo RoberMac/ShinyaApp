@@ -162,6 +162,11 @@ ul {
     color: #666;
     border-color: #666;
 }
+/* General Box Shadow */
+.general_box_shadow {
+    -moz-box-shadow: 0px 3px 15px 0px rgba(0,0,0,0.50);
+    box-shadow:      0px 3px 15px 0px rgba(0,0,0,0.50);
+}
 /* main_box */
 .main_box {
     position: absolute;
@@ -170,8 +175,6 @@ ul {
     width: 56.25%;
     height: 60%;
     background: #fff;
-    -moz-box-shadow: 0px 3px 15px 0px rgba(0,0,0,0.50);
-    box-shadow:      0px 3px 15px 0px rgba(0,0,0,0.50);
     border-radius: 10px;
 }
     .main_box .bottom_right_corner {
@@ -470,8 +473,6 @@ ul {
         cursor: pointer;
         cursor: -webkit-zoom-in;
         opacity: 1;
-        -moz-box-shadow: 0px 3px 15px 0px rgba(0,0,0,0.50);
-        box-shadow: 0px 3px 15px 0px rgba(0,0,0,0.50);
     }
     #img_box img.zoom_out {
         cursor: -webkit-zoom-out;
@@ -493,8 +494,8 @@ ul {
         -webkit-filter: grayscale(1);
         filter: grayscale(1);
     }
-/* img_fullscreen_box */
-#img_fullscreen_box {
+/* fullscreen_box */
+.fullscreen_box {
     position: absolute;
     width: 100%;
     height: 100%;
@@ -504,41 +505,89 @@ ul {
     -webkit-overflow-scrolling: touch;
     z-index: 1;
 }
-    #img_fullscreen_box::-webkit-scrollbar {
+    .fullscreen_box::-webkit-scrollbar {
         display: none;
     }
-    #img_fullscreen_box > div {
+    .fullscreen_box > div {
         position: absolute;
         width: 100%;
         height: 100%;
         display: table;
     }
-        #img_fullscreen_box img {
-            margin-top: 7px;
-            max-width: 90%;
-            cursor: pointer;
-            cursor: -webkit-zoom-out;
-            -moz-box-shadow: 0px 3px 15px 0px rgba(0,0,0,0.50);
-            box-shadow: 0px 3px 15px 0px rgba(0,0,0,0.50);
-        }
-        #img_fullscreen_box svg {
-            cursor: pointer;
-            cursor: -webkit-zoom-out;
-        }
-        #img_fullscreen_box > div .load_animate:before {
-            background-color: #FFF;
-        }
-    #img_fullscreen_box #check_origin_img {
-        margin-top: 3px;
-        margin-bottom: 7px;
+    /* 查看圖片 */
+    #img_fullscreen_box img {
+        margin-top: 7px;
+        max-width: 90%;
+        cursor: pointer;
+        cursor: -webkit-zoom-out;
     }
-        #img_fullscreen_box #check_origin_img span {
-            padding: 1px;
-            color: #CECECF;
-            border: 1px solid #CECECF;
-            font-size: 10px;
-            cursor: pointer;
+    #img_fullscreen_box svg {
+        cursor: pointer;
+        cursor: -webkit-zoom-out;
+    }
+    #img_fullscreen_box > div .load_animate:before {
+        background-color: #FFF;
+    }
+#img_fullscreen_box #check_origin_img {
+    margin-top: 3px;
+    margin-bottom: 7px;
+}
+    #img_fullscreen_box #check_origin_img span {
+        display: inline-block;
+        padding: 0 1px;
+        color: #CECECF;
+        border: 1px solid #CECECF;
+        font-size: 10px;
+        cursor: pointer;
+    }
+    /* 在線用戶列表 */
+    #online_user_box {
+        width: 35.8mm;
+        height: 42.0mm;
+        border-radius: 20px;
+        background-color: #fff;
+    }
+        #watch_face {
+            display: table;
+            height: 100%;
+            width: 100%;
         }
+        #watch_face > div:first-child {
+            display: table-row;
+        }
+            #watch_face h4 {
+                margin: 7px 0 0 0;
+            }
+        #watch_face > div:last-child {
+            display: table-row;
+            height: 100%;
+        }
+            #watch_face > div:last-child > div {
+                width: 80%;
+                height: 100%;
+                overflow-x: hidden;
+                overflow-y: auto;
+                -webkit-overflow-scrolling: touch;
+            }
+            #watch_face > div:last-child > div::-webkit-scrollbar {
+                display: none;
+            }
+            #watch_face .atUser {
+                margin-top: 7px;
+                text-align: left;
+            }
+                #watch_face .atUser span {
+                    display: inline-block;
+                    padding: 1px 2px;
+                    font-size: 12px;
+                    border: 1px solid #000;
+                    border-radius: 4px;
+                    cursor: pointer;
+                }
+                #watch_face .atUser span:hover {
+                    background-color: #000;
+                    color: #fff;
+                }
 /* #notify_box & #at_box */
 .all_notify_box {
     position: absolute;
@@ -577,6 +626,13 @@ ul {
     text-align: left;
     z-index: 2;
 }
+    #at_box > span {
+        cursor: pointer;
+    }
+    #at_box > span:hover {
+        color: #fff;
+        background-color: #CECECF;
+    }
 /* user_info_box */
 #user_info_box {
     position: absolute;
@@ -1183,8 +1239,6 @@ ul {
 }
 .sunAndMoon.sun {
     border-right: 17px solid #fff;
-    -moz-box-shadow: 0px 3px 15px 0px rgba(0,0,0,0.50);
-    box-shadow: 0px 3px 15px 0px rgba(0,0,0,0.50);
 }
 .sunAndMoon.moon {
     border-right: 3px solid #fff;
@@ -1195,6 +1249,7 @@ ul {
     bottom: 20px;
     font-size: 12px;
     color: #CECECF;
+    cursor: pointer;
 }
 /* Animate */
 #logo, #logo svg {
@@ -1209,7 +1264,10 @@ input,
     -webkit-transition: all .7s ease-in-out;
     transition: all .7s ease-in-out;
 }
-
+.faster_animate {
+    -webkit-transition: all .3s ease-in-out;
+    transition: all .3s ease-in-out;
+}
 .main_box,
 .back_button {
     -webkit-transition: all 1s linear;
@@ -1400,6 +1458,9 @@ input,
             height: 8px;
             border-radius: 5px;
         }
+    .all_notify_box > span:first-child {
+        margin-left: 3px;
+    }
     #getGeoServices {
         width: 24px;
         height: 24px;
