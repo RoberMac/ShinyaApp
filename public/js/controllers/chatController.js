@@ -54,6 +54,7 @@ angular.module('ShinyaApp.chatController', [])
         }
         $scope.now_img_list = []
         $scope.isZoomIn = false
+        $scope.isShowAtUserBox = false
     }
     $scope.currentPage = 'infoBox'
     $scope.currentPageIs = function (name){
@@ -169,6 +170,7 @@ angular.module('ShinyaApp.chatController', [])
         $scope.isOtherDateNews = true
         $scope.now_img_list = []
         $scope.isZoomIn = false
+        $scope.isShowAtUserBox = false
         // 重置新聞時段 & 上／下一個時段新聞可選性
         $scope.selectDate = new Date().getHours()
         isShowPreOrNextHour()
@@ -500,9 +502,16 @@ angular.module('ShinyaApp.chatController', [])
      *
      *  `$scope.atUser`：當前 @ 的用戶列表
      *  `$scope.isUserOnline`：判斷用戶是否在線
+     *  `$scope.toggleAtUserBox`：顯示／隱藏「在線用戶列表」
+     *  `$scope.removeAtUser`：移除用戶從 @ 列表
+     *  `$scope.addAtUser`：添加用戶到 @ 列表
      *
      */
     $scope.atUser = []
+    $scope.isShowAtUserBox = false
+    $scope.toggleAtUserBox = function (){
+        $scope.isShowAtUserBox = !$scope.isShowAtUserBox
+    }
     $scope.isUserOnline = function (username){
         return $scope.onlineUser.indexOf(username.slice(1)) >= 0
     }
@@ -523,7 +532,40 @@ angular.module('ShinyaApp.chatController', [])
         } else {
             $scope.atUser = []
         }
+        // 顯示「在線用戶列表」
+        if (newVal.match(/\@$/g)){
+            $scope.isShowAtUserBox = true
+            // 移動端：隱藏鍵盤
+            $rootScope.isMobile
+            ? document.getElementById('chat_submit_input').blur()
+            : null
+        }
+        // 隱藏「在線用戶列表」
+        if (oldVal.match(/\@$/g)){
+            $scope.isShowAtUserBox = false
+            // 移動端：顯示鍵盤
+            $rootScope.isMobile
+            ? document.getElementById('chat_submit_input').focus()
+            : document.getElementById('chat_submit_input').focus()
+        }
     })
+    $scope.removeAtUser = function (username){
+        var reg = new RegExp('\\s\?' + username + '\\s\?', 'g')
+        $scope.msgOutbox.textMsg = $scope.msgOutbox.textMsg.replace(reg, '')
+    }
+    $scope.addAtUser = function (username){
+        var textMsg = $scope.msgOutbox.textMsg
+
+        textMsg.match(username)
+        ? null
+        : textMsg.match(/\@$/g)
+            ? $scope.msgOutbox.textMsg = textMsg.concat(username + ' ')
+            : $scope.msgOutbox.textMsg = textMsg.concat('@' + username + ' ')
+        // 若從非「聊天界面」且處於桌面端，切換到「聊天界面」
+        !$rootScope.isMobile && !$scope.isChatBox
+        ? $scope.toggleChatBox(null, true)
+        : null
+    }
     /*
      *******************
      * 文本消息抵達與發送
@@ -586,6 +628,7 @@ angular.module('ShinyaApp.chatController', [])
             $scope.msgOutbox.textMsg = ''
         }
         $scope.isZoomIn = false
+        $scope.isShowAtUserBox = false
     }
     /*
      **************

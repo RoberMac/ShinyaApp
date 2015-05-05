@@ -65,6 +65,7 @@ angular.module('ShinyaApp.beepDirective', [])
                 } else {
                     if (type === 1){
                         $scope.isZoomIn = false
+                        $scope.isShowAtUserBox = false
                         // 滾動並抹除提醒
                         scrollToSpecPos()
                     } else if (type === 2){
