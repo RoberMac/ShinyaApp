@@ -4,13 +4,13 @@ angular.module('ShinyaApp.imgDirective', [])
         restrict: 'E',
         replace : true,
         template: '<div ng-if="now_img_list.length > 0" id="img_box" class="general_animate" ng-class="{\'me\': isImgBoxRight, \'mobile\': isMobile}">'
-                +   '<ul ng-click="toggleImgBox({})">'
+                +   '<ul>'
                 +       '<li ng-repeat="url in now_img_list" class="general_animate">'
                 +           '<img class="general_box_shadow general_animate" ng-src="{{url.small}}" ng-class="{\'zoom_out\': isZoomIn && $index === now_zoom_id}" ng-click="toggleImageSize(url, $index)" sy-imageonload>'
                 +       '</li>'
                 +   '</ul>'
                 + '</div>',
-        controller: ['$scope', '$window', '$timeout', function ($scope, $window, $timeout){
+        controller: ['$scope', '$timeout', function ($scope, $timeout){
             /*
              **************
              * 圖片消息相關
@@ -68,9 +68,6 @@ angular.module('ShinyaApp.imgDirective', [])
                     $scope.isZoomIn = false
                     $scope.now_zoom_id = -1
                 }
-            }
-            $scope.openLink = function (link){
-                $window.open(link)
             }
         }]
     }

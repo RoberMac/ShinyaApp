@@ -1,6 +1,6 @@
 node_modules/*
 public/others/*
+public/bower_components
 *.key
 logs/*
-
 TODO
