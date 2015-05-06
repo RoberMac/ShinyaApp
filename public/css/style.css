@@ -535,11 +535,13 @@ ul {
     #img_fullscreen_box #check_origin_img span {
         display: inline-block;
         padding: 0 1px;
-        color: #CECECF;
         border: 1px solid #CECECF;
         font-size: 10px;
         cursor: pointer;
     }
+        #img_fullscreen_box #check_origin_img span > a {
+            color: #CECECF;
+        }
     /* 在線用戶列表 */
     #online_user_box {
         width: 35.8mm;
@@ -556,7 +558,7 @@ ul {
             display: table-row;
         }
             #watch_face h4 {
-                margin: 7px 0 0 0;
+                margin: 7px 0;
             }
         #watch_face > div:last-child {
             display: table-row;

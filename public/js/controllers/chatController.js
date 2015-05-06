@@ -541,7 +541,7 @@ angular.module('ShinyaApp.chatController', [])
             : null
         }
         // 隱藏「在線用戶列表」
-        if (oldVal.match(/\@$/g)){
+        if (oldVal.match(/\@$/g) || newVal.match(/\@([^\s\@]){1,16}\s$/g)){
             $scope.isShowAtUserBox = false
             // 移動端：顯示鍵盤
             $rootScope.isMobile
