@@ -1245,6 +1245,7 @@ ul {
 .sunAndMoon.moon {
     border-right: 3px solid #fff;
 }
+/* 在線用戶數 */
 #userCount {
     position: absolute;
     right: 20px;
@@ -1253,6 +1254,12 @@ ul {
     color: #CECECF;
     cursor: pointer;
 }
+    #userCount.user_join {
+        color: #4EBD4A;
+    }
+    #userCount.user_left {
+        color: #CB1B45;
+    }
 /* Animate */
 #logo, #logo svg {
     -webkit-transition: all 1.7s ease-in-out;
