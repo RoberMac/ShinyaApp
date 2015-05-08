@@ -8,7 +8,7 @@ var q_userFindOne          = Q.nbind(User.findOne, User),
 // Helper
 function queryError(err, next){
     log.error('[DB: Query Error]', err)
-    next({'code': 500, 'status': 'error', 'msg': '服務器出錯'})
+    next({'code': 500, 'status': 'error', 'msg': 'error.SERVER_ERROR'})
     throw new Error('Query Error')
 }
 
@@ -21,7 +21,7 @@ var api_db_helper = {
         .then(function (userInfo){
             if (!userInfo){
                 log.warning('[DB: Not Found]')
-                res.status(400).json({'status': 'error', 'msg': '用戶不存在'})
+                res.status(400).json({'status': 'error', 'msg': 'error.USER_NOT_EXIST'})
                 return;
             }
             var basic_info = {
@@ -41,7 +41,7 @@ var api_db_helper = {
         .then(function (userInfo){
             if (!userInfo){
                 log.warning('[DB: Not Found]')
-                res.status(400).json({'status': 'error', 'msg': '用戶不存在'})
+                res.status(400).json({'status': 'error', 'msg': 'error.USER_NOT_EXIST'})
                 return;
             }
             var country    = body.selectCountry,
@@ -73,7 +73,7 @@ var api_db_helper = {
             .then(function (found){
                 if (!found){
                     log.warning('[DB: Not Found]', selectDate, country)
-                    res.status(400).json({'status': 'error', 'msg': '此時段新聞不存在'})
+                    res.status(400).json({'status': 'error', 'msg': 'chat.NEWS_NOT_EXIST'})
                     return;
                 }
                 res.send({'status': 'ok', 'msg': found[country]})
@@ -103,7 +103,7 @@ var api_db_helper = {
         .then(function (found){
             if (!found){
                 log.warning('[DB: Not Found]')
-                res.status(400).json({'status': 'error', 'msg': '用戶不存在'})
+                res.status(400).json({'status': 'error', 'msg': 'error.USER_NOT_EXIST'})
                 return;
             }
             if (geo_helper.isSamePlace(found.last_geo, coords) 

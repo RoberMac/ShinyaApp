@@ -21,7 +21,7 @@ angular.module('ShinyaApp.notifyDirective', [])
                     elem.removeClass('error_msg ok_msg').addClass('submit_animate')
                     elem.attr({
                         'type' : 'submit',
-                        'value': attr.value || '提交'
+                        'value': attr.value
                     })
                 }
             })

@@ -1,6 +1,11 @@
 angular.module('ShinyaApp.chatController', [])
-.controller('chatController', ['$rootScope', '$scope', '$http', '$timeout', '$window', '$location', '$filter', 'jwtHelper','store', 'syPosHelper', 'syTimeHelper', 'syGeoHelper', 'syMsgHelper', 
-    function ($rootScope, $scope, $http, $timeout, $window, $location, $filter, jwtHelper, store, syPosHelper, syTimeHelper, syGeoHelper, syMsgHelper){
+.controller('chatController', [
+    '$rootScope', '$scope', '$http',
+    '$timeout', '$window', '$location',
+    '$filter', '$route', '$translate', 'jwtHelper',
+    'store', 'syPosHelper', 'syTimeHelper',
+    'syGeoHelper', 'syMsgHelper', 
+    function ($rootScope, $scope, $http, $timeout, $window, $location, $filter, $route, $translate, jwtHelper, store, syPosHelper, syTimeHelper, syGeoHelper, syMsgHelper){
 
     $rootScope.isSubmit = false
     /*
@@ -75,6 +80,21 @@ angular.module('ShinyaApp.chatController', [])
     }
     /*
      **************
+     * i18n
+     **************
+     *
+     */
+    $scope.i18n_JOIN = $translate.instant('chat.JOINED')
+    $scope.i18n_DATE_FORMAT = $translate.instant('chat.DATE_FORMAT')
+    $scope.i18n_TIME_FORMAT = $translate.instant('chat.TIME_FORMAT')
+    $scope.$on('$translateChangeBeforeStart', function (){
+        $scope.toggleCurrentPage('loadBox')
+    })
+    $rootScope.$on('$translateChangeSuccess', function (){
+        $route.reload()
+    })
+    /*
+     **************
      * 用戶基本信息
      **************
      *      `$scope.infoBox`
@@ -90,14 +110,15 @@ angular.module('ShinyaApp.chatController', [])
         decodeToken = jwtHelper.decodeToken(token);
     // 從 JWT 解碼獲取用戶信息
     $scope.infoBox = {
-        title      : '加入於',
+        title      : $translate.instant('chat.JOINED'),
         username   : decodeToken.username,
         numero     : decodeToken.numero,
-        date       : $filter('date')(decodeToken.date, 'yyyy 年 M 月 d 日'),
+        date       : $filter('date')(decodeToken.date, $scope.i18n_DATE_FORMAT),
         country    : decodeToken.country,
         partsOfADay: syTimeHelper.partsOfADay(~~($filter('date')(decodeToken.date, 'H'))),
         weather    : decodeToken.weather.description
     }
+    console.log($scope.infoBox, $scope.i18n_JOIN)
     $scope.numero = function (numero){
         return syTimeHelper.getNumero($scope.infoBox.numero)
     }
@@ -106,14 +127,10 @@ angular.module('ShinyaApp.chatController', [])
     $scope.togglePartWeather = function (){
         if ($scope.partWeather == syGeoHelper.getCityWeatherType(decodeToken.weather.code)){
             $scope.partWeather = ''
-            $timeout(function (){
-                $scope.infoBox.title = '加入於'
-            }, 777)
+            $scope.infoBox.title = $translate.instant('chat.JOINED')
         } else {
             $scope.partWeather = syGeoHelper.getCityWeatherType(decodeToken.weather.code)
-            $timeout(function (){
-                $scope.infoBox.title = '當日天氣'
-            }, 777)
+            $scope.infoBox.title = $translate.instant('chat.THE_DAY_WEATHER')
         }
     }
     /*
@@ -149,8 +166,7 @@ angular.module('ShinyaApp.chatController', [])
                     username: username,
                     numero: data.msg.numero,
                     country: data.msg.country || 'CN',
-                    date: $filter('date')(data.msg.date, 'yyyy 年 M 月 d 日'),
-                    pure_date: data.msg.date
+                    date: data.msg.date
                 }
                 // 存儲於本地
                 store.set(username, info)
@@ -175,7 +191,7 @@ angular.module('ShinyaApp.chatController', [])
         $scope.selectDate = new Date().getHours()
         isShowPreOrNextHour()
         // 獲取新聞
-        $scope.getSelectedDateNews(username, $scope.otherUserInfo['pure_date'], true)
+        $scope.getSelectedDateNews(username, $scope.otherUserInfo['date'], true)
     }
     /*
      *****************
@@ -201,11 +217,11 @@ angular.module('ShinyaApp.chatController', [])
     $scope.toggleNewsExist = function (){
         $scope.isNewsExist = !$scope.isNewsExist
     }
-    $scope.newsErrMsg = '此時段新聞不存在'
-    $scope.newsDateTitle = '當日新聞'
+    $scope.newsErrMsg = $translate.instant('chat.NEWS_NOT_EXIST')
+    $scope.newsDateTitle = $translate.instant('chat.THE_DAY_NEWS')
     $scope.selectDateNewsBox = []
     $scope.selectDate = new Date().getHours()
-    $scope.selectCountry = $scope.infoBox.country || 'CN'
+    $scope.selectCountry = store.get('NG_TRANSLATE_COUNTRY') || $scope.infoBox.country || 'CN'
     var timezoneOffset = new Date().getTimezoneOffset() / 60,
         // 存儲一日，過期刪除
         one_day_news = store.getNamespacedStore('one-day-news', '-'),
@@ -231,7 +247,7 @@ angular.module('ShinyaApp.chatController', [])
                     $scope.quit()
                 } else {
                     status === 400 ? $timeout.cancel(loadTimer) : null
-                    callback('error', data.msg || '網絡出錯，請稍候再試')
+                    callback('error', data.msg || $translate.instant('chat.NETWORK_ERROR_MSG'))
                 }
             })
         },
@@ -244,7 +260,7 @@ angular.module('ShinyaApp.chatController', [])
         statefulGetSelectedDateNews = function (){
             // 保持「當前狀態（今日／當前／其他用戶）」獲取相應新聞
             $scope.isOtherDateNews
-            ? $scope.getSelectedDateNews($scope.otherUserInfo.username, $scope.otherUserInfo['pure_date'], true)
+            ? $scope.getSelectedDateNews($scope.otherUserInfo.username, $scope.otherUserInfo['date'], true)
             : $scope.isTodayNews
                 ? $scope.getSelectedDateNews(null, Date.now(), true)
                 : $scope.getSelectedDateNews(null, decodeToken.date)
@@ -277,7 +293,7 @@ angular.module('ShinyaApp.chatController', [])
             news_id = syTimeHelper.getDayMs(newsDate) + $scope.selectCountry + $scope.selectDate,
             selectDateNews = isOneDayNews ? one_day_news.get(news_id) : store.get(news_id);
         $scope.isShowNewsOptions = true
-        $scope.newsDateTitle = $scope.isTodayNews ? '今日新聞' : '當日新聞'
+        $scope.newsDateTitle = $scope.isTodayNews ? $translate.instant('chat.TODAY_NEWS') : $translate.instant('chat.THE_DAY_NEWS')
         $scope.isLoadErr = false
         // 判斷是否從本地獲取新聞
         if (selectDateNews){
@@ -390,10 +406,14 @@ angular.module('ShinyaApp.chatController', [])
                 store.set('isGeoServices', true)
                 // 登記重新登錄後的「下一步動作」
                 $rootScope.lastInfo[1] = 'gotoGeoBox'
-                $scope.$emit('preTurnOnGeoServices', '已開啟服務，請重新登錄')
+                $timeout(function (){
+                    $rootScope.$broadcast('turnOnGeoServices', $translate.instant('chat.GEO_ON_MSG'))
+                }, 100)
             } else {
                 store.set('isGeoServices', false)
-                $scope.$emit('preTurnOffGeoServices', '已關閉服務，請重新登錄')
+                $timeout(function (){
+                    $rootScope.$broadcast('turnOffGeoServices', $translate.instant('chat.GEO_OFF_MSG'))
+                }, 100)
             }
             $scope.quit()
         }).
