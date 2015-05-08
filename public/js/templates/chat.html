@@ -10,9 +10,9 @@
                 <div ng-if="!contentItem.isMe" class="username_box">
                     <span ng-click="toggleOtherUserInfo(contentItem.username, contentItem.date)">{{contentItem.username}}</span>
                     <div ng-if="otherUserInfoId === contentItem.date" class="other_user_info general_animate">
-                        <span class="numero" ng-class="numero(otherUserInfo.numero)">No.{{otherUserInfo.numero}}</span>
-                        <span class="country" ng-class="otherUserInfo.country">{{otherUserInfo.country}}</span>
-                        <span class="faster_animate" ng-click="getOtherDateNews(contentItem.username)">{{otherUserInfo.date}}</span>
+                        <span ng-class="numero(otherUserInfo.numero)">No.{{otherUserInfo.numero}}</span>
+                        <span ng-class="otherUserInfo.country">{{otherUserInfo.country}}</span>
+                        <span class="faster_animate" ng-click="getOtherDateNews(contentItem.username)">{{otherUserInfo.date | date: i18n_DATE_FORMAT}}</span>
                     </div>
                 </div>
                 <div class="content_box" ng-class="{'syShow': isAtMsgShow, 'img_msg': contentItem.isImg}" ng-click="toggleImgBox(contentItem)">
@@ -28,7 +28,7 @@
             <div class="vertically_center">
                 <img class="general_box_shadow" ng-src="{{imgURL.medium}}" ng-click="toggleImageSize()" alt="" sy-imageonload>
                 <div id="check_origin_img">
-                    <span><a ng-href="{{imgURL.large}}" target="_blank">查看原圖</a></span>
+                    <span><a ng-href="{{imgURL.large}}" target="_blank">{{'chat.VIEW_ORIGINAL' | translate}}</a></span>
                 </div>
             </div>
         </div>
@@ -73,10 +73,10 @@
                             <!-- 註冊日期／註冊當日天氣 -->
                             <h3>{{infoBox.title}}</h3>
                             <div class="register_date general_animate">
-                                <span ng-show="infoBox.title == '加入於'">
+                                <span ng-show="infoBox.title == i18n_JOIN">
                                     <a ng-click="getSelectedDateNews()">{{::infoBox.date}}</a>
                                 </span>
-                                <span ng-show="infoBox.title != '加入於'">{{::infoBox.weather}}</span>
+                                <span ng-show="infoBox.title != i18n_JOIN">{{::infoBox.weather}}</span>
                             </div>
                             <div class="all general_animate" ng-class="[getDaytimeOrNight, partWeather]" ng-click="togglePartWeather()">
                                 <span class="general_animate" ng-show="!partWeather">{{::infoBox.partsOfADay}}</span>
@@ -92,7 +92,7 @@
                             <a ng-href="{{item.url}}" target="_blank">{{item.title}}</a>
                         </div>
                         <div id="news_source">
-                            <span>來源：{{news.source_name}}</span>
+                            <span>{{'chat.NEWS_SOURCES' | translate}}{{news.source_name}}</span>
                         </div>
                     </div>
                     <div ng-show="!isNewsExist" id="news_dont_exist">
@@ -106,7 +106,7 @@
                             <div class="geoOnAndOff general_animate" ng-click="toggleGeoServices()">
                             </div>
                         </div>
-                        <h4>位置服務</h4>
+                        <h4>{{'chat.LOCATION_SERVICES' | translate}}</h4>
                     </div>
                     <div ng-if="isGeoServices">
                         <div class="all_weather" id="now_weather">
@@ -145,7 +145,7 @@
                         <div class="vertically_center">
                             <div ng-class="{'voiced': !isMuted}" id="mute" class="general_animate" ng-click="toggleMuted()"></div>
                         </div>
-                        <div id="mute_title" class="setting_all_title general_animate" ng-class="{'setting_on': !isMuted}">聲音</div>    
+                        <div id="mute_title" class="setting_all_title general_animate" ng-class="{'setting_on': !isMuted}">{{'chat.SOUND' | translate}}</div>    
                     </div>
                     <div id="setting_top_right" class="setting_all_corner">
                         <!-- 位置服務 -->
@@ -155,7 +155,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div id="geoStatus_title" class="setting_all_title" ng-class="{'setting_on': isGeoServices}">位置</div>
+                        <div id="geoStatus_title" class="setting_all_title" ng-class="{'setting_on': isGeoServices}">{{'chat.LOCATION' | translate}}</div>
                     </div>
                     <div id="setting_bottom_left" class="setting_all_corner">
                         <div class="vertically_center">
@@ -163,7 +163,7 @@
                                 <img id="demo_icon" src="/public/img/version_icon.svg" alt="demo icon">
                             </a>
                         </div>
-                        <div id="demo_title" class="setting_all_title">版本</div>
+                        <div id="demo_title" class="setting_all_title">{{'chat.VERSION' | translate}}</div>
                     </div>
                     <div id="setting_bottom_right" class="setting_all_corner">
                         <!-- 註銷 -->
@@ -171,7 +171,7 @@
                             <div id="quit" ng-class="{'sun': !isSun, 'moon': isSun}">
                             </div>
                         </div>
-                        <div id="quit_title" class="setting_all_title">註銷</div>
+                        <div id="quit_title" class="setting_all_title">{{'chat.LOG_OUT' | translate}}</div>
                     </div>
                 </div>
                 <!-- 過場動畫 -->
@@ -189,7 +189,7 @@
                 <h2>{{::infoBox.username}}</h2>
                 <div id="info_numero_box">
                     <!-- 註冊序號 -->
-                    <p>第 <span ng-class="numero(infoBox.numero)">{{::infoBox.numero}}</span> 號用戶</p>
+                    <p>{{'chat.NUMERO_PREFIX' | translate}}<span ng-class="numero(infoBox.numero)">{{::infoBox.numero}}</span>{{'chat.NUMERO_SUBFFIX' | translate}}</p>
                 </div>
             </div>
             <!-- 進入：地理位置服務 -->
@@ -199,7 +199,7 @@
                 </div>
             </div>
             <div ng-if="isMobile" class="bottom_center_corner">
-                在線人數：{{userCount}}
+                {{'chat.USER_COUNT' | translate}}{{userCount}}
             </div>
             <!-- 註銷用戶 -->
             <div class="bottom_right_corner">
@@ -224,28 +224,28 @@
         </div>
         <div ng-if="isShowNewsOptions" class="general_animate">
             <div ng-if="!isOtherDateNews" id="news_today" class="bottom_left_corner general_animate" ng-class="{'today': isTodayNews}" ng-click="toggleTodayNews()">
-                今日
+                {{'chat.TODAY' | translate}}
             </div>
             <div ng-if="isOtherDateNews" class="bottom_left_corner general_animate">
-                <span id="news_date">{{otherUserInfo.date}}</span>
+                <span id="news_date">{{otherUserInfo.date | date: i18n_DATE_FORMAT}}</span>
             </div>
-            <div id="news_country" class="bottom_right_corner general_animate" ng-class="selectCountry" ng-click="selectNextCountry()">
+            <div class="country bottom_right_corner general_animate" ng-class="selectCountry" ng-click="selectNextCountry()">
                 {{selectCountry}}
             </div>
         </div>
         <!-- 地理位置服務：外部部件 -->
         <div ng-if="currentPageIs('geoBox') && isGeoServices" id="geo_outer_box" class="general_animate">
             <div id="now_geo" class="all_geo">
-                <h3>現在</h3>
+                <h3>{{'chat.NOW' | translate}}</h3>
                 <a ng-href="http://maps.google.com/maps?z=12&t=h&q=loc:{{geoBox.now_geo.lat}}+{{geoBox.now_geo.lon}}" target="_blank">{{geoBox.now_geo.location}}</a>
             </div>
             <div id="last_geo" class="all_geo">
                 <a ng-href="http://maps.google.com/maps?z=12&t=h&q=loc:{{geoBox.last_geo.lat}}+{{geoBox.last_geo.lon}}" target="_blank">{{geoBox.last_geo.location}}</a>
                 <h3 ng-show="!isSameDay">
-                    {{geoBox.last_geo.date | date: 'yyyy 年 M 月 d 日'}}
+                    {{geoBox.last_geo.date | date: i18n_DATE_FORMAT}}
                 </h3>
                 <h3 ng-show="isSameDay">
-                    {{geoBox.last_geo.date | date: 'HH 時 mm 分'}}
+                    {{geoBox.last_geo.date | date: i18n_TIME_FORMAT}}
                 </h3>
             </div>
         </div>
@@ -260,6 +260,7 @@
 <sy-img></sy-img>
 <sy-usercount></sy-usercount>
 <sy-beep></sy-beep>
+<sy-i18n ng-if="currentPage === 'settingBox'"></sy-i18n>
 <div id="at_box" class="all_notify_box general_animate" ng-show="isChatBox" >
     <span ng-repeat="username in atUser track by $index" class="general_animate" ng-click="removeAtUser(username)">
         <span ng-class="{'online': isUserOnline(username), 'offline': !isUserOnline(username)}">@</span>{{username.slice(1)}}

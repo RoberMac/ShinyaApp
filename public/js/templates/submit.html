@@ -1,32 +1,41 @@
-<div class="main_box" ng-class="{'input_shake_animate': input_shake_animate}">
-    <div class="form_box">
+<div class="main_box general_box_shadow" ng-class="{'input_shake_animate': input_shake_animate}">
+    <div ng-hide="isShowLoadAnimate" class="form_box general_animate">
         <div ng-switch on="isLogin" class="vertically_center">
             <!-- login -->
             <div ng-switch-when="true">
                 <form novalidate ng-submit="loginSubmit()" name="form">
                     <div class="form_title">
-                        <span id="login_span">登陸</span>
-                        <span ng-click="toggleSubmit()">註冊</span>
+                        <span id="login_span">{{'login.TITLE' | translate}}</span>
+                        <span class="faster_animate" ng-click="toggleSubmit()">{{'register.TITLE' | translate}}</span>
                     </div>
-                    <input sy-autofocus type="text" ng-model="login.user" name="user" placeholder="用戶名／電郵地址" required>
-                    <input type="password" ng-model="login.password" name="password" placeholder="密碼" required>
-                    <input class="submit_animate general_animate" type="submit" value="提交" sy-notify>
+                    <input sy-autofocus type="text" ng-model="login.user" name="user" placeholder="{{'login.USERNAME' | translate}}" required>
+                    <input type="password" ng-model="login.password" name="password" placeholder="{{'general.PASSWORD' | translate}}" required>
+                    <input class="submit_animate general_animate" type="submit" value="{{'login.SUBMIT_TITLE' | translate}}" sy-notify>
                 </form>
             </div>
             <!-- register -->
             <div ng-switch-when="false">
                 <form novalidate ng-submit="registerSubmit()" name="form">
                     <div class="form_title">
-                        <span ng-click="toggleSubmit()">登陸</span>
-                        <span id="register_span">註冊</span>
+                        <span class="faster_animate" ng-click="toggleSubmit()">{{'login.TITLE' | translate}}</span>
+                        <span id="register_span">{{'register.TITLE' | translate}}</span>
                     </div>
-                    <input sy-autofocus type="text" ng-model="register.username" name="username" placeholder="用戶名" ng-maxlength="16" required>
-                    <input type="email" ng-model="register.email" name="email" placeholder="電郵地址" required>
-                    <input type="password" ng-model="register.password" name="password" placeholder="密碼" required>
-                    <input ng-if="form.$valid || isMsgNotify" class="submit_animate general_animate"  type="submit" value="提交" sy-notify>
+                    <input sy-autofocus type="text" ng-model="register.username" name="username" placeholder="{{'register.USERNAME' | translate}}" ng-maxlength="16" required>
+                    <input type="email" ng-model="register.email" name="email" placeholder="{{'general.EMAIL' | translate}}" required>
+                    <input type="password" ng-model="register.password" name="password" placeholder="{{'general.PASSWORD' | translate}}" required>
+                    <input ng-if="form.$valid || isMsgNotify" class="submit_animate general_animate"  type="submit" value="{{'register.SUBMIT_TITLE' | translate}}" sy-notify>
                 </form>
             </div>
         </div>
     </div>
-    <p class="bottom_right_corner general_animate" ng-show="isLogin"><a href="forgot">忘記密碼</a></p>
+    <p ng-show="isLogin && !isShowLoadAnimate" class="bottom_right_corner general_animate">
+        <a href="forgot">{{'login.FORGOT_TITLE' | translate}}</a>
+    </p>
+    <!-- 過場動畫 -->
+    <div ng-show="isShowLoadAnimate" id="load_inner_box" class="general_animate">
+        <div class="vertically_center">
+            <div class="load_animate"></div>
+        </div>
+    </div>
 </div>
+<sy-i18n></sy-i18n>

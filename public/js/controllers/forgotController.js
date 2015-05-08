@@ -1,5 +1,6 @@
 angular.module('ShinyaApp.forgotController', [])
-.controller('forgotController', ['$scope', '$rootScope', '$http', '$timeout', '$location', function($scope, $rootScope, $http, $timeout, $location){
+.controller('forgotController', ['$scope', '$rootScope', '$http', '$timeout', '$location', '$translate',
+    function($scope, $rootScope, $http, $timeout, $location, $translate){
 
     $rootScope.isSubmit = false
     /*
@@ -19,7 +20,7 @@ angular.module('ShinyaApp.forgotController', [])
     $scope.msgNotify = function (type, msg){
         if (type === 'error'){
             $scope.input_shake_animate = true
-            $scope.errMsg = msg
+            $scope.errMsg = $translate.instant(msg)
             $scope.isMsgNotify = true
             $timeout(function (){
                 $scope.errMsg = ''
@@ -27,7 +28,7 @@ angular.module('ShinyaApp.forgotController', [])
                 $scope.isMsgNotify = false
             }, 1717)
         } else if (type === 'ok'){
-            $scope.okMsg = msg
+            $scope.okMsg = $translate.instant(msg)
             $scope.isMsgNotify = true
             $timeout(function (){
                 $scope.okMsg = ''
@@ -57,7 +58,7 @@ angular.module('ShinyaApp.forgotController', [])
     }
     $scope.gotoStepThree = function (){
         $scope.step = 3
-        $scope.msgNotify('ok', '請輸入新密碼')
+        $scope.msgNotify('ok', $translate.instant('ok.NEW_PASSWORD'))
     }
     $scope.forgotEmailSubmit = function (){
 

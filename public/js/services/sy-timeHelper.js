@@ -1,25 +1,26 @@
 angular.module('ShinyaApp.timeHelperServices', [])
-.service('syTimeHelper', function(){
+.service('syTimeHelper', ['$translate', function($translate){
 
     // 用戶註冊當日時刻
+    // via http://zh.wikipedia.org/zh-hk/%E5%87%8C%E6%99%A8
     this.partsOfADay = function (hour) {
 
         if (hour <= 3){
-            return '深夜'
+            return $translate.instant('time.MIDNIGHT')
         } else if (hour <= 6){
-            return '破曉'
+            return $translate.instant('time.DAWN')
         } else if (hour <= 9){
-            return '早晨'
+            return $translate.instant('time.MORNING')
         } else if (hour <= 12){
-            return '午前'
+            return $translate.instant('time.FORENOON')
         } else if (hour <= 15){
-            return '午後'
+            return $translate.instant('time.AFTERNOON')
         } else if (hour <= 18){
-            return '傍晚'
+            return $translate.instant('time.EVENING')
         } else if (hour <= 21){
-            return '薄暮'
+            return $translate.instant('time.DUSK')
         } else {
-            return '深夜'
+            return $translate.instant('time.MIDNIGHT')
         }
     },
     // 用戶註冊次序號
@@ -53,4 +54,4 @@ angular.module('ShinyaApp.timeHelperServices', [])
         
         return this.getDayMs(now) === this.getDayMs(last)
     }
-})
+}])

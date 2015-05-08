@@ -48,7 +48,6 @@ input:focus, button:focus {
 ul {
     list-style: none;
 }
-
 /* 開場動畫 */
 #opening_animation {
     position: absolute;
@@ -83,7 +82,45 @@ ul {
 #outer_box.logo_loaded {
     opacity: 1;
 }
-/* 國家色 */
+/* 底部定位 */
+.bottom_right_corner {
+    position: absolute;
+    bottom: 10px;
+    right: 17px;
+    z-index: 999;
+}
+    .bottom_right_corner a {
+        font-size: 12px;
+        color: #CECECF;
+    }
+.bottom_center_corner {
+    position: absolute;
+    width: 100%;
+    bottom: 10px;
+    left: 0px;
+    font-size: 10px;
+    color: #CECECF;
+}
+.bottom_left_corner {
+    position: absolute;
+    bottom: 10px;
+    left: 17px;
+    font-size: 12px;
+    color: #CECECF;
+    z-index: 999;
+}
+/* 國家 */
+.country {
+    width: 27px;
+    height: 27px;
+    border-width: 1px;
+    border-style:solid;
+    font-size: 11px;
+    line-height: 27px;
+    border-radius: 14px;
+    overflow: hidden;
+    cursor: pointer;
+}
 .CN {
     color: #E74010;
     border-color: #E74010;
@@ -177,87 +214,61 @@ ul {
     background: #fff;
     border-radius: 10px;
 }
-    .main_box .bottom_right_corner {
-        position: absolute;
-        bottom: 10px;
-        right: 17px;
-        z-index: 999;
+    /* 「用戶信息界面」右下角，進入「設置界面」按鈕 */
+    #setting {
+        position: relative;
+        width: 12px;
+        height: 12px;
+        border: 1px solid #CECECF;
+        -webkit-transform: rotate(20deg);
+        transform: rotate(20deg);
+        cursor: pointer;
     }
-        .main_box .bottom_right_corner a {
-            font-size: 12px;
-            color: #CECECF;
-        }
-        /* 「用戶信息界面」右下角，進入「設置界面」按鈕 */
-        #setting {
-            position: relative;
-            width: 12px;
-            height: 12px;
+        #setting:before {
+            content: "";
+            position: absolute;
+            top: -1px;
+            left: -1px;
+            width: 10px;
+            height: 10px;
             border: 1px solid #CECECF;
-            -webkit-transform: rotate(20deg);
-            transform: rotate(20deg);
+            -webkit-transform: rotate(135deg);
+            transform: rotate(135deg);
+        }
+        #setting:after {
+            content: '';
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            width: 4px;
+            height: 4px;
+            border: 1px solid #CECECF;
+            border-radius: 3px;
+        }
+    /* 「用戶信息界面」左下角，進入「位置服務」按鈕 */
+    #getGeoServices {
+        position: relative;
+        top: 0px;
+        width: 12px;
+        height: 12px;
+        border-radius: 7px;
+        border: 1px solid #CECECF;
+        border-bottom-left-radius: 0px;
+        -webkit-transform: rotate(-45deg);
+        transform: rotate(-45deg);
+        cursor: pointer;
+    }
+        #getGeoServices:before {
+            content: '';
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            width: 4px;
+            height: 4px;
+            border-radius: 3px;
+            border: 1px solid #CECECF;
             cursor: pointer;
         }
-            #setting:before {
-                content: "";
-                position: absolute;
-                top: -1px;
-                left: -1px;
-                width: 10px;
-                height: 10px;
-                border: 1px solid #CECECF;
-                -webkit-transform: rotate(135deg);
-                transform: rotate(135deg);
-            }
-            #setting:after {
-                content: '';
-                position: absolute;
-                top: 2px;
-                left: 2px;
-                width: 4px;
-                height: 4px;
-                border: 1px solid #CECECF;
-                border-radius: 3px;
-            }
-    .main_box .bottom_center_corner {
-        position: absolute;
-        width: 100%;
-        bottom: 10px;
-        left: 0px;
-        font-size: 10px;
-        color: #CECECF;
-    }
-    .main_box .bottom_left_corner {
-        position: absolute;
-        bottom: 10px;
-        left: 17px;
-        font-size: 12px;
-        color: #CECECF;
-        z-index: 999;
-    }
-        /* 「用戶信息界面」左下角，進入「位置服務」按鈕 */
-        #getGeoServices {
-            position: relative;
-            top: 0px;
-            width: 12px;
-            height: 12px;
-            border-radius: 7px;
-            border: 1px solid #CECECF;
-            border-bottom-left-radius: 0px;
-            -webkit-transform: rotate(-45deg);
-            transform: rotate(-45deg);
-            cursor: pointer;
-        }
-            #getGeoServices:before {
-                content: '';
-                position: absolute;
-                top: 2px;
-                left: 2px;
-                width: 4px;
-                height: 4px;
-                border-radius: 3px;
-                border: 1px solid #CECECF;
-                cursor: pointer;
-            }
 /* form_box */
 .form_box {
     position: absolute;
@@ -276,9 +287,13 @@ ul {
         .form_box .form_title span {
             margin: 5px;
             padding: 4px;
+            color: #CECECF;
             border-radius: 4px;
             cursor: pointer;
         }
+            .form_box .form_title span:hover {
+                color: #000;
+            }
         .form_box .form_title #register_span {
             color: #fff;
             background-color: #4EBD4A;
@@ -818,9 +833,6 @@ ul {
         bottom: 87%;
         width: 100%;
     }
-        #news_title h3 {
-            letter-spacing: 2px;
-        }
     #news_select_date {
         position: absolute;
         bottom: 10px;
@@ -860,16 +872,6 @@ ul {
         color: #000;
         border: 1px solid #000;
         border-radius: 3px;
-    }
-    #news_country {
-        width: 27px;
-        height: 27px;
-        border-width: 1px;
-        border-style:solid;
-        font-size: 11px;
-        line-height: 27px;
-        border-radius: 14px;
-        cursor: pointer;
     }
 /* geoBox: inner */
 #geo_inner_box {
@@ -1259,6 +1261,13 @@ ul {
     }
     #userCount.user_left {
         color: #CB1B45;
+    }
+/* i18n */
+#i18n {
+    white-space: nowrap;
+}
+    #i18n .country {
+        margin-top: 7px;
     }
 /* Animate */
 #logo, #logo svg {

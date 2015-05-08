@@ -12,7 +12,7 @@ var q_userFindOne = Q.nbind(User.findOne, User),
 
 function queryError(err, next){
     log.error('[DB: Query Error]', err)
-    next({'code': 500, 'status': 'error', 'msg': '服務器出錯'})
+    next({'code': 500, 'status': 'error', 'msg': 'error.SERVER_ERROR'})
     throw new Error('Query Error')
 }
 
@@ -28,18 +28,18 @@ var db_helper = {
         // 檢查郵箱
         if (!validator.isEmail(email)){
             log.warning('[Register: Wrong Email Address]')
-            next({'code': 400, 'status': 'error', 'msg': '電郵地址有誤'})
+            next({'code': 400, 'status': 'error', 'msg': 'error.EMAIL_INCORRECT'})
             return;
         }
         //檢查用戶名
         if (username.search(/\s/) >= 0){
             log.warning('[Register: Wrong Username] cannot contain spaces')
-            next({'code': 400, 'status': 'error', 'msg': '用戶名不能包含空格'})
+            next({'code': 400, 'status': 'error', 'msg': 'error.USERNAME_SPACES'})
             return;
         }
         if (!validator.isLength(username, 1, 16)){
             log.warning('[Register: Wrong Username] maximum 16 characters')
-            next({'code': 400, 'status': 'error', 'msg': '用戶名不能超過十六個字符'})
+            next({'code': 400, 'status': 'error', 'msg': 'error.USERNAME_LENGTH'})
             return;
         }
         // 檢查 用戶名 & 電郵地址 是否存在
@@ -49,10 +49,10 @@ var db_helper = {
             ])
         .spread(function (userFound, emailFound){
             if (userFound){
-                next({'code': 400, 'status': 'error', 'msg': '用戶名已存在'})
+                next({'code': 400, 'status': 'error', 'msg': 'error.USER_EXIST'})
                 throw '[Register: Username Existed] ' + username
             } else if (emailFound){
-                next({'code': 400, 'status': 'error', 'msg': '電郵地址已存在'})
+                next({'code': 400, 'status': 'error', 'msg': 'error.EMAIL_EXIST'})
                 throw '[Register: Email Address Existed] ' + email
             } else {
                 return '用戶名 & 電郵地址 √'
@@ -117,14 +117,14 @@ var db_helper = {
             q_userSave()
             .then(function (){
                 log.info('[Register: Success]', username)
-                res.json({'status': 'ok', 'msg': '註冊成功'})
+                res.json({'status': 'ok', 'msg': 'ok.SIGNED_UP'})
                 email_helper.send_log_email(
                     'shenyepoxiao@gmail.com',
                     '新用戶加入',
                     '新用戶：' + username)
             }, function (err){
                 log.error('[DB: Save Error]', err)
-                next({'code': 500, 'status': 'error', 'msg': '服務器出錯'})
+                next({'code': 500, 'status': 'error', 'msg': 'error.SERVER_ERROR'})
             })
         })
         .fail(function (err){
@@ -136,7 +136,7 @@ var db_helper = {
         // 檢查密碼是否存在
         if (!login_form.password){
             log.warning('[Login: Required Password]', login_form.user)
-            next({'code': 400, 'status': 'error', 'msg': '請輸入密碼'})
+            next({'code': 400, 'status': 'error', 'msg': 'error.PASSWORD_REQUIRED'})
             return;
         }
         if (validator.isEmail(login_form.user)){
@@ -153,14 +153,14 @@ var db_helper = {
             .then(function (found){
                 // 檢查用戶是否存在
                 if (!found){
-                    next({'code': 400, 'status': 'error', 'msg': '用戶不存在'})
+                    next({'code': 400, 'status': 'error', 'msg': 'error.USER_NOT_EXIST'})
                     throw '[Login: User Does Not Existed] ' + login_form.user
                     return;
                 }
                 // 檢查密碼是否正確
                 var compare_password = found.password || ''
                 if (!bcrypt.compareSync(login_form.password, compare_password)){
-                    next({'code': 400, 'status': 'error', 'msg': '密碼有誤'})
+                    next({'code': 400, 'status': 'error', 'msg': 'error.PASSWORD_INCORRECT'})
                     throw '[Login: Wrong Password] ' + login_form.user
                     return;
                 }
@@ -197,14 +197,14 @@ var db_helper = {
         .then(function (found){
             // 檢查電郵地址是否存在
             if (!found){
-                next({'code': 400, 'status': 'error', 'msg': '電郵地址不存在'})
+                next({'code': 400, 'status': 'error', 'msg': 'error.EMAIL_NOT_EXIST'})
                 throw '[Forgot: Email Address Does Not Existed] ' + forgot_email_form.email
                 return;
             }
             // 發送驗證碼到用戶郵箱
-            // email_helper.forgot_email(forgot_email_form.email, code)
+            email_helper.forgot_email(forgot_email_form.email, code)
             log.info('[Forgot: Step One Success]')
-            res.json({'status': 'ok', 'msg': '請輸入收到的驗證碼'})
+            res.json({'status': 'ok', 'msg': 'ok.ENTER_CODE'})
         }, function (err){
             queryError(err, next)
         })
@@ -218,13 +218,13 @@ var db_helper = {
         q_userFindOne({email: update_form.email})
         .then(function (found){
             if (!found) {
-                next({'code': 400, 'status': 'error', 'msg': '電郵地址不存在'})
+                next({'code': 400, 'status': 'error', 'msg': 'error.EMAIL_NOT_EXIST'})
                 throw '[Forgot: Email Address Does Not Existed] ' + update_form.email
                 return;
             }
             // 檢查驗證碼是否最新鮮，因為有可能同時存在多個新鮮的驗證碼
             if (found.forgot_code !== update_form.code){
-                next({'code': 400, 'status': 'error', 'msg': '請輸入最新的驗證碼'})
+                next({'code': 400, 'status': 'error', 'msg': 'error.CODE_LATEST'})
                 throw '[Forgot: Not Fresh Code] ' + update_form.email
                 return;
             }
@@ -235,14 +235,14 @@ var db_helper = {
                 })
             .then(function (found){
                 if(!found){
-                    next({'code': 400, 'status': 'error', 'msg': '電郵地址不存在'})
+                    next({'code': 400, 'status': 'error', 'msg': 'error.EMAIL_NOT_EXIST'})
                     throw '[Forgot: Email Address Does Not Existed] ' + update_form.email
                     return;
                 }
                 // 發送提醒郵件
                 email_helper.notify_email(update_form.email, update_form.ip)
                 log.info('[Forgot: Change Password Success]')
-                res.json({'status': 'ok', 'msg': '修改密碼成功'})
+                res.json({'status': 'ok', 'msg': 'ok.PASSWORD_CHANGED'})
             })
         }, function (err){
             queryError(err, next)

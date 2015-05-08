@@ -3,7 +3,7 @@ angular.module('ShinyaApp.usercountDirective', [])
     return {
         restrict: 'E',
         template: '<div ng-if="!isMobile" id="userCount" class="faster_animate" ng-click="toggleAtUserBox()">'
-                +   '在線人數：{{userCount}}'
+                +   '{{\'chat.USER_COUNT\' | translate}}{{userCount}}'
                 + '</div>',
         controller: ['$scope', '$timeout', function ($scope, $timeout){
             

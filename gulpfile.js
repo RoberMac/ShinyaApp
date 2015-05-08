@@ -7,8 +7,17 @@ var gulp       = require('gulp'),
     minifyHTML = require('gulp-minify-html');
 
 var paths = {
-    js_sy: ['public/js/core.js', 'public/js/directives/*.js', 'public/js/services/*.js', 'public/js/controllers/*.js'],
-    js_libs: ['public/js/libs/angular.min.js', 'public/js/libs/*.js', '!public/js/libs/*.map'],
+    js_sy: [
+        'public/js/core.js',
+        'public/js/directives/*.js',
+        'public/js/services/*.js',
+        'public/js/controllers/*.js'
+    ],
+    js_libs: [
+        'public/js/libs/angular.min.js',
+        'public/js/libs/*.js',
+        '!public/js/libs/*.map'
+    ],
     css_sy: 'public/css/style.css',
     css_libs: ['public/css/*.css', '!public/css/style.css'],
     html_sy: 'public/js/templates/*.html'
@@ -81,4 +90,3 @@ gulp.task('watch', function() {
 
 // The default task (called when you run `gulp` from cli) 
 gulp.task('default', ['watch', 'js_sy', 'js_libs', 'css_libs', 'css_sy', 'html_sy']);
-

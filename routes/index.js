@@ -59,11 +59,11 @@ router.post('/forgot_code', function (req, res, next){
     log.info('[POST: /forgot_code]', req.ip)
     if (!req.body.password){
         log.warning('[Forgot: Required Password]')
-        next({'code': 400, 'status': 'error', 'msg': '請填寫新密碼'})
+        next({'code': 400, 'status': 'error', 'msg': 'error.NEW_PASSWORD'})
         return;
     } else if (!req.body.code) {
         log.warning('[Forgot: Required Code]')
-        next({'code': 400, 'status': 'error', 'msg': '請填寫驗證碼'})
+        next({'code': 400, 'status': 'error', 'msg': 'error.ENTER_CODE'})
         return;
     }
     // 電郵地址信息
@@ -76,13 +76,13 @@ router.post('/forgot_code', function (req, res, next){
         if (err) {
             if (err.name === 'TokenExpiredError'){
                 log.warning('[Forgot: Code Expires]', err)
-                res.status(400).json({'status': 'error', 'msg': '驗證碼已經過期了'})
+                res.status(400).json({'status': 'error', 'msg': 'error.CODE_EXPIRED'})
             } else if (err.name === 'JsonWebTokenError'){
                 log.warning('[Forgot: Wrong Code]', err)
-                res.status(400).json({'status': 'error', 'msg': '這個碼不是我發的'})
+                res.status(400).json({'status': 'error', 'msg': 'error.CODE_ERROR'})
             } else {
                 log.warning('[Forgot: WTF]', err)
-                res.status(400).json({'status': 'error', 'msg': '我不知道你說什麼'})
+                res.status(400).json({'status': 'error', 'msg': 'error.CODE_WHAT'})
             }
             return;
         }

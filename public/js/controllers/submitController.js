@@ -1,6 +1,9 @@
 angular.module('ShinyaApp.submitController', [])
-.controller('submitController', ['$scope', '$rootScope', '$http', '$timeout', '$location', '$route', '$window', 'jwtHelper', 'store',
-    function ($scope, $rootScope, $http, $timeout, $location, $route, $window, jwtHelper, store){
+.controller('submitController', [
+        '$scope', '$rootScope', '$http',
+        '$timeout', '$location', '$route',
+        '$window', 'jwtHelper', 'store', '$translate',
+    function ($scope, $rootScope, $http, $timeout, $location, $route, $window, jwtHelper, store, $translate){
 
     $rootScope.isSubmit = true
     /*
@@ -20,7 +23,7 @@ angular.module('ShinyaApp.submitController', [])
     $scope.msgNotify = function (type, msg){
         if (type === 'error'){
             $scope.input_shake_animate = true
-            $scope.errMsg = msg
+            $scope.errMsg = $translate.instant(msg)
             $scope.isMsgNotify = true
             $timeout(function (){
                 $scope.errMsg = ''
@@ -28,7 +31,7 @@ angular.module('ShinyaApp.submitController', [])
                 $scope.isMsgNotify = false
             }, 1717)
         } else if (type === 'ok'){
-            $scope.okMsg = msg
+            $scope.okMsg = $translate.instant(msg)
             $scope.isMsgNotify = true
             $timeout(function (){
                 $scope.okMsg = ''
@@ -48,22 +51,33 @@ angular.module('ShinyaApp.submitController', [])
         if (jwtHelper.isTokenExpired(store.get('id_token'))){
             // 此時 $scope.msgNotify 方法還沒定義
             $timeout(function (){
-                $scope.msgNotify('ok', '請重新登錄')
+                $scope.msgNotify('ok', $translate.instant('ok.RELOGIN'))
             }, 0)
         }
     }
     // 監聽開啟／關閉「位置服務」
-    $scope.$on('turnOnGeoServices', function (msg){
+    $scope.$on('turnOnGeoServices', function (e, msg){
         $timeout(function (){
-            $scope.msgNotify('ok', '已開啟服務，請重新登錄')
+            $scope.msgNotify('ok', msg)
         }, 0)
     })
-    $scope.$on('turnOffGeoServices', function (msg){
+    $scope.$on('turnOffGeoServices', function (e, msg){
         $timeout(function (){
-            $scope.msgNotify('ok', '已關閉服務，請重新登錄')
+            $scope.msgNotify('ok', msg)
         }, 0)
     })
-
+    /*
+     **********
+     * i18n
+     **********
+     */
+    $scope.isShowLoadAnimate = false
+    $scope.$on('$translateChangeBeforeStart', function (){
+        $scope.isShowLoadAnimate = true
+    })
+    $rootScope.$on('$translateChangeSuccess', function (){
+        $route.reload()
+    })
     /*
      **********
      * 頁面切換
