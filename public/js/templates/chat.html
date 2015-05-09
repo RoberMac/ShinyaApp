@@ -47,7 +47,7 @@
                     <div id="watch_face">
                         <!-- table-row -->
                         <div>
-                            <h4>在線用戶</h4>                            
+                            <h4>{{'chat.ONLINE_USER' | translate}}</h4>                            
                         </div>
                         <!-- table-row -->
                         <div>
@@ -269,6 +269,6 @@
 <!-- 聊天輸入框 -->
 <div id="chat_submit_box" class="general_animate" ng-show="isChatBox">
     <form sy-hide-keyboard novalidate ng-submit="emitTextMsg()" name="form">
-        <input id="chat_submit_input" type="text" ng-model="msgOutbox.textMsg" sy-autofocus ng-maxlength="1024" ng-model-options="{ debounce: 250 }">
+        <input id="chat_submit_input"  class="faster_animate" type="text" ng-model="msgOutbox.textMsg" sy-autofocus ng-maxlength="1024" ng-model-options="{ debounce: 250 }">
     </form>
 </div>

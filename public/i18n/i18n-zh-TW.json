@@ -1,0 +1,80 @@
+{
+    "login": {
+        "TITLE": "登入",
+        "USERNAME": "使用者名稱／電子郵件地址",
+        "FORGOT_TITLE": "忘記密碼",
+        "SUBMIT_TITLE": "登入"
+    },
+    "register": {
+        "TITLE": "註冊",
+        "USERNAME": "使用者名稱",
+        "SUBMIT_TITLE": "註冊"
+    },
+    "general": {
+        "EMAIL": "電子郵件地址",
+        "PASSWORD": "密碼"
+    },
+    "forgot": {
+        "TITLE": "尋找你的帳戶",
+        "NEW_PASSWORD": "新密碼",
+        "CODE": "驗證碼",
+        "NEXT_STEP": "下一步"
+    },
+    "chat": {
+        "ONLINE_USER": "線上使用者",
+        "USER_COUNT": "線上人數：",
+        "JOINED": "加入於",
+        "NUMERO_PREFIX": "第 ",
+        "NUMERO_SUBFFIX": " 號用戶",
+        "DATE_FORMAT": "yyyy/MM/dd",
+        "TIME_FORMAT": "HH:mm:ss",
+        "SOUND": "聲音",
+        "LOCATION": "位置",
+        "LOCATION_SERVICES": "位置服務",
+        "VERSION": "版本",
+        "LOG_OUT": "登出",
+        "VIEW_ORIGINAL": "查看原圖",
+        "NEWS_SOURCES": "新聞來源：",
+        "TODAY": "今日",
+        "NOW": "現在",
+        "THE_DAY_WEATHER": "當日天氣",
+        "THE_DAY_NEWS": "當日新聞",
+        "TODAY_NEWS": "今日新聞",
+        "GEO_ON_MSG": "已開啟服務，請重新登入",
+        "GEO_OFF_MSG": "已關閉服務，請重新登入",
+        "NEWS_NOT_EXIST": "此時段新聞不存在",
+        "NETWORK_ERROR_MSG": "網路錯誤，請稍候再試"
+    },
+    "time": {
+        "DAWN": "破曉",
+        "MORNING": "早晨",
+        "FORENOON": "午前",
+        "AFTERNOON": "午後",
+        "EVENING": "傍晚",
+        "DUSK": "薄暮",
+        "MIDNIGHT": "深夜"
+    },
+    "error": {
+        "SERVER_ERROR": "伺服器錯誤",
+        "USER_EXIST": "使用者名稱已存在",
+        "USER_NOT_EXIST": "使用者名稱不存在",
+        "EMAIL_EXIST": "電子郵件地址已存在",
+        "EMAIL_NOT_EXIST": "電子郵件地址不存在",
+        "EMAIL_INCORRECT": "電子郵件地址不正確",
+        "PASSWORD_REQUIRED": "請輸入您的密碼",
+        "PASSWORD_INCORRECT": "密碼不正確",
+        "CODE_LATEST": "請輸入最新的驗證碼",
+        "CODE_EXPIRED": "驗證碼已經過期了",
+        "CODE_ERROR": "這個碼不是我發的",
+        "CODE_WHAT": "我不知道你說什麼",
+        "USERNAME_SPACES": "使用者名稱不能包含空格",
+        "USERNAME_LENGTH": "使用者名稱不能超過十六個字符"
+    },
+    "ok": {
+        "RELOGIN": "請重新登入",
+        "NEW_PASSWORD": "請輸入新密碼",
+        "ENTER_CODE": "請輸入收到的驗證碼",
+        "PASSWORD_CHANGED": "修改密碼成功",
+        "SIGNED_UP": "註冊成功"
+    }
+}

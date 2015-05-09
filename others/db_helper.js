@@ -61,32 +61,33 @@ var db_helper = {
             queryError(err, next)
         })
         .then(function (){
-            // 獲取 國家代碼 & 城市名 & 起始位置天氣
-            return Q.all([
-                getCountryAndCity(register_form.register_info.ip),
-                getGeoWeather(place.lat, place.lon)
-                ])
+            // 獲取 國家代碼 & 城市名
+            return getCountryAndCity(register_form.register_info.ip)
             .then(function (data){
                 return data
             })
         })
-        .spread(function (countryAndCity, beginWeather){
-            // 獲取用戶註冊城市天氣
-            return getCityWeather(countryAndCity[1])
-            .then(function (weather){
-                return [countryAndCity, beginWeather, weather]
+        .spread(function (country, city){
+            // 獲取 起始位置天氣 & 用戶註冊城市天氣
+            return Q.all([
+                    getGeoWeather(place.lat, place.lon, country),
+                    getCityWeather(city, country)
+                ])
+            .spread(function (beginWeather, weather){
+                return [country, city, beginWeather, weather]
             })
         })
-        .spread(function (countryAndCity, beginWeather, weather){
+        .spread(function (country, city, beginWeather, weather){
+            log.info(country, city, beginWeather, weather)
             // 獲取當前註冊用戶數
             return q_count({})
             .then(function (count){
-                return [countryAndCity, beginWeather, weather, count]
+                return [country, city, beginWeather, weather, count]
             }, function (err){
                 queryError(err, next)
             })
         })
-        .spread(function (countryAndCity, beginWeather, weather, count){
+        .spread(function (country, city, beginWeather, weather, count){
             // 初始化用戶數據
             var user = new User({
                 'username': username,
@@ -106,8 +107,8 @@ var db_helper = {
                     weather: beginWeather
                 },
                 'geo_info': {
-                    'country': countryAndCity[0],
-                    'city'   : countryAndCity[1],
+                    'country': country,
+                    'city'   : city,
                     'weather': weather
                 },
                 'isGeoServices': false

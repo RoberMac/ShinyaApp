@@ -27,7 +27,7 @@ router.post('/toggleGeoServices', function (req, res, next){
 router.post('/getGeoServices', function (req, res, next){
 
     log.info('[POST: /getGeoServices]', req.user.username)
-    api_db_helper.getGeoServices(req.user, req.body.coords, res, next)
+    api_db_helper.getGeoServices(req.user, req.body.coords, req.body.countryCode, res, next)
 })
 
 module.exports = router

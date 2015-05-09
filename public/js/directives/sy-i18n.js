@@ -3,8 +3,8 @@ angular.module('ShinyaApp.i18nDirective', [])
     return {
         restrict: 'E',
         replace : true,
-        template: '<div id="i18n" class="bottom_left_corner">'
-                +   '<div ng-repeat="item in langList" class="country general_animate" ng-class="item.country" ng-click="changeLanguage(item.country)">'
+        template: '<div id="i18n" class="bottom_left_corner general_animate">'
+                +   '<div ng-repeat="item in langList" class="lang country general_animate general_box_shadow" ng-class="item.country" ng-click="changeLanguage(item.country)">'
                 +       '{{item.lang}}'
                 +   '</div>'
                 + '</div>',

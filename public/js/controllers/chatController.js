@@ -315,7 +315,7 @@ angular.module('ShinyaApp.chatController', [])
                     $scope.currentPage === 'loadBox' ?  $scope.toggleCurrentPage('newsBox') : null
                 } else {
                     $scope.currentPage === 'loadBox' ? $scope.toggleCurrentPage('newsBox') : null
-                    $scope.newsErrMsg = news
+                    $scope.newsErrMsg = $translate.instant(news)
                     $scope.isNewsExist ? $scope.toggleNewsExist() : null
                 }
             }, username)
@@ -460,7 +460,8 @@ angular.module('ShinyaApp.chatController', [])
                     coords: {
                         lat: pos.coords.latitude,
                         lon: pos.coords.longitude
-                    }
+                    },
+                    countryCode: store.get('NG_TRANSLATE_COUNTRY') || 'CN'
                 }).
                 success(function (data, status, headers, config){
                     $timeout.cancel(loadTimer)
