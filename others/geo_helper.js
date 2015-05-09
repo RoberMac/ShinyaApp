@@ -5,10 +5,6 @@ var API_KEY = {
     'Google': process.env.GKEY || '',
     'OpenWeatherMap': process.env.OKEY || ''
 },
-    google_geocoder = geocoder('google', 'https', {
-        apiKey: API_KEY['Google'],
-        language: 'zh-HK'
-    }),
     freegeoip = geocoder('freegeoip', 'https');
 
 // Q
@@ -27,9 +23,23 @@ var q_request = function (url){
     })
     return deferred.promise
 },
-    q_geocode  = Q.nbind(freegeoip.geocode, freegeoip),
-    q_reverse  = Q.nbind(google_geocoder.reverse, google_geocoder);
+    q_geocode = Q.nbind(freegeoip.geocode, freegeoip);
 
+// i18n
+// via http://openweathermap.org/current
+var i18n_list = {
+    'CN': 'zh_cn',
+    'HK': 'zh_tw',
+    'TW': 'zh_tw',
+    'US': 'en',
+    'JP': 'ja',
+    'DE': 'de',
+    'FR': 'fr',
+    'IN': 'hi',
+    'KR': 'ko',
+    'RU': 'ru',
+    'BR': 'pt'
+}
 
 var geo_helper = {
     // 地理位置
@@ -47,7 +57,13 @@ var geo_helper = {
             return ['CN', 'beijing']
         })
     },
-    getStreetName: function (origin){
+    getStreetName: function (origin, countryCode){
+
+        var google_geocoder = geocoder('google', 'https', {
+            apiKey: API_KEY['Google'],
+            language: i18n_list[countryCode] || 'en'
+        }),
+            q_reverse = Q.nbind(google_geocoder.reverse, google_geocoder);
 
         log.info('[Geo: getStreetName]')
 
@@ -80,12 +96,14 @@ var geo_helper = {
             )
     },
     // 天氣
-    getCityWeather: function (city){
+    getCityWeather: function (city, countryCode){
 
         log.info('[Geo: getCityWeather]')
         var url = 'http://api.openweathermap.org/data/2.5/weather?q='
                     + city
-                    +'&lang=zh_tw&units=metric&APPID='
+                    +'&lang='
+                    + (i18n_list[countryCode] || 'en')
+                    + '&units=metric&APPID='
                     + API_KEY['OpenWeatherMap'];
 
         return q_request(url)
@@ -106,14 +124,16 @@ var geo_helper = {
             }
         })
     },
-    getGeoWeather: function (lat, lon){
+    getGeoWeather: function (lat, lon, countryCode){
 
         log.info('[Geo: getGeoWeather]')
         var url = 'http://api.openweathermap.org/data/2.5/weather?lat='
                     + lat
                     + '&lon='
                     + lon
-                    + '&lang=zh_tw&units=metric&APPID='
+                    + '&lang='
+                    + (i18n_list[countryCode] || 'en')
+                    + '&units=metric&APPID='
                     + API_KEY['OpenWeatherMap'];
 
         return q_request(url)

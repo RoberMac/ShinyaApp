@@ -97,7 +97,7 @@ var api_db_helper = {
         })
     },
     // 獲取「位置服務」
-    getGeoServices: function (user, coords, res, next){
+    getGeoServices: function (user, coords, countryCode, res, next){
 
         q_userFindOne({username: user.username}, 'last_geo')
         .then(function (found){
@@ -109,31 +109,34 @@ var api_db_helper = {
             if (geo_helper.isSamePlace(found.last_geo, coords) 
                 && (new Date() - geo_helper.getDayMs(found.last_geo.date)) < 86400000){
                 // 同一天同一位置多次請求
-                var msg = {
-                    last_geo: found.last_geo,
-                    now_geo : {
-                        lat: coords.lat,
-                        lon: coords.lon,
-                        location: found.last_geo.location,
-                        date: new Date(),
-                        weather: found.last_geo.weather
+                geo_helper.getGeoWeather(coords.lat, coords.lon, countryCode)
+                .then(function (weather){
+                    var msg = {
+                        last_geo: found.last_geo,
+                        now_geo : {
+                            lat: coords.lat,
+                            lon: coords.lon,
+                            location: found.last_geo.location,
+                            date: new Date(),
+                            weather: weather
+                        }
                     }
-                }
-                // 更新座標、日期
-                q_userFindOneAndUpdate({username: user.username}, {
-                    last_geo: msg.now_geo
-                })
-                .then(function (found){
-                    res.send({'status': 'ok', 'msg': msg})
-                }, function (err){
-                    queryError(err, next)
+                    // 更新座標、日期
+                    q_userFindOneAndUpdate({username: user.username}, {
+                        last_geo: msg.now_geo
+                    })
+                    .then(function (found){
+                        res.send({'status': 'ok', 'msg': msg})
+                    }, function (err){
+                        queryError(err, next)
+                    })
                 })
             } else {
                 // 獲取 天氣 & 街道名
                 Q.all([
-                    geo_helper.getGeoWeather(coords.lat, coords.lon),
-                    geo_helper.getStreetName(coords)
-                    ])
+                    geo_helper.getGeoWeather(coords.lat, coords.lon, countryCode),
+                    geo_helper.getStreetName(coords, countryCode)
+                ])
                 .spread(function (weather, streetName){
                     // 距離服務
                     var msg = {

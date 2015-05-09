@@ -1,0 +1,80 @@
+{
+    "login": {
+        "TITLE": "Log In",
+        "USERNAME": "Username / Email",
+        "FORGOT_TITLE": "Forgot Password",
+        "SUBMIT_TITLE": "Log In"
+    },
+    "register": {
+        "TITLE": "Sign Up",
+        "USERNAME": "Username",
+        "SUBMIT_TITLE": "Sign Up"
+    },
+    "general": {
+        "EMAIL": "Email",
+        "PASSWORD": "Password"
+    },
+    "forgot": {
+        "TITLE": "Find Your Account",
+        "NEW_PASSWORD": "New Password",
+        "CODE": "Verification Code",
+        "NEXT_STEP": "Next Step"
+    },
+    "chat": {
+        "ONLINE_USER": "Online User",
+        "USER_COUNT": "Online User: ",
+        "JOINED": "Joined",
+        "NUMERO_PREFIX": "No. ",
+        "NUMERO_SUBFFIX": "",
+        "DATE_FORMAT": "MM/dd/yyyy",
+        "TIME_FORMAT": "HH:mm:ss",
+        "SOUND": "Sound",
+        "LOCATION": "Location",
+        "LOCATION_SERVICES": "Location Services",
+        "VERSION": "Version",
+        "LOG_OUT": "Log Out",
+        "VIEW_ORIGINAL": "View Original",
+        "NEWS_SOURCES": "News Sources: ",
+        "TODAY": "TDA",
+        "NOW": "Now",
+        "THE_DAY_WEATHER": "The Day\"s Weather",
+        "THE_DAY_NEWS": "The Day\"s News",
+        "TODAY_NEWS": "Today\"s News",
+        "GEO_ON_MSG": "Success, Please re-login",
+        "GEO_OFF_MSG": "Success, Please re-login",
+        "NEWS_NOT_EXIST": "News does not exist",
+        "NETWORK_ERROR_MSG": "Network Error, Please try again later"
+    },
+    "time": {
+        "DAWN": "AM",
+        "MORNING": "AM",
+        "FORENOON": "AM",
+        "AFTERNOON": "PM",
+        "EVENING": "PM",
+        "DUSK": "PM",
+        "MIDNIGHT": "PM"
+    },
+    "error": {
+        "SERVER_ERROR": "Server Error",
+        "USER_EXIST": "User already exists",
+        "USER_NOT_EXIST": "User does not exist",
+        "EMAIL_EXIST": "Email already exists",
+        "EMAIL_NOT_EXIST": "Email address does not exist",
+        "EMAIL_INCORRECT": "Email address is incorrect",
+        "PASSWORD_REQUIRED": "Password is required",
+        "PASSWORD_INCORRECT": "Password is incorrect",
+        "CODE_LATEST": "Not THE LATEST Code",
+        "CODE_EXPIRED": "Verification Code expired",
+        "CODE_ERROR": "Incorrect Verification Code",
+        "CODE_WHAT": "WHAT?",
+        "USERNAME_SPACES": "Username can\"t contain spaces",
+        "USERNAME_LENGTH": "Max length of Username: 16"
+    },
+    "ok": {
+        "RELOGIN": "Please re-login",
+        "NEW_PASSWORD": "Please enter new password",
+        "ENTER_CODE": "Enter the Code you received",
+        "PASSWORD_CHANGED": "Password Changed Successfully",
+        "SIGNED_UP": "Sign Up Successfully"
+    }
+}

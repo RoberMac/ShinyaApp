@@ -15,6 +15,8 @@ var paths = {
     ],
     js_libs: [
         'public/js/libs/angular.min.js',
+        'public/js/libs/angular-translate.min.js',
+        'public/js/libs/angular-translate-loader-static-files.min.js',
         'public/js/libs/*.js',
         '!public/js/libs/*.map'
     ],

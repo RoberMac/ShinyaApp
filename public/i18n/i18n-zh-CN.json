@@ -1,0 +1,80 @@
+{
+    "login": {
+        "TITLE": "登录",
+        "USERNAME": "用户名／邮箱地址",
+        "FORGOT_TITLE": "忘记密码",
+        "SUBMIT_TITLE": "登录"
+    },
+    "register": {
+        "TITLE": "注册",
+        "USERNAME": "用户名",
+        "SUBMIT_TITLE": "注册"
+    },
+    "general": {
+        "EMAIL": "邮箱地址",
+        "PASSWORD": "密码"
+    },
+    "forgot": {
+        "TITLE": "寻找你的账号",
+        "NEW_PASSWORD": "新密码",
+        "CODE": "验证码",
+        "NEXT_STEP": "下一步"
+    },
+    "chat": {
+        "ONLINE_USER": "在线用户",
+        "USER_COUNT": "在线人数：",
+        "JOINED": "加入于",
+        "NUMERO_PREFIX": "第 ",
+        "NUMERO_SUBFFIX": " 号用户",
+        "DATE_FORMAT": "yyyy 年 M 月 d 日",
+        "TIME_FORMAT": "HH 时 mm 分",
+        "SOUND": "声音",
+        "LOCATION": "位置",
+        "LOCATION_SERVICES": "位置服务",
+        "VERSION": "版本",
+        "LOG_OUT": "注销",
+        "VIEW_ORIGINAL": "查看原图",
+        "NEWS_SOURCES": "新闻来源：",
+        "TODAY": "今日",
+        "NOW": "现在",
+        "THE_DAY_WEATHER": "当日天气",
+        "THE_DAY_NEWS": "当日新闻",
+        "TODAY_NEWS": "今日新闻",
+        "GEO_ON_MSG": "已开启服务，请重新登录",
+        "GEO_OFF_MSG": "已关闭服务，请重新登录",
+        "NEWS_NOT_EXIST": "此时段新闻不存在",
+        "NETWORK_ERROR_MSG": "网络错误，请稍候再试"
+    },
+    "time": {
+        "DAWN": "破晓",
+        "MORNING": "早晨",
+        "FORENOON": "午前",
+        "AFTERNOON": "午后",
+        "EVENING": "傍晚",
+        "DUSK": "薄暮",
+        "MIDNIGHT": "深夜"
+    },
+    "error": {
+        "SERVER_ERROR": "服务器错误",
+        "USER_EXIST": "用户名已存在",
+        "USER_NOT_EXIST": "用户名不存在",
+        "EMAIL_EXIST": "邮箱地址已存在",
+        "EMAIL_NOT_EXIST": "邮箱地址不存在",
+        "EMAIL_INCORRECT": "邮箱地址不正確",
+        "PASSWORD_REQUIRED": "请输入你的密码",
+        "PASSWORD_INCORRECT": "密码不正确",
+        "CODE_LATEST": "请输入最新的验证码",
+        "CODE_EXPIRED": "验证码已过期",
+        "CODE_ERROR": "验证码有误",
+        "CODE_WHAT": "验证码有误",
+        "USERNAME_SPACES": "用户名不能包含空格",
+        "USERNAME_LENGTH": "用户名不能超过十六个字符"
+    },
+    "ok": {
+        "RELOGIN": "请重新登录",
+        "NEW_PASSWORD": "请输入新密码",
+        "ENTER_CODE": "请输入收到的验证码",
+        "PASSWORD_CHANGED": "修改密码成功",
+        "SIGNED_UP": "注册成功"
+    }
+}
