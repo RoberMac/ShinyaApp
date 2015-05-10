@@ -118,7 +118,6 @@ angular.module('ShinyaApp.chatController', [])
         partsOfADay: syTimeHelper.partsOfADay(~~($filter('date')(decodeToken.date, 'H'))),
         weather    : decodeToken.weather.description
     }
-    console.log($scope.infoBox, $scope.i18n_JOIN)
     $scope.numero = function (numero){
         return syTimeHelper.getNumero($scope.infoBox.numero)
     }
