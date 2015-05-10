@@ -1,0 +1,80 @@
+{
+    "login": {
+        "TITLE": "ログイン",
+        "USERNAME": "ユーザー名またはEメール",
+        "FORGOT_TITLE": "パスワードをお忘れですか",
+        "SUBMIT_TITLE": "ログイン"
+    },
+    "register": {
+        "TITLE": "登録する",
+        "USERNAME": "ユーザー名",
+        "SUBMIT_TITLE": "登録する"
+    },
+    "general": {
+        "EMAIL": "Eメール",
+        "PASSWORD": "パスワード"
+    },
+    "forgot": {
+        "TITLE": "アカウントを探す",
+        "NEW_PASSWORD": "新しいパスワード",
+        "CODE": "確認コードを",
+        "NEXT_STEP": "次のステップ"
+    },
+    "chat": {
+        "ONLINE_USER": "オンラインユーザー",
+        "USER_COUNT": "オンライン：",
+        "JOINED": "登録日",
+        "NUMERO_PREFIX": "No. ",
+        "NUMERO_SUBFFIX": "",
+        "DATE_FORMAT": "yyyy 年 M 月 d 日",
+        "TIME_FORMAT": "HH 时 mm 分",
+        "SOUND": "音",
+        "LOCATION": "立地",
+        "LOCATION_SERVICES": "位置情報サービス",
+        "VERSION": "バージョン",
+        "LOG_OUT": "ログアウト",
+        "VIEW_ORIGINAL": "オリジナル画像表示",
+        "NEWS_SOURCES": "ニュースソース：",
+        "TODAY": "今日",
+        "NOW": "現在",
+        "THE_DAY_WEATHER": "當日の天気",
+        "THE_DAY_NEWS": "當日のニュース",
+        "TODAY_NEWS": "今日のニュース",
+        "GEO_ON_MSG": "成功、再度ログインしてください",
+        "GEO_OFF_MSG": "成功、再度ログインしてください",
+        "NEWS_NOT_EXIST": "ニュースは存在しません",
+        "NETWORK_ERROR_MSG": "ネットワークの状況を確認の上、しばらくしてからもう一度お試しください。"
+    },
+    "time": {
+        "DAWN": "暁",
+        "MORNING": "朝",
+        "FORENOON": "午前",
+        "AFTERNOON": "午後",
+        "EVENING": "夕",
+        "DUSK": "薄暮",
+        "MIDNIGHT": "深夜"
+    },
+    "error": {
+        "SERVER_ERROR": "サーバエラーが発生しました",
+        "USER_EXIST": "ユーザー名は既に存在しています",
+        "USER_NOT_EXIST": "このユーザーは 存在しません",
+        "EMAIL_EXIST": "このEメールアドレスは既に存在します",
+        "EMAIL_NOT_EXIST": "このEメールアドレスが存在しません",
+        "EMAIL_INCORRECT": "不正なEメールアド",
+        "PASSWORD_REQUIRED": "パスワードを入力してください",
+        "PASSWORD_INCORRECT": "パスワードが正しくありません",
+        "CODE_LATEST": "最新の確認コードを入力してください",
+        "CODE_EXPIRED": "確認コードの有効期限が切れています",
+        "CODE_ERROR": "確認コード異常",
+        "CODE_WHAT": "確認コード異常",
+        "USERNAME_SPACES": "ユーザー名にスペースを含めることはできません",
+        "USERNAME_LENGTH": "ユーザー名を超える16文字にすることはできません"
+    },
+    "ok": {
+        "RELOGIN": "再度ログインしてください",
+        "NEW_PASSWORD": "新しいパスワードを入力して",
+        "ENTER_CODE": "受信確認コードを入力してください",
+        "PASSWORD_CHANGED": "パスワードの変更の成功",
+        "SIGNED_UP": "成功を登録"
+    }
+}

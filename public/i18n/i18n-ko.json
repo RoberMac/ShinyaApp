@@ -1,0 +1,80 @@
+{
+    "login": {
+        "TITLE": "로그인",
+        "USERNAME": "사용자 이름／이메일",
+        "FORGOT_TITLE": "비밀번호 찾기",
+        "SUBMIT_TITLE": "로그인"
+    },
+    "register": {
+        "TITLE": "가입",
+        "USERNAME": "사용자 이름",
+        "SUBMIT_TITLE": "가입"
+    },
+    "general": {
+        "EMAIL": "이메일",
+        "PASSWORD": "비밀번호"
+    },
+    "forgot": {
+        "TITLE": "계정을 찾으세요",
+        "NEW_PASSWORD": "새 비밀번호",
+        "CODE": "보안 코드",
+        "NEXT_STEP": "다음 단계"
+    },
+    "chat": {
+        "ONLINE_USER": "온라인 사용자",
+        "USER_COUNT": "온라인 사용자：",
+        "JOINED": "가입일",
+        "NUMERO_PREFIX": "No. ",
+        "NUMERO_SUBFFIX": "",
+        "DATE_FORMAT": "yyyy 년 M 월 d 일",
+        "TIME_FORMAT": "HH 시 mm 분",
+        "SOUND": "소리",
+        "LOCATION": "로케이션",
+        "LOCATION_SERVICES": "위치 서비스",
+        "VERSION": "버전",
+        "LOG_OUT": "로그 아웃",
+        "VIEW_ORIGINAL": "보기 원본 사진",
+        "NEWS_SOURCES": "뉴스 소스：",
+        "TODAY": "오늘",
+        "NOW": "지금",
+        "THE_DAY_WEATHER": "그날 날씨",
+        "THE_DAY_NEWS": "그날 뉴스",
+        "TODAY_NEWS": "오늘의 뉴스",
+        "GEO_ON_MSG": "다시 로그인",
+        "GEO_OFF_MSG": "다시 로그인",
+        "NEWS_NOT_EXIST": "뉴스가 존재하지 않습니다",
+        "NETWORK_ERROR_MSG": "나중에 다시 시도하십시오"
+    },
+    "time": {
+        "DAWN": "새벽",
+        "MORNING": "아침",
+        "FORENOON": "오전",
+        "AFTERNOON": "오후",
+        "EVENING": "저녁",
+        "DUSK": "박모",
+        "MIDNIGHT": "심야"
+    },
+    "error": {
+        "SERVER_ERROR": "서버 오류",
+        "USER_EXIST": "계정이 이미 존재합니다",
+        "USER_NOT_EXIST": "사용자 이름이 존재하지 않습니다",
+        "EMAIL_EXIST": "이메일이 이미 존재합니다",
+        "EMAIL_NOT_EXIST": "이메일이 존재하지 않습니다",
+        "EMAIL_INCORRECT": "이메일이 잘못되었습니다",
+        "PASSWORD_REQUIRED": "비밀번호를 입력하세요",
+        "PASSWORD_INCORRECT": "암호가 올바르지 않습니다",
+        "CODE_LATEST": "최신 인증 코드를 입력",
+        "CODE_EXPIRED": "인증 코드가 만료되었습니다",
+        "CODE_ERROR": "확인 코드 오류",
+        "CODE_WHAT": "확인 코드 오류",
+        "USERNAME_SPACES": "사용자 이름은 공백을 포함 할 수 없습니다",
+        "USERNAME_LENGTH": "사용자 이름은 16 개 이상 문자가 될 수 없습니다"
+    },
+    "ok": {
+        "RELOGIN": "다시 로그인하세요",
+        "NEW_PASSWORD": "새 비밀번호를 입력하십시오",
+        "ENTER_CODE": "수신 된 인증 코드를 입력하세요",
+        "PASSWORD_CHANGED": "암호 변경 성공",
+        "SIGNED_UP": "성공에 서명"
+    }
+}
