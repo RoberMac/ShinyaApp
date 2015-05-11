@@ -1,0 +1,80 @@
+{
+    "login": {
+        "TITLE": "Entrar",
+        "USERNAME": "Nome de Usuário ou E-mail",
+        "FORGOT_TITLE": "Esqueceu sua senha?",
+        "SUBMIT_TITLE": "Entrar"
+    },
+    "register": {
+        "TITLE": "Abrir uma conta",
+        "USERNAME": "Nome de Usuário",
+        "SUBMIT_TITLE": "Abrir uma conta"
+    },
+    "general": {
+        "EMAIL": "E-mail",
+        "PASSWORD": "Senha"
+    },
+    "forgot": {
+        "TITLE": "Encontre sua conta",
+        "NEW_PASSWORD": "Nova senha",
+        "CODE": "Código de Verificação",
+        "NEXT_STEP": "Próximo Passo"
+    },
+    "chat": {
+        "ONLINE_USER": "Usuários Online",
+        "USER_COUNT": "Usuários Online: ",
+        "JOINED": "Participa desde",
+        "NUMERO_PREFIX": "No. ",
+        "NUMERO_SUBFFIX": "",
+        "DATE_FORMAT": "dd/MM/yyyy",
+        "TIME_FORMAT": "HH:mm:ss",
+        "SOUND": "Som",
+        "LOCATION": "Localização",
+        "LOCATION_SERVICES": "Serviços de Localização",
+        "VERSION": "Versão",
+        "LOG_OUT": "Sair",
+        "VIEW_ORIGINAL": "Ver Original",
+        "NEWS_SOURCES": "Fontes de notícias: ",
+        "TODAY": "Hoje",
+        "NOW": "Agora Mesmo",
+        "THE_DAY_WEATHER": "O clima naquele dia",
+        "THE_DAY_NEWS": "Notícias naquele dia",
+        "TODAY_NEWS": "Notícias de hoje",
+        "GEO_ON_MSG": "Iniciar sessão novamente",
+        "GEO_OFF_MSG": "Iniciar sessão novamente",
+        "NEWS_NOT_EXIST": "O Notícias não existe",
+        "NETWORK_ERROR_MSG": "Erro de rede"
+    },
+    "time": {
+        "DAWN": "AM",
+        "MORNING": "AM",
+        "FORENOON": "AM",
+        "AFTERNOON": "PM",
+        "EVENING": "PM",
+        "DUSK": "PM",
+        "MIDNIGHT": "PM"
+    },
+    "error": {
+        "SERVER_ERROR": "Erro de servidor",
+        "USER_EXIST": "Nome de Usuário já existe",
+        "USER_NOT_EXIST": "Nome de Usuário não existe",
+        "EMAIL_EXIST": "E-mail já existe",
+        "EMAIL_NOT_EXIST": "E-mail não existe",
+        "EMAIL_INCORRECT": "E-mail imprecisas",
+        "PASSWORD_REQUIRED": "Por favor insira sua senha",
+        "PASSWORD_INCORRECT": "Senha incorreta",
+        "CODE_LATEST": "Por favor insira um novo Código de Verificação",
+        "CODE_EXPIRED": "Código de Verificação expirou",
+        "CODE_ERROR": "Erro Código de Verificação",
+        "CODE_WHAT": "Erro Código de Verificação",
+        "USERNAME_SPACES": "Não conter espaços",
+        "USERNAME_LENGTH": "Não mais de dezesseis caracteres"
+    },
+    "ok": {
+        "RELOGIN": "Iniciar sessão novamente",
+        "NEW_PASSWORD": "Digitar uma nova senha",
+        "ENTER_CODE": "Digite o Código de Verificação recebidos",
+        "PASSWORD_CHANGED": "Senha alterada com sucesso",
+        "SIGNED_UP": "Registe sucesso"
+    }
+}

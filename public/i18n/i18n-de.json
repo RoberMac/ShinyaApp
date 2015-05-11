@@ -1,0 +1,80 @@
+{
+    "login": {
+        "TITLE": "Anmelden",
+        "USERNAME": "Nutzername oder E-Mail",
+        "FORGOT_TITLE": "Passwort vergessen?",
+        "SUBMIT_TITLE": "Anmelden"
+    },
+    "register": {
+        "TITLE": "Registrieren",
+        "USERNAME": "Nutzername",
+        "SUBMIT_TITLE": "Registrieren"
+    },
+    "general": {
+        "EMAIL": "E-Mail",
+        "PASSWORD": "Passwort"
+    },
+    "forgot": {
+        "TITLE": "Dein Konto finden",
+        "NEW_PASSWORD": "Neues Passwort",
+        "CODE": "Sicherheitscode",
+        "NEXT_STEP": "Nächster Schritt"
+    },
+    "chat": {
+        "ONLINE_USER": "Online-Nutzern",
+        "USER_COUNT": "Online-Nutzern: ",
+        "JOINED": "Beigetreten",
+        "NUMERO_PREFIX": "No. ",
+        "NUMERO_SUBFFIX": "",
+        "DATE_FORMAT": "dd.MM.yyyy",
+        "TIME_FORMAT": "HH:mm:ss",
+        "SOUND": "Schall",
+        "LOCATION": "Standort",
+        "LOCATION_SERVICES": "Ortungsdiensten",
+        "VERSION": "Version",
+        "LOG_OUT": "Abmelden",
+        "VIEW_ORIGINAL": "Originalbild",
+        "NEWS_SOURCES": "News Source: ",
+        "TODAY": "TDA",
+        "NOW": "Jetzt",
+        "THE_DAY_WEATHER": "Die Tageswetter",
+        "THE_DAY_NEWS": "Die Nachrichten",
+        "TODAY_NEWS": "Die Nachrichten Heute",
+        "GEO_ON_MSG": "Bitte neu anmelden",
+        "GEO_OFF_MSG": "Bitte neu anmelden",
+        "NEWS_NOT_EXIST": "Nachrichten existiert nicht",
+        "NETWORK_ERROR_MSG": "Netzwerkfehler"
+    },
+    "time": {
+        "DAWN": "AM",
+        "MORNING": "AM",
+        "FORENOON": "AM",
+        "AFTERNOON": "PM",
+        "EVENING": "PM",
+        "DUSK": "PM",
+        "MIDNIGHT": "PM"
+    },
+    "error": {
+        "SERVER_ERROR": "Server Error",
+        "USER_EXIST": "Nutzername ist bereits vorhanden",
+        "USER_NOT_EXIST": "Nutzername existiert nicht",
+        "EMAIL_EXIST": "E-Mail ist bereits vorhanden",
+        "EMAIL_NOT_EXIST": "E-Mail ist nicht vorhanden",
+        "EMAIL_INCORRECT": "E-mail ist falsch",
+        "PASSWORD_REQUIRED": "Geben Sie Ihr Passwort ein",
+        "PASSWORD_INCORRECT": "Passwort ist falsch",
+        "CODE_LATEST": "Geben Sie den aktuellen Sicherheitscode",
+        "CODE_EXPIRED": "Sicherheitscode ist abgelaufen",
+        "CODE_ERROR": "Sicherheitscode nicht korrekt",
+        "CODE_WHAT": "Sicherheitscode nicht korrekt",
+        "USERNAME_SPACES": "Nutzername darf Leerzeichen enthalten",
+        "USERNAME_LENGTH": "Nutzername kann nicht mehr als sechzehn Zeichen"
+    },
+    "ok": {
+        "RELOGIN": "Bitte neu anmelden",
+        "NEW_PASSWORD": " Geben Sie das neue Passwort",
+        "ENTER_CODE": "Geben Sie Sicherheitscode",
+        "PASSWORD_CHANGED": "Passwort erfolgreich geändert",
+        "SIGNED_UP": "Registrieren Erfolg"
+    }
+}

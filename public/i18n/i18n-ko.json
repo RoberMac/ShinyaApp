@@ -1,7 +1,7 @@
 {
     "login": {
         "TITLE": "로그인",
-        "USERNAME": "사용자 이름／이메일",
+        "USERNAME": "사용자 이름 또는 이메일",
         "FORGOT_TITLE": "비밀번호 찾기",
         "SUBMIT_TITLE": "로그인"
     },

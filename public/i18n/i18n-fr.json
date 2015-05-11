@@ -1,0 +1,80 @@
+{
+    "login": {
+        "TITLE": "Connexion",
+        "USERNAME": "Identifiant ou Adresse e-mail",
+        "FORGOT_TITLE": "Mot de passe oublié ?",
+        "SUBMIT_TITLE": "Connexion"
+    },
+    "register": {
+        "TITLE": "Inscription",
+        "USERNAME": "Identifiant",
+        "SUBMIT_TITLE": "Inscription"
+    },
+    "general": {
+        "EMAIL": "Adresse e-mail",
+        "PASSWORD": "Mot de passe"
+    },
+    "forgot": {
+        "TITLE": "Retrouvez Votre Compte",
+        "NEW_PASSWORD": "Nouveau Mot De Passe",
+        "CODE": "Code de sécurité",
+        "NEXT_STEP": "étape suivante"
+    },
+    "chat": {
+        "ONLINE_USER": "Utilisateurs en ligne",
+        "USER_COUNT": "Utilisateurs en ligne: ",
+        "JOINED": "Inscrit en ",
+        "NUMERO_PREFIX": "No. ",
+        "NUMERO_SUBFFIX": "",
+        "DATE_FORMAT": "MM/dd/yyyy",
+        "TIME_FORMAT": "HH:mm:ss",
+        "SOUND": "Son",
+        "LOCATION": "Localisation",
+        "LOCATION_SERVICES": "Services de localisation",
+        "VERSION": "Version",
+        "LOG_OUT": "Se déconnecter",
+        "VIEW_ORIGINAL": "Voir des photos originales",
+        "NEWS_SOURCES": "Sources: ",
+        "TODAY": "auj.",
+        "NOW": "Tout de suite",
+        "THE_DAY_WEATHER": "La météo Ce jour là",
+        "THE_DAY_NEWS": "Nouvelles Ce jour là",
+        "TODAY_NEWS": "Nouvelles Aujourd'hui",
+        "GEO_ON_MSG": "S'il vous plaît re-connexion",
+        "GEO_OFF_MSG": "S'il vous plaît re-connexion",
+        "NEWS_NOT_EXIST": "Nouvelles n'existe pas",
+        "NETWORK_ERROR_MSG": "Erreur réseau"
+    },
+    "time": {
+        "DAWN": "Aube",
+        "MORNING": "Matin",
+        "FORENOON": "Matin",
+        "AFTERNOON": "PM",
+        "EVENING": "Soir",
+        "DUSK": "PM",
+        "MIDNIGHT": "PM"
+    },
+    "error": {
+        "SERVER_ERROR": " Erreur de serveur",
+        "USER_EXIST": "Ce nom d'utilisateur existe déjà",
+        "USER_NOT_EXIST": "Utilisateur ne existe pas",
+        "EMAIL_EXIST": "Adresse e-mail existe déjà",
+        "EMAIL_NOT_EXIST": "Adresse e-mail ne existe pas",
+        "EMAIL_INCORRECT": "Adresse e-mail est incorrect",
+        "PASSWORD_REQUIRED": "Entrez votre mot de passe",
+        "PASSWORD_INCORRECT": "Le mot de passe est incorrect",
+        "CODE_LATEST": "Entrez le dernier code de sécurité",
+        "CODE_EXPIRED": "Le code de sécurité est expiré",
+        "CODE_ERROR": "Erreur de code de sécurité",
+        "CODE_WHAT": "Erreur de code de sécurité",
+        "USERNAME_SPACES": "Ne peut pas contenir d'espaces",
+        "USERNAME_LENGTH": "Ne peut être plus de seize caractères"
+    },
+    "ok": {
+        "RELOGIN": "S'il vous plaît re-connexion",
+        "NEW_PASSWORD": "Entrer votre nouveau mot de passe",
+        "ENTER_CODE": "Entrez le code reçu",
+        "PASSWORD_CHANGED": "Votre mot de passe a été modifié avec succès",
+        "SIGNED_UP": "Inscription complétée avec succès"
+    }
+}

@@ -1,0 +1,80 @@
+{
+    "login": {
+        "TITLE": "Войти",
+        "USERNAME": "имя пользователя или E-mail",
+        "FORGOT_TITLE": "Забыли пароль?",
+        "SUBMIT_TITLE": "Войти"
+    },
+    "register": {
+        "TITLE": "Регистрация",
+        "USERNAME": "имя пользователя",
+        "SUBMIT_TITLE": "Регистрация"
+    },
+    "general": {
+        "EMAIL": "E-mail",
+        "PASSWORD": "Пароль"
+    },
+    "forgot": {
+        "TITLE": "Найти ваш аккаунт",
+        "NEW_PASSWORD": "Новый Пароль",
+        "CODE": "Код Безопасности",
+        "NEXT_STEP": "следующий шаг"
+    },
+    "chat": {
+        "ONLINE_USER": "Пользователи на сайте",
+        "USER_COUNT": "количество онлайн пользователей: ",
+        "JOINED": "дату регистрации в",
+        "NUMERO_PREFIX": "No. ",
+        "NUMERO_SUBFFIX": "",
+        "DATE_FORMAT": "MM/dd/yyyy",
+        "TIME_FORMAT": "HH:mm:ss",
+        "SOUND": "Звук",
+        "LOCATION": "геолокации",
+        "LOCATION_SERVICES": "службах геолокации",
+        "VERSION": "версия",
+        "LOG_OUT": "Выйти",
+        "VIEW_ORIGINAL": "Оригинальные фотографии",
+        "NEWS_SOURCES": "Источник:",
+        "TODAY": "TDA",
+        "NOW": "Сейчас",
+        "THE_DAY_WEATHER": "этот день погода",
+        "THE_DAY_NEWS": "этот день Новости",
+        "TODAY_NEWS": "Новости Сегодня",
+        "GEO_ON_MSG": "Войдите в систему ещё раз",
+        "GEO_OFF_MSG": "Войдите в систему ещё раз",
+        "NEWS_NOT_EXIST": "Новости не существует",
+        "NETWORK_ERROR_MSG": "Ошибка Сети"
+    },
+    "time": {
+        "DAWN": "AM",
+        "MORNING": "Утро",
+        "FORENOON": "утро",
+        "AFTERNOON": "днем",
+        "EVENING": "PM",
+        "DUSK": "PM",
+        "MIDNIGHT": "PM"
+    },
+    "error": {
+        "SERVER_ERROR": "Ошибка Сервера",
+        "USER_EXIST": "Имя пользователя уже существует",
+        "USER_NOT_EXIST": "Имя пользователя не существует",
+        "EMAIL_EXIST": "E-mail уже существует",
+        "EMAIL_NOT_EXIST": "E-mail не существует",
+        "EMAIL_INCORRECT": "E-mail неправильно",
+        "PASSWORD_REQUIRED": "Пожалуйста введите пароль",
+        "PASSWORD_INCORRECT": "Неправильный пароль",
+        "CODE_LATEST": "Пожалуйста, введите новый Код Безопасности",
+        "CODE_EXPIRED": "Код подтверждения истек",
+        "CODE_ERROR": "кода подтверждения ошибка",
+        "CODE_WHAT": "кода подтверждения ошибка",
+        "USERNAME_SPACES": "Не может содержать пробелы",
+        "USERNAME_LENGTH": "Более шестнадцати символов"
+    },
+    "ok": {
+        "RELOGIN": "Войдите в систему ещё раз",
+        "NEW_PASSWORD": "Введите новый пароль",
+        "ENTER_CODE": "Введите код, полученный",
+        "PASSWORD_CHANGED": "Пароль успешно изменен",
+        "SIGNED_UP": "Войдите успеха"
+    }
+}
