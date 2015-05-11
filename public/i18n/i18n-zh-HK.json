@@ -74,7 +74,7 @@
         "RELOGIN": "請重新登入",
         "NEW_PASSWORD": "請輸入新密碼",
         "ENTER_CODE": "請輸入收到的驗證碼",
-        "PASSWORD_CHANGED": "修改密碼成功",
+        "PASSWORD_CHANGED": "密碼修改成功",
         "SIGNED_UP": "註冊成功"
     }
 }

@@ -74,7 +74,7 @@
         "RELOGIN": "请重新登录",
         "NEW_PASSWORD": "请输入新密码",
         "ENTER_CODE": "请输入收到的验证码",
-        "PASSWORD_CHANGED": "修改密码成功",
+        "PASSWORD_CHANGED": "密码修改成功",
         "SIGNED_UP": "注册成功"
     }
 }

@@ -10,14 +10,19 @@ angular.module('ShinyaApp.i18nDirective', [])
                 + '</div>',
         controller: ['$scope', '$rootScope', '$timeout', '$translate', 'store', function ($scope, $rootScope, $timeout, $translate, store){
 
-            var country_list = ['HK', 'CN', 'TW', 'US', 'JP', 'KR'],
+            var country_list = ['HK', 'CN', 'JP', 'TW', 'US', 'BR', 'IN', 'KR', 'RU', 'DE', 'FR'],
                 language_list = [
                     {lang: '繁', country: 'HK', key: 'zh-HK'},
                     {lang: '简', country: 'CN', key: 'zh-CN'},
+                    {lang: '日', country: 'JP', key: 'ja'},
                     {lang: '正', country: 'TW', key: 'zh-TW'},
                     {lang: 'EN', country: 'US', key: 'en'},
-                    {lang: '日', country: 'JP', key: 'ja'},
-                    {lang: '한', country: 'KR', key: 'ko'}
+                    {lang: 'Pt', country: 'BR', key: 'pt'},
+                    {lang: 'हिंदी', country: 'IN', key: 'hi'},
+                    {lang: '한', country: 'KR', key: 'ko'},
+                    {lang: 'Я', country: 'RU', key: 'ru'},
+                    {lang: 'DE', country: 'DE', key: 'de'},
+                    {lang: 'FR', country: 'FR', key: 'fr'}
                 ],
                 selectCountry = store.get('NG_TRANSLATE_COUNTRY') || 'HK',
                 index = country_list.indexOf(selectCountry),

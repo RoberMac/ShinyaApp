@@ -1,0 +1,80 @@
+{
+    "login": {
+        "TITLE": "लॉगिन",
+        "USERNAME": "उपयोगकर्ता नाम या ई-मेल",
+        "FORGOT_TITLE": "अपना पासवर्ड भूल गए?",
+        "SUBMIT_TITLE": "लॉगिन"
+    },
+    "register": {
+        "TITLE": "साइन अप करें",
+        "USERNAME": "उपयोगकर्ता नाम",
+        "SUBMIT_TITLE": "साइन अप करें"
+    },
+    "general": {
+        "EMAIL": "ई-मेल",
+        "PASSWORD": "पासवर्ड"
+    },
+    "forgot": {
+        "TITLE": "अपने खाते का पता लगाएं",
+        "NEW_PASSWORD": "नया पासवर्ड",
+        "CODE": "सुरक्षा कोड",
+        "NEXT_STEP": "अगला कदम"
+    },
+    "chat": {
+        "ONLINE_USER": "ऑनलाइन उपयोगकर्ता",
+        "USER_COUNT": "ऑनलाइन उपयोगकर्ता: ",
+        "JOINED": "शामिल होने की तारीख",
+        "NUMERO_PREFIX": "No. ",
+        "NUMERO_SUBFFIX": "",
+        "DATE_FORMAT": "dd-MM-yyyy",
+        "TIME_FORMAT": "HH:mm:ss",
+        "SOUND": "ध्वनि",
+        "LOCATION": "स्थान",
+        "LOCATION_SERVICES": "स्थान सेवाएं",
+        "VERSION": "रिहाई",
+        "LOG_OUT": "साइन आउट",
+        "VIEW_ORIGINAL": "मूल देखें",
+        "NEWS_SOURCES": "खबर के सूत्र: ",
+        "TODAY": "आज",
+        "NOW": "अब",
+        "THE_DAY_WEATHER": "उस दिन मौसम",
+        "THE_DAY_NEWS": "उस दिन खबर",
+        "TODAY_NEWS": "आज की खबर",
+        "GEO_ON_MSG": "पुन: साइन इन करें",
+        "GEO_OFF_MSG": "पुन: साइन इन करें",
+        "NEWS_NOT_EXIST": "समाचार मौजूद नहीं है",
+        "NETWORK_ERROR_MSG": "नेटवर्क त्रुटि"
+    },
+    "time": {
+        "DAWN": "AM",
+        "MORNING": "AM",
+        "FORENOON": "AM",
+        "AFTERNOON": "PM",
+        "EVENING": "PM",
+        "DUSK": "PM",
+        "MIDNIGHT": "PM"
+    },
+    "error": {
+        "SERVER_ERROR": "सर्वर त्रुटि",
+        "USER_EXIST": "यूजर का नाम पहले से ही मौजूद है",
+        "USER_NOT_EXIST": "यूजर का नाम मौजूद नहीं है",
+        "EMAIL_EXIST": "ई-मेल पता पहले से ही मौजूद है",
+        "EMAIL_NOT_EXIST": "ई-मेल पता मौजूद नहीं है",
+        "EMAIL_INCORRECT": "ई-मेल पता सही नहीं है",
+        "PASSWORD_REQUIRED": "अपना पासवर्ड दर्ज करें",
+        "PASSWORD_INCORRECT": "पासवर्ड गलत है",
+        "CODE_LATEST": "एक नए सत्यापन कोड दर्ज करें",
+        "CODE_EXPIRED": "सत्यापन कोड समाप्त हो गया है",
+        "CODE_ERROR": "कोड गलत है",
+        "CODE_WHAT": "कोड गलत है",
+        "USERNAME_SPACES": "तुम एक अंतरिक्ष चरित्र नहीं हो सकते",
+        "USERNAME_LENGTH": "से अधिक नहीं सोलह पात्रों"
+    },
+    "ok": {
+        "RELOGIN": "पुन: साइन इन करें",
+        "NEW_PASSWORD": "एक नया पासवर्ड दर्ज करें",
+        "ENTER_CODE": "प्राप्त सत्यापन कोड दर्ज करें",
+        "PASSWORD_CHANGED": "पासवर्ड सफलतापूर्वक बदला गया",
+        "SIGNED_UP": "सफलता साइन इन करें"
+    }
+}

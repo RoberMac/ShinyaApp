@@ -147,8 +147,8 @@ ul {
     .TW.lang {
         color: #fff;
         border: 0;
-        background-image: -webkit-linear-gradient(285deg, #FF2600 0%, #021DA6 25%);
-        background-image: linear-gradient(15deg, #FF2600 0%, #021DA6 25%);
+        background-image: -webkit-linear-gradient(-15deg, #FF2600 0%, #021DA6 25%);
+        background-image: linear-gradient(-15deg, #FF2600 0%, #021DA6 25%);
     }
 .US {
     color: #002868;
@@ -160,8 +160,8 @@ ul {
     .US.lang {
         color: #fff;
         border: 0;
-        background-image: -webkit-linear-gradient(285deg, #BF0A30 0%, #002868 25%);
-        background-image: linear-gradient(15deg, #BF0A30 0%, #002868 25%);
+        background-image: -webkit-linear-gradient(-15deg, #BF0A30 0%, #002868 25%);
+        background-image: linear-gradient(-15deg, #BF0A30 0%, #002868 25%);
     }
 .JP {
     color: #C70025;
@@ -179,6 +179,12 @@ ul {
     border-bottom-color: #FED100;
     border-left-color: #FED100;
 }
+    .DE.lang {
+        color: #FED100;
+        border: 0;
+        background-image: -webkit-linear-gradient(#BF0A30, #BF0A30 50%, #1E1E1E 50%);
+        background-image: linear-gradient(#BF0A30, #BF0A30 50%, #1E1E1E 50%);
+    }
 .FR {
     color: #00209F;
     border-top-color: #00209F;
@@ -186,13 +192,25 @@ ul {
     border-bottom-color: #F42A41;
     border-left-color: #F42A41;
 }
+    .FR.lang {
+        color: #FFF;
+        border: 0;
+        background-image: -webkit-linear-gradient(left, #00209F, #00209F 50%, #F42A41 50%);
+        background-image: linear-gradient(to right, #00209F, #00209F 50%, #F42A41 50%);
+    }
 .IN {
-    color: #000;
+    color: #000080;
     border-top-color: #138808;
     border-right-color: #138808;
     border-bottom-color: #FF9933;
     border-left-color: #FF9933;
 }
+    .IN.lang {
+        color: #000080;
+        border: 0;
+        background-image: -webkit-linear-gradient(-15deg, #138808 0%, #FF9933 25%);
+        background-image: linear-gradient(-15deg, #138808 0%, #FF9933 25%);
+    }
 .KR {
     color: #000080;
     border-top-color: #C60C30;
@@ -208,15 +226,27 @@ ul {
     }
 .RU {
     color: #0000FE;
-    border: #FE0000;
+    border-color: #FE0000;
 }
+    .RU.lang {
+        color: #FFF;
+        border: 0;
+        background-image: -webkit-linear-gradient(#0000FE, #0000FE 50%, #FE0000 50%);
+        background-image: linear-gradient(#0000FE, #0000FE 50%, #FE0000 50%);
+    }
 .BR {
     color: #3200FE;
-    border-top: #007600;
-    border-right: #007600;
-    border-bottom: #FEFE00;
-    border-left: #FEFE00;
+    border-top-color: #007600;
+    border-right-color: #007600;
+    border-bottom-color: #FEFE00;
+    border-left-color: #FEFE00;
 }
+    .BR.lang {
+        color: #FEFE00;
+        border: 0;
+        background-image: -webkit-linear-gradient(-15deg, #3200FE 0%, #007600 25%);
+        background-image: linear-gradient(-15deg, #3200FE 0%, #007600 25%);
+    }
 /* Numero */
 .gold {
     color: #D4AF37;
