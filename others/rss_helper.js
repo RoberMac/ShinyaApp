@@ -11,14 +11,14 @@ var feed_list = {
         {'source_name': 'UOL Notícias', 'url': 'http://rss.uol.com.br/feed/noticias.xml'} // UOL Notícias
     ],
     'CN': [
-        {'source_name': 'Google 新聞', 'url': 'https://news.google.com/news?cf=all&ned=cn&hl=zh-CN&output=rss'}, // Google 新聞
-        {'source_name': '網易新闻', 'url': 'http://news.163.com/special/00011K6L/rss_sh.xml'}, // 網易新聞
+        {'source_name': 'Google 新闻', 'url': 'https://news.google.com/news?cf=all&ned=cn&hl=zh-CN&output=rss'}, // Google 新聞
+        {'source_name': '网易新闻', 'url': 'http://news.163.com/special/00011K6L/rss_sh.xml'}, // 網易新聞
         {'source_name': '新浪新闻', 'url': 'http://rss.sina.com.cn/news/china/focus15.xml'}, // 新浪新聞
-        {'source_name': '華爾街見闻', 'url': 'http://wallstreetcn.com/rss.xml'}, // 華爾街見闻
-        {'source_name': '紐約時報中文網', 'url': 'http://cn.nytimes.com/rss.html'}, // 紐約時報中文網
-        {'source_name': 'BBC 中文網', 'url': 'http://www.bbc.co.uk/zhongwen/trad/index.xml'}, // BBC 中文網
+        {'source_name': '华尔街见闻', 'url': 'http://wallstreetcn.com/rss.xml'}, // 華爾街見闻
+        {'source_name': '纽约时报中文网', 'url': 'http://cn.nytimes.com/rss.html'}, // 紐約時報中文網
+        {'source_name': 'BBC 中文网', 'url': 'http://www.bbc.co.uk/zhongwen/trad/index.xml'}, // BBC 中文網
         {'source_name': 'cnBeta', 'url': 'http://rss.cnbeta.com/rss'}, // cnBeta
-        {'source_name': '灣區日報', 'url': 'http://wanqu.co/feed'}, // 灣區日報
+        {'source_name': '湾区日报', 'url': 'http://wanqu.co/feed'}, // 灣區日報
         {'source_name': 'Engadget 中文版', 'url': 'http://cn.engadget.com/rss.xml'} // Engadget 中文版
     ],
     'DE': [

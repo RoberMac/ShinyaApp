@@ -5,6 +5,7 @@ angular.module('ShinyaApp.imgDirective', [])
         replace : true,
         template: '<div ng-if="now_img_list.length > 0" id="img_box" class="general_animate" ng-class="{\'me\': isImgBoxRight, \'mobile\': isMobile}">'
                 +   '<ul>'
+                +       '<li><span class="close_img_box general_box_shadow general_animate" ng-click="toggleImgBox({isMe: false})"></span></li>'
                 +       '<li ng-repeat="url in now_img_list" class="general_animate">'
                 +           '<img class="general_box_shadow general_animate" ng-src="{{url.small}}" ng-class="{\'zoom_out\': isZoomIn && $index === now_zoom_id}" ng-click="toggleImageSize(url, $index)" sy-imageonload>'
                 +       '</li>'
@@ -34,19 +35,25 @@ angular.module('ShinyaApp.imgDirective', [])
             $scope.now_img_list = []
             $scope.now_zoom_id = -1
             $scope.imgURL = ''
-            $scope.toggleImgBox = function (obj){
+            $scope.toggleImgBox = function (obj, index){
                 var isMe = obj.isMe,
-                    id   = obj.date;
-                if ($scope.now_img_list !== $scope.img_list[id] && angular.equals($scope.now_img_list, [])){
+                    id   = obj.date,
+                    isSameList = $scope.now_img_list == $scope.img_list[id],
+                    isEmptyList = angular.equals($scope.now_img_list, []),
+                    now_img_list = index >= 0
+                        ? $scope.img_list[id].slice(index, index + 1)
+                        : $scope.img_list[id];
+
+                if (!isSameList && isEmptyList){
                     // 現在不存在已打開的圖片預覽，直接打開
                     $scope.isImgBoxRight = isMe
-                    $scope.now_img_list = $scope.img_list[id]
-                } else if ($scope.now_img_list !== $scope.img_list[id] && !angular.equals($scope.now_img_list, [])){
+                    $scope.now_img_list = now_img_list
+                } else if (!isSameList && !isEmptyList){
                     // 現在存在已打開的圖片預覽，先關閉，再打開
                     $scope.now_img_list = []
                     $timeout(function (){
                         $scope.isImgBoxRight = isMe
-                        $scope.now_img_list = $scope.img_list[id]
+                        $scope.now_img_list = now_img_list
                     }, 717)
                 } else {
                     // 關閉圖片預覽

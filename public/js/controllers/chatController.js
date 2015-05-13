@@ -88,6 +88,7 @@ angular.module('ShinyaApp.chatController', [])
     $scope.i18n_DATE_FORMAT = $translate.instant('chat.DATE_FORMAT')
     $scope.i18n_TIME_FORMAT = $translate.instant('chat.TIME_FORMAT')
     $scope.$on('$translateChangeBeforeStart', function (){
+        $scope.isLoadErr = false
         $scope.toggleCurrentPage('loadBox')
     })
     $rootScope.$on('$translateChangeSuccess', function (){
@@ -608,9 +609,11 @@ angular.module('ShinyaApp.chatController', [])
             $scope.msgInbox.push({
                 'isMe'      : isMe,
                 'isImg'     : data.img_list.length > 0,
+                'img_list'  : data.img_list,
+                'url_list'  : data.url_list,
                 'isShowDate': syMsgHelper.isShowDate(data.date),
                 'date'      : data.date,
-                'msg'       : syMsgHelper.msgSanitization(data.msg, data.img_list),
+                'msg'       : data.msg,
                 'username'  : data.username,
             })
             data.img_list.length > 0 
@@ -667,9 +670,11 @@ angular.module('ShinyaApp.chatController', [])
                         $scope.msgInbox.push({
                             'isMe'      : decodeToken.username === data[i].username,
                             'isImg'     : data[i].img_list.length > 0,
+                            'img_list'  : data[i].img_list,
+                            'url_list'  : data[i].url_list,
                             'isShowDate': (i === 0) ? true : false,
                             'date'      : data[i].date,
-                            'msg'       : syMsgHelper.msgSanitization(data[i].msg, data[i].img_list),
+                            'msg'       : data[i].msg,
                             'username'  : data[i].username
                         })
                         data[i].img_list.length > 0

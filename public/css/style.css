@@ -415,22 +415,45 @@ ul {
         cursor: pointer;
         z-index: 0;
     }
+    #chat_box .all .img_item {
+        display: inline-block;
+        width: 14px;
+        height: 14px;
+        background-color: #FFF;
+        border-radius: 7px;
+        vertical-align: middle;
+        cursor: pointer;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        user-select: none;
+    }
+        #chat_box .all .img_item:hover {
+            background-color: #000;
+        }
+    #chat_box .all .url_item {
+        margin: 0 1px;
+        padding: 0 2px;
+        font-size: 11px;
+        border: 1px solid #000;
+        border-radius: 3px;
+        cursor: pointer;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        user-select: none;
+    }
+    #chat_box .all .url_item:hover {
+        background-color: #000;
+    }
+        #chat_box .all .url_item:hover > a {
+            color: #FFF;
+        }
     #chat_box .all .content_box {
         position: relative;
         padding: 4px 10px;
         max-width: 66.7%;
         border-radius: 7px;
-        -webkit-user-select: text;
-        -moz-user-select: text;
-        user-select: text;
         z-index: 1;
     }
-        #chat_box .all .content_box.img_msg {
-            cursor: pointer;
-        }
-            #chat_box .all .content_box.img_msg pre {
-                cursor: pointer;
-            }
         #chat_box .all .content_box.atMsg {
             color: #FFF;
             background-color: #000;
@@ -441,6 +464,9 @@ ul {
             white-space: pre-wrap;
             font: inherit;
             cursor: text;
+            -webkit-user-select: text;
+            -moz-user-select: text;
+            user-select: text;
         }
         #chat_box .all .content_box pre::selection {
             background-color: #000;
@@ -538,10 +564,21 @@ ul {
     #img_box::-webkit-scrollbar { 
         display: none; 
     }
+    #img_box .close_img_box {
+        display: inline-block;
+        width: 27px;
+        height: 27px;
+        margin: 7px 0;
+        background-color: #FFF;
+        border: 1px solid #FFF;
+        border-radius: 50%;
+        cursor: pointer;
+        cursor: -webkit-zoom-out;
+    }
     #img_box img {
         width: 57px;
         height: 57px;
-        border-radius: 40px;
+        border-radius: 50%;
         margin: 7px 0;
         border: 0px solid #FFF;
         -webkit-filter: grayscale(1);
@@ -1528,6 +1565,10 @@ input,
         #logo svg {
             max-width: 77%;
         }
+    #img_box .close_img_box {
+        width: 57px;
+        height: 57px;
+    }
     #setting {
         width: 22px;
         height: 22px;

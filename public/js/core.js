@@ -20,6 +20,7 @@ angular.module('ShinyaApp', [
     'ShinyaApp.beepDirective',
     'ShinyaApp.usercountDirective',
     'ShinyaApp.i18nDirective',
+    'ShinyaApp.textMsgDirective',
     'ShinyaApp.submitController',
     'ShinyaApp.chatController',
     'ShinyaApp.forgotController'

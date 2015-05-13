@@ -9,15 +9,17 @@
                 </div>
                 <div ng-if="!contentItem.isMe" class="username_box">
                     <span ng-click="toggleOtherUserInfo(contentItem.username, contentItem.date)">{{contentItem.username}}</span>
+                    <!-- 其他用戶基本信息 -->
                     <div ng-if="otherUserInfoId === contentItem.date" class="other_user_info general_animate">
                         <span ng-class="numero(otherUserInfo.numero)">No.{{otherUserInfo.numero}}</span>
                         <span ng-class="otherUserInfo.country">{{otherUserInfo.country}}</span>
                         <span class="faster_animate" ng-click="getOtherDateNews(contentItem.username)">{{otherUserInfo.date | date: i18n_DATE_FORMAT}}</span>
                     </div>
                 </div>
-                <div class="content_box" ng-class="{'syShow': isAtMsgShow, 'img_msg': contentItem.isImg}" ng-click="toggleImgBox(contentItem)">
-                    <pre>{{contentItem.msg}}</pre>
+                <div class="content_box" ng-class="{'syShow': isAtMsgShow, 'img_msg': contentItem.isImg}">
+                    <pre sy-text-msg item='contentItem' img-click="toggleImgBox(contentItem, index)"></pre>
                 </div>
+                <!-- 圖片存在提醒 -->
                 <div class="img_pointer general_animate" ng-if="contentItem.isImg" ng-class="{'img_click_pointer': now_img_list === img_list[contentItem.date]}" ng-click="toggleImgBox(contentItem)"></div>
             </div>
         </div>

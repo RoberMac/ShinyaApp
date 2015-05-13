@@ -37,15 +37,21 @@ io.on('connection', function (socket) {
     socket.on('textMsg', function (msg) {
 
         // 提取文本中的 URL
-        var url_list = msg.msg.match(/(https?:\/\/[^\s]+)/g),
+        var url_box   = msg.msg.match(/(https?:\/\/[^\s]+)/g),
+            url_list  = [],
             img_list  = [];
         // 提取 URL 中的 Image URL
-        if (url_list){
-            for (var i = 0; i < url_list.length; i++){
-                var url = url_list[i]
-                if (validator.isURL(url) && /\.(jpe?g|png|gif)$/i.test(url)){
-                    img_list.push(url)
-                }
+        if (url_box){
+            for (var i = 0; i < url_box.length; i++){
+                var url = url_box[i]
+                // 提取圖片連結
+                validator.isURL(url) && /\.(jpe?g|png|gif)$/i.test(url)
+                ? img_list.push(url)
+                : null
+                // 提取普通（非圖片）的連結
+                validator.isURL(url) && !/\.(jpe?g|png|gif)$/i.test(url)
+                ? url_list.push(url)
+                : null
             }
         }
         // 初始化消息對象
@@ -55,7 +61,8 @@ io.on('connection', function (socket) {
                 'msg'     : msg.msg,
                 'username': username,
                 'at'      : msg.at,
-                'img_list': img_list
+                'img_list': img_list,
+                'url_list': url_list
             }
         // 緩存十條消息
         if (msgCache.length < 10){
