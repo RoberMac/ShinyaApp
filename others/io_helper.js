@@ -37,13 +37,20 @@ io.on('connection', function (socket) {
     socket.on('textMsg', function (msg) {
 
         // 提取文本中的 URL
-        var url_box   = msg.msg.match(/(https?:\/\/[^\s]+)/g),
+        var url_box   = msg.msg.match(/(https?:\/\/)?(\w+(\.\w+)+)[^\s]*/g),
             url_list  = [],
-            img_list  = [];
+            img_list  = [],
+            textMsg = msg.msg;
         // 提取 URL 中的 Image URL
         if (url_box){
             for (var i = 0; i < url_box.length; i++){
-                var url = url_box[i]
+                var url = ''
+                if (/^https?:\/\//g.test(url_box[i])){
+                    url = url_box[i]
+                } else {
+                    url = 'http://' + url_box[i]
+                    textMsg = textMsg.replace(url_box[i], 'http://' + url_box[i])
+                }
                 // 提取圖片連結
                 validator.isURL(url) && /\.(jpe?g|png|gif)$/i.test(url)
                 ? img_list.push(url)
@@ -58,7 +65,7 @@ io.on('connection', function (socket) {
         var newMsg = {
                 'id'      : socket.id,
                 'date'    : Date.now(),
-                'msg'     : msg.msg,
+                'msg'     : textMsg,
                 'username': username,
                 'at'      : msg.at,
                 'img_list': img_list,
