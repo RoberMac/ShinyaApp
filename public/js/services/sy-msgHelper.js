@@ -19,7 +19,7 @@ angular.module('ShinyaApp.msgHelperServices', [])
         var cache    = [],
             list_len = img_list.length;
         for (var i = 0; i < list_len; i++){
-            if (img_list[i].indexOf('sinaimg.cn') > 0){
+            if (img_list[i].indexOf('sinaimg.cn') >= 0){
                 // 新浪圖床
                 cache.push({
                     'small' : sinaImgHelper(img_list[i], 'square'),

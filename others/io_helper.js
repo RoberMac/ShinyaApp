@@ -1,4 +1,5 @@
 var validator = require('validator'),
+    sanitizer = require('sanitizer'),
     sjwt      = require('socketio-jwt');
 
 io.use(sjwt.authorize({
@@ -37,28 +38,34 @@ io.on('connection', function (socket) {
     socket.on('textMsg', function (msg) {
 
         // 提取文本中的 URL
-        var url_box   = msg.msg.match(/(https?:\/\/[^\s]+)/g),
+        var url_reg = /(https?:\/\/)?[^\s\/\$\.\?\#]+\.[^\s]*/g,
+            url_box   = msg.msg.match(url_reg), // URL 粗匹配
             url_list  = [],
-            img_list  = [];
-        // 提取 URL 中的 Image URL
+            img_list  = [],
+            textMsg   = sanitizer.escape(msg.msg);
+
         if (url_box){
             for (var i = 0; i < url_box.length; i++){
-                var url = url_box[i]
-                // 提取圖片連結
-                validator.isURL(url) && /\.(jpe?g|png|gif)$/i.test(url)
-                ? img_list.push(url)
-                : null
-                // 提取普通（非圖片）的連結
-                validator.isURL(url) && !/\.(jpe?g|png|gif)$/i.test(url)
-                ? url_list.push(url)
-                : null
+                if (!validator.isURL(url_box[i])) continue;
+
+                var url = ''
+                if (/^https?:\/\//g.test(url_box[i])){
+                    url = url_box[i]
+                } else {
+                    url = 'http://' + url_box[i]
+                    textMsg = textMsg.replace(url_box[i], 'http://' + url_box[i])
+                }
+
+                /\.(jpe?g|png|gif)$/i.test(url)
+                ? img_list.push(url) // 提取圖片連結
+                : url_list.push(url) // 提取普通（非圖片）的連結
             }
         }
         // 初始化消息對象
         var newMsg = {
                 'id'      : socket.id,
                 'date'    : Date.now(),
-                'msg'     : msg.msg,
+                'msg'     : textMsg,
                 'username': username,
                 'at'      : msg.at,
                 'img_list': img_list,
