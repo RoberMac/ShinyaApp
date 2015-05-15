@@ -23,7 +23,7 @@ angular.module('ShinyaApp.textMsgDirective', [])
             // 將文本消息中包含的「超連結」替換
             for (var i = 0; i < url_list_len; i++){
                 var url_title = urlSanitization(url_list[i])
-                msg = msg.replace(url_list[i], 
+                msg = msg.replace(new RegExp(url_list[i] + '(?!\")'), 
                     '<span class="url_item faster_animate"><a class="faster_animate" href=\"'
                     + url_list[i]
                     + '\" target=\"_blank\">'
@@ -89,5 +89,9 @@ function urlSanitization(url){
     var url_parser = document.createElement('a'),
         reg = /(?:\w*\.)?(\w+)(?=\.(\w)+)/g;
     url_parser.href = url
-    return reg.exec(url_parser.hostname)[1].toUpperCase()
+    try {
+        return reg.exec(url_parser.hostname)[1].toUpperCase()
+    } catch (e){
+        return '❓'
+    }
 }
