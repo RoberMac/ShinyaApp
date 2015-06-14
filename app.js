@@ -29,6 +29,7 @@ touch(log_file, function (){
     })
 })
 process.on('uncaughtException', function (err) {
+    console.log(err)
     log.alert(err.toString('utf8'));
     // 發送郵件提醒
     email_helper.send_log_email('shenyepoxiao@gmail.com', '服務器出現錯誤', err.stack, function (){

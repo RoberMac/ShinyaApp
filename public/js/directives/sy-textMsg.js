@@ -75,7 +75,8 @@ function urlSanitization(url){
         '58.com': '58 同城',
         'ganji.com': '赶集',
         'dxy.cn': '丁香园',
-        'hupu.com': '虎扑体育'
+        'hupu.com': '虎扑体育',
+        'shenyepoxiao.com': '深夜，破曉。'
     },
         siteKey = Object.keys(siteList),
         len = siteKey.length;
