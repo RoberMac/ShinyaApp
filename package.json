@@ -1,6 +1,6 @@
 {
   "name": "ShinyaApp",
-  "version": "0.4.1",
+  "version": "0.4.2",
   "description": "A Chat App",
   "main": "app.js",
   "author": {
@@ -18,9 +18,7 @@
     "compression": "^1.4.3",
     "express": "^4.12.3",
     "express-jwt": "^3.0.0",
-    "feedparser": "^1.0.1",
     "helmet": "^0.9.0",
-    "iconv-lite": "^0.4.8",
     "jsonwebtoken": "^5.0.0",
     "log": "^1.4.0",
     "mongoose": "^4.0.2",

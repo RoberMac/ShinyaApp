@@ -142,11 +142,6 @@ app.use(function (err, req, res, next){
     }
 })
 
-// 定時抓取新聞
-var getNews = require('./others/rss_helper');
-getNews(1000 * 60 * 60 * 1)
-
-
 http.listen(process.env.PORT || 3000, function (){
     log.info('[Listen]', '3000 port')
 })
