@@ -4,3 +4,4 @@ public/bower_components
 *.key
 logs/*
 TODO
+.env
