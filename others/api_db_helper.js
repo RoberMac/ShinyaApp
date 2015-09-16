@@ -7,7 +7,6 @@ var q_userFindOne          = Q.nbind(User.findOne, User),
 
 // Helper
 function queryError(err, next){
-    log.error('[DB: Query Error]', err)
     next({'code': 500, 'status': 'error', 'msg': 'error.SERVER_ERROR'})
     throw new Error('Query Error')
 }
@@ -20,7 +19,6 @@ var api_db_helper = {
         q_userFindOne({username: username}, 'register_info geo_info')
         .then(function (userInfo){
             if (!userInfo){
-                log.warning('[DB: Not Found]')
                 res.status(400).json({'status': 'error', 'msg': 'error.USER_NOT_EXIST'})
                 return;
             }
@@ -40,7 +38,6 @@ var api_db_helper = {
         q_userFindOne({username: body.username || user.username}, 'register_info geo_info')
         .then(function (userInfo){
             if (!userInfo){
-                log.warning('[DB: Not Found]')
                 res.status(400).json({'status': 'error', 'msg': 'error.USER_NOT_EXIST'})
                 return;
             }
@@ -72,7 +69,6 @@ var api_db_helper = {
             q_newsFindOne({date: selectDate}, country)
             .then(function (found){
                 if (!found){
-                    log.warning('[DB: Not Found]', selectDate, country)
                     res.status(400).json({'status': 'error', 'msg': 'chat.NEWS_NOT_EXIST'})
                     return;
                 }
@@ -102,7 +98,6 @@ var api_db_helper = {
         q_userFindOne({username: user.username}, 'last_geo')
         .then(function (found){
             if (!found){
-                log.warning('[DB: Not Found]')
                 res.status(400).json({'status': 'error', 'msg': 'error.USER_NOT_EXIST'})
                 return;
             }

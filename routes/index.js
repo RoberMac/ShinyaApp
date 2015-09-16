@@ -8,8 +8,6 @@ var jwt       = require('jsonwebtoken'),
 
 router.get(['/', '/chat', '/forgot'], function (req, res, next){
 
-    log.info('[GET: /]', req.ip)
-
     platform.parse(req.get('user-agent')).name === 'IE'
     ? res.redirect(process.env.PWD + '/views/404.html')
     : res.sendFile(process.env.PWD + '/views/index.html')
@@ -17,7 +15,6 @@ router.get(['/', '/chat', '/forgot'], function (req, res, next){
 
 router.post('/register', function (req, res, next){
 
-    log.info('[POST: /register]', req.ip, req.body.username)
     // 用戶註冊信息
     var register_form = {
         username      : validator.trim(req.body.username),
@@ -34,7 +31,6 @@ router.post('/register', function (req, res, next){
 
 router.post('/login', function (req, res, next){
 
-    log.info('[POST: /login]', req.ip, req.body.user)
     // 用戶登陸信息
     var login_form = {
         user     : validator.trim(req.body.user),
@@ -45,7 +41,6 @@ router.post('/login', function (req, res, next){
 
 router.post('/forgot_email', function (req, res, next){
 
-    log.info('[POST: /forgot_email]', req.ip)
     // 電郵地址信息
     var forgot_email_form = {
         email: req.body.email,
@@ -56,13 +51,10 @@ router.post('/forgot_email', function (req, res, next){
 
 router.post('/forgot_code', function (req, res, next){
 
-    log.info('[POST: /forgot_code]', req.ip)
     if (!req.body.password){
-        log.warning('[Forgot: Required Password]')
         next({'code': 400, 'status': 'error', 'msg': 'error.NEW_PASSWORD'})
         return;
     } else if (!req.body.code) {
-        log.warning('[Forgot: Required Code]')
         next({'code': 400, 'status': 'error', 'msg': 'error.ENTER_CODE'})
         return;
     }
@@ -75,13 +67,10 @@ router.post('/forgot_code', function (req, res, next){
         
         if (err) {
             if (err.name === 'TokenExpiredError'){
-                log.warning('[Forgot: Code Expires]', err)
                 res.status(400).json({'status': 'error', 'msg': 'error.CODE_EXPIRED'})
             } else if (err.name === 'JsonWebTokenError'){
-                log.warning('[Forgot: Wrong Code]', err)
                 res.status(400).json({'status': 'error', 'msg': 'error.CODE_ERROR'})
             } else {
-                log.warning('[Forgot: WTF]', err)
                 res.status(400).json({'status': 'error', 'msg': 'error.CODE_WHAT'})
             }
             return;

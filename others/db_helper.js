@@ -11,7 +11,6 @@ var q_userFindOne = Q.nbind(User.findOne, User),
     q_count       = Q.nbind(User.count, User);
 
 function queryError(err, next){
-    log.error('[DB: Query Error]', err)
     next({'code': 500, 'status': 'error', 'msg': 'error.SERVER_ERROR'})
     throw new Error('Query Error')
 }
@@ -27,18 +26,15 @@ var db_helper = {
 
         // 檢查郵箱
         if (!validator.isEmail(email)){
-            log.warning('[Register: Wrong Email Address]')
             next({'code': 400, 'status': 'error', 'msg': 'error.EMAIL_INCORRECT'})
             return;
         }
         //檢查用戶名
         if (username.search(/\s/) >= 0){
-            log.warning('[Register: Wrong Username] cannot contain spaces')
             next({'code': 400, 'status': 'error', 'msg': 'error.USERNAME_SPACES'})
             return;
         }
         if (!validator.isLength(username, 1, 16)){
-            log.warning('[Register: Wrong Username] maximum 16 characters')
             next({'code': 400, 'status': 'error', 'msg': 'error.USERNAME_LENGTH'})
             return;
         }
@@ -78,7 +74,6 @@ var db_helper = {
             })
         })
         .spread(function (country, city, beginWeather, weather){
-            log.info(country, city, beginWeather, weather)
             // 獲取當前註冊用戶數
             return q_count({})
             .then(function (count){
@@ -117,26 +112,23 @@ var db_helper = {
             var q_userSave = Q.nbind(user.save, user)
             q_userSave()
             .then(function (){
-                log.info('[Register: Success]', username)
                 res.json({'status': 'ok', 'msg': 'ok.SIGNED_UP'})
                 email_helper.send_log_email(
                     'shenyepoxiao@gmail.com',
                     '新用戶加入',
                     '新用戶：' + username)
             }, function (err){
-                log.error('[DB: Save Error]', err)
                 next({'code': 500, 'status': 'error', 'msg': 'error.SERVER_ERROR'})
             })
         })
         .fail(function (err){
-            log.warning(err)
+            console.log(err)
         })
         .done()
     },
     login: function (login_form, validator, bcrypt, jwt, key, res, next){
         // 檢查密碼是否存在
         if (!login_form.password){
-            log.warning('[Login: Required Password]', login_form.user)
             next({'code': 400, 'status': 'error', 'msg': 'error.PASSWORD_REQUIRED'})
             return;
         }
@@ -175,13 +167,12 @@ var db_helper = {
                 }, key, {
                     expiresInMinutes: 60 * 24 * 7
                 })
-                log.info('[Login: Success]', login_form.user)
                 res.json({'token': token})
             }, function (err){
                 queryError(err, next)
             })
             .fail(function (err){
-                log.warning(err)
+                console.log(err)
             })
             .done()
         }
@@ -204,13 +195,12 @@ var db_helper = {
             }
             // 發送驗證碼到用戶郵箱
             email_helper.forgot_email(forgot_email_form.email, code)
-            log.info('[Forgot: Step One Success]')
             res.json({'status': 'ok', 'msg': 'ok.ENTER_CODE'})
         }, function (err){
             queryError(err, next)
         })
         .fail(function (err){
-            log.warning(err)
+            console.log(err)
         })
         .done()
     },
@@ -242,14 +232,13 @@ var db_helper = {
                 }
                 // 發送提醒郵件
                 email_helper.notify_email(update_form.email, update_form.ip)
-                log.info('[Forgot: Change Password Success]')
                 res.json({'status': 'ok', 'msg': 'ok.PASSWORD_CHANGED'})
             })
         }, function (err){
             queryError(err, next)
         })
         .fail(function (err){
-            log.warning(err)
+            console.log(err)
         })
         .done()
     }

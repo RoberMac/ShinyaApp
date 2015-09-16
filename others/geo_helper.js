@@ -45,15 +45,12 @@ var geo_helper = {
     // 地理位置
     getCountryAndCity: function (ip){
 
-        log.info('[Geo: getCountryAndCity]')
-
         return q_geocode(ip)
         .timeout(3000)
         .then(function(data){
             return [data[0].countryCode, data[0].city]
         })
         .fail(function (err){
-            log.error('[Geo: getCountryAndCity]', err)
             return ['CN', 'beijing']
         })
     },
@@ -65,8 +62,6 @@ var geo_helper = {
         }),
             q_reverse = Q.nbind(google_geocoder.reverse, google_geocoder);
 
-        log.info('[Geo: getStreetName]')
-
         return q_reverse({
             lat: origin.lat, 
             lon: origin.lon
@@ -76,7 +71,6 @@ var geo_helper = {
             return data[0].streetName
         })
         .fail(function (err){
-            log.error('[Geo: getStreetName]', err)
             return '洛陽城四零四號山洞'
         })
     },
@@ -98,7 +92,6 @@ var geo_helper = {
     // 天氣
     getCityWeather: function (city, countryCode){
 
-        log.info('[Geo: getCityWeather]')
         var url = 'http://api.openweathermap.org/data/2.5/weather?q='
                     + city
                     +'&lang='
@@ -116,7 +109,6 @@ var geo_helper = {
             }
         })
         .fail(function (err){
-            log.error('[Geo: getCityWeather]', err)
             return {
                 description: '多雲',
                 code: 802,
@@ -126,7 +118,6 @@ var geo_helper = {
     },
     getGeoWeather: function (lat, lon, countryCode){
 
-        log.info('[Geo: getGeoWeather]')
         var url = 'http://api.openweathermap.org/data/2.5/weather?lat='
                     + lat
                     + '&lon='
@@ -147,7 +138,6 @@ var geo_helper = {
             }
         })
         .fail(function (err){
-            log.error('[Geo: getGeoWeather]', err)
             return {
                 description: '多雲',
                 temp: 17,

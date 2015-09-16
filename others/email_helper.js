@@ -29,9 +29,7 @@ var email_helper = {
         }
         q_sendMail(mailOptions)
         .then(function (info){
-            log.info('[Forgot: Send Forgot Mail Success]', info.response)
         }, function (err){
-            log.error('[Forgot: Send Forgot Mail Wrong]', err)
         })
     },
     notify_email: function (email, ip){
@@ -49,9 +47,7 @@ var email_helper = {
         }
         q_sendMail(mailOptions)
         .then(function (info){
-            log.info('[Forgot: Send Notify Mail Success]', info.response)
         }, function (err){
-            log.error('[Forgot: Send Notify Mail Wrong]', err)
         })
     },
     send_log_email: function (email, title, text, callback){
@@ -64,12 +60,10 @@ var email_helper = {
         }
         q_sendMail(mailOptions)
         .then(function (info){
-            log.info('[Forgot: Send Log Mail Success]', info.response)
             if (callback){
                 callback()
             }
         }, function (err){
-            log.error('[Forgot: Send Log Mail Wrong]', err)
         })
     }
 }

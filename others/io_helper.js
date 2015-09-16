@@ -13,7 +13,6 @@ var msgCache   = [],
     userCount  = 0;
 io.on('connection', function (socket) {
     var username =  socket.decoded_token.username
-    log.info('[SIO: Connect]', username, socket.id, userCount)
     if (onlineUser.indexOf(username) < 0){
         userCount ++
         onlineUser.push(username)
@@ -81,7 +80,6 @@ io.on('connection', function (socket) {
         io.emit('textMsg', newMsg)
     })
     socket.on('disconnect', function (msg) {
-        log.info('[SIO: Disconnect]', username, userCount)
         if (onlineUser.indexOf(username) >= 0){
             if (multiLoginUser.indexOf(username) >= 0){
                 multiLoginUser.splice(onlineUser.indexOf(username), 1)
